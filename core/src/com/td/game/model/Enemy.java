@@ -2,15 +2,17 @@ package com.td.game.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import java.awt.Rectangle;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Circle;
 
 public class Enemy {
 
-  private static final int WIDTH = 32;
-  private static final int HEIGHT = 32;
+  private static final int WIDTH = 128;
+  private static final int HEIGHT = 128;
   private static final Texture TEXTURE = new Texture(Gdx.files.internal("alien.png"));
 
-  private Rectangle collisionBox;
+  private Sprite sprite;
+  private Circle zone;
 
   /**
    * Simple constructor for an Enemy object.
@@ -18,9 +20,12 @@ public class Enemy {
    * @param xPos the x-position of the collision box for this enemy.
    * @param yPos the y-position of the collision box for this enemy.
    */
-  Enemy(int xPos, int yPos) {
-    collisionBox = new Rectangle();
-    collisionBox.setBounds(xPos, yPos, WIDTH, HEIGHT);
+  Enemy(float xPos, float yPos) {
+    sprite = new Sprite();
+    sprite.setX(xPos);
+    sprite.setY(yPos);
+
+    zone = new Circle(sprite.getX(), sprite.getY(), 64);
   }
 
   /**
@@ -28,8 +33,8 @@ public class Enemy {
    *
    * @return the x-position of the collision box.
    */
-  int getXPos() {
-    return this.collisionBox.x;
+  float getXPos() {
+    return this.sprite.getX();
   }
 
   /**
@@ -37,8 +42,8 @@ public class Enemy {
    *
    * @return the y-position of the collision box.
    */
-  int getYPos() {
-    return this.collisionBox.y;
+  float getYPos() {
+    return this.sprite.getY();
   }
 
   /**
@@ -47,7 +52,8 @@ public class Enemy {
    * @param delta a delta to add to the x-position.
    */
   void updateXPos(float delta) {
-    this.collisionBox.x += delta;
+    sprite.setX(sprite.getX() + delta);
+    this.zone.x += delta;
   }
 
   /**
@@ -56,7 +62,7 @@ public class Enemy {
    * @param delta a delta to add to the y-position.
    */
   public void updateYPos(float delta) {
-    this.collisionBox.y += delta;
+    sprite.setY(sprite.getY() + delta);
   }
 
   /**
@@ -66,5 +72,13 @@ public class Enemy {
    */
   Texture getTexture() {
     return TEXTURE;
+  }
+
+  /**
+   * Simple accessor method on for the zone.
+   * @return a Circle zone for this enemy.
+   */
+  public Circle getZone() {
+    return this.zone;
   }
 }
