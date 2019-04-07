@@ -6,7 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.td.game.screens.MenuScreen;
 
 /**
- * Main class for application and serves as entry point to the game.
+ * Game abstract class provides an implementation of ApplicationListener for you to use, along with
+ * some helper methods to set and handle Screen rendering.
  */
 public class TowerDefenseGame extends Game {
 
