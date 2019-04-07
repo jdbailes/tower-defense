@@ -4,37 +4,31 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.td.game.TowerDefenseGame;
-import java.awt.Rectangle;
+import com.td.game.model.Wave;
+import java.util.Random;
 
 public class GameScreen implements Screen {
 
   private OrthographicCamera camera;
   private SpriteBatch batch;
 
-  private Rectangle alien;
-  private Texture alienImage;
+  // Creates the wave of enemies
+  private Wave wave = new Wave(10);
 
   private final TowerDefenseGame game;
 
   GameScreen(final TowerDefenseGame game) {
+    // Passing the game into the game screen
     this.game = game;
 
-    // Load the images for the alien
-    alienImage = new Texture(Gdx.files.internal("alien.png"));
-
+    // Setup the camera
     camera = new OrthographicCamera();
-    camera.setToOrtho(false, 1600, 960);
+    camera.setToOrtho(false, 1920, 1080);
 
+    // Initialise a new SpriteBatch for this game
     batch = new SpriteBatch();
-
-    alien = new Rectangle();
-    alien.x = 20;
-    alien.y = 800;
-    alien.width = 64;
-    alien.height = 64;
   }
 
   @Override
@@ -44,23 +38,31 @@ public class GameScreen implements Screen {
 
   @Override
   public void render(float delta) {
+    // Renders the background
     Gdx.gl.glClearColor(0, 0, 0.2f, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+    // Determine a spawn probability
+    Random rand = new Random();
+    float randomFloat = rand.nextFloat();
+
+    // Spawns enemies onto the map
+    if (randomFloat < 0.01) { // Spawn probability could be constant/parameterised
+      // Adds a new enemy to the wave
+      wave.addEnemy();
+    }
+
+    // Removes enemies that have reached the end of the map
+    wave.cleanUp();
+
     camera.update();
-
-    alien.x += 75 * Gdx.graphics.getDeltaTime();
-
-    if (alien.x < 0) {
-      alien.x = 0;
-    }
-    if (alien.x > 1600 - 64) {
-      alien.x = 1600 - 64;
-    }
-
     batch.setProjectionMatrix(camera.combined);
     batch.begin();
-    batch.draw(alienImage, alien.x, alien.y);
+
+    // Updates the positions of all enemies and draws them
+    wave.updatePositions(100 * Gdx.graphics.getDeltaTime());
+    wave.batchDraw(batch);
+
     batch.end();
   }
 
