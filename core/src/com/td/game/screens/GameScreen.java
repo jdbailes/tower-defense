@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.td.game.TowerDefenseGame;
+import com.td.game.model.Tower;
 import com.td.game.model.Wave;
 import java.util.Random;
 
@@ -16,6 +17,9 @@ public class GameScreen implements Screen {
 
   // Creates the wave of enemies
   private Wave wave = new Wave(10);
+
+  // Create a single tower for the game
+  private Tower tower = new Tower(896, 746);
 
   private final TowerDefenseGame game;
 
@@ -59,9 +63,12 @@ public class GameScreen implements Screen {
     batch.setProjectionMatrix(camera.combined);
     batch.begin();
 
-    // Updates the positions of all enemies and draws them
+    // Updates the positions of all enemies and draws the wave
     wave.updatePositions(100 * Gdx.graphics.getDeltaTime());
     wave.batchDraw(batch);
+
+    // Draws the tower
+    tower.batchDraw(batch);
 
     batch.end();
   }
