@@ -51,7 +51,8 @@ public class Wave {
     List<Enemy> cleanedEnemies = this.enemies.stream().filter(enemy -> enemy.getXPos() < 1920 - 64)
         .collect(Collectors.toList());
 
-    if(this.enemies.size() != cleanedEnemies.size()) { // Prevent infinite spawning
+    // Prevent infinite spawning
+    if (this.enemies.size() != cleanedEnemies.size()) {
       this.enemies = cleanedEnemies;
       maxSize = cleanedEnemies.size();
     }
