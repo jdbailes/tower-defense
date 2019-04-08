@@ -18,7 +18,7 @@ public class MenuScreen implements Screen {
     this.game = game;
 
     camera = new OrthographicCamera();
-    camera.setToOrtho(false, 1600, 960);
+    camera.setToOrtho(false, 1920, 1080);
   }
 
   @Override
@@ -37,8 +37,8 @@ public class MenuScreen implements Screen {
     game.batch.setProjectionMatrix(camera.combined);
 
     game.batch.begin();
-    game.font.draw(game.batch, "TOWER DEFENSE ", 200, 300);
-    game.font.draw(game.batch, "Tap anywhere to begin!", 200, 200);
+    game.font.draw(game.batch, "TOWER DEFENSE ", 900, 540);
+    game.font.draw(game.batch, "Tap anywhere to begin!", 900, 500);
     game.batch.end();
 
     // Check to see if the screen has been touched and switches to game screen if so

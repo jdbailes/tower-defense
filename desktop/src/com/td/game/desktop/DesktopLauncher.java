@@ -10,9 +10,9 @@ public class DesktopLauncher {
     LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
     // Manual config override
-    config.title = "Tower Defense";
-    config.width = 1600;
-    config.height = 960;
+    config.title = "Tower Defense by Team Apollo";
+    config.width = 1920;
+    config.height = 1080;
 
     new LwjglApplication(new TowerDefenseGame(), config);
   }
