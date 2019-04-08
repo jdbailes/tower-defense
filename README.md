@@ -1,3 +1,4 @@
+# 🛡 tower-defense 🛡
 _Current working branch is **theHack**_
 
 - [x] Create an enemy & move across the map
@@ -5,8 +6,6 @@ _Current working branch is **theHack**_
 - [x] Create a tower (spaceship)
 - [x] Add collission circles to enemies and tower to prep for bullets (We need to know when enemies are in range etc)
 - [ ] Allow the tower to shoot at an enemy when the enemy is in range of the tower
-
-# 🛡 tower-defense 🛡
 
 ## Initial Setup
 InteliJ would be the recomended IDE for this project, rather than Eclipse - but if you're familier with Eclipse then that's fine. Any instructions in this README will be targetted at an IntelliJ setup.
