@@ -8,14 +8,10 @@ import com.badlogic.gdx.math.Circle;
 
 public class Tower {
 
-  // Tower configuration
-  private Sprite sprite;
-  private static final int WIDTH = 128;
-  private static final int HEIGHT = 128;
-  private static final Texture TEXTURE = new Texture(Gdx.files.internal("ship.png"));
+  private Sprite sprite;  // Tower configuration
+  private Circle zone;    // Encircles the tower and acts as a detection zone
 
-  // Encircles the tower and acts as a detection zone
-  private Circle zone;
+  private static final String IMAGE = "ship.png";
 
   /**
    * Simple constructor for a Tower object.
@@ -31,13 +27,17 @@ public class Tower {
     zone = new Circle(sprite.getX(), sprite.getY(), 300);
   }
 
+  private Texture getTexture() {
+    return new  Texture(Gdx.files.internal(IMAGE));
+  }
+
   /**
    * Renders the tower on the map.
    *
    * @param batch a SpriteBatch passed from the calling class.
    */
   public void batchDraw(SpriteBatch batch) {
-    batch.draw(TEXTURE, sprite.getX(), sprite.getY());
+    batch.draw(getTexture(), sprite.getX(), sprite.getY());
   }
 
   /**
@@ -46,5 +46,14 @@ public class Tower {
    */
   public Circle getZone() {
     return this.zone;
+  }
+
+  /**
+   * Determines whether an enemy has collided with the tower.
+   * @param enemy Enemy which may have collided with tower.
+   * @return true if collision has occurred, otherwise false.
+   */
+  public boolean collides(Enemy enemy) {
+    return this.zone.overlaps(enemy.getZone());
   }
 }

@@ -7,12 +7,10 @@ import com.badlogic.gdx.math.Circle;
 
 public class Enemy {
 
-  private static final int WIDTH = 128;
-  private static final int HEIGHT = 128;
-  private static final Texture TEXTURE = new Texture(Gdx.files.internal("alien.png"));
+  private Sprite sprite;  // Enemy configuration
+  private Circle zone;    // Encircles the enemy and acts as a detection zone
 
-  private Sprite sprite;
-  private Circle zone;
+  private static final String IMAGE = "alien.png";
 
   /**
    * Simple constructor for an Enemy object.
@@ -57,21 +55,12 @@ public class Enemy {
   }
 
   /**
-   * Updates the y-position of the enemy's collision box.
-   *
-   * @param delta a delta to add to the y-position.
-   */
-  public void updateYPos(float delta) {
-    sprite.setY(sprite.getY() + delta);
-  }
-
-  /**
    * Simple accessor method on the enemy texture.
    *
    * @return the texture of the enemy.
    */
   Texture getTexture() {
-    return TEXTURE;
+    return new Texture(Gdx.files.internal(IMAGE));
   }
 
   /**
