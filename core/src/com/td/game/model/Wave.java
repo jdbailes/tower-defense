@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
  */
 public class Wave {
 
-  private List<Enemy> enemies = new ArrayList<>();
-  private int maxSize;
+  private List<Enemy> enemies = new ArrayList<>();  // A list of enemies in a wave
+  private Integer waveSize;                         // Size of the wave
 
   // Pre-defined spawn positions for all enemies on the map
   private final static int SPAWN_X_POS = -64; // 0 - 64
@@ -20,11 +20,20 @@ public class Wave {
   /**
    * Creates a new wave containing a single enemy.
    *
-   * @param maxSize the maximum size the wave can be.
+   * @param waveSize the maximum size the wave can be.
    */
-  public Wave(int maxSize) {
-    this.maxSize = maxSize;
+  public Wave(int waveSize) {
+    this.waveSize = waveSize;
     this.enemies.add(new Enemy(SPAWN_X_POS, SPAWN_Y_POS));
+  }
+
+  /**
+   * Simple accessor method for the list of enemies.
+   *
+   * @return the list of enemies (i.e. the wave).
+   */
+  public List<Enemy> getEnemies() {
+    return enemies;
   }
 
   /**
@@ -32,9 +41,7 @@ public class Wave {
    * new enemy and adds it to the wave.
    */
   public void addEnemy() {
-    int waveSize = enemies.size();
-
-    if (waveSize < this.maxSize) {
+    if (enemies.size() < this.waveSize) {
       if (enemies.get(enemies.size() - 1).getXPos()
           > 64) { // Ensures enemies don't spawn on top of each other
         Enemy enemy = new Enemy(SPAWN_X_POS, SPAWN_Y_POS);
@@ -47,14 +54,14 @@ public class Wave {
    * Checks for enemies that have reached the end of the map and removes them from the wave.
    */
   public void cleanUp() {
-
+    // Filters out enemies that have left the screen
     List<Enemy> cleanedEnemies = this.enemies.stream().filter(enemy -> enemy.getXPos() < 1920 - 64)
         .collect(Collectors.toList());
 
     // Prevent infinite spawning
     if (this.enemies.size() != cleanedEnemies.size()) {
       this.enemies = cleanedEnemies;
-      maxSize = cleanedEnemies.size();
+      waveSize = cleanedEnemies.size();
     }
   }
 
@@ -67,12 +74,7 @@ public class Wave {
     enemies.forEach(e -> e.updateXPos(delta));
   }
 
-  /**
-   * Renders each enemy on the maps.
-   *
-   * @param batch a SpriteBatch passed from the calling class.
-   */
   public void batchDraw(SpriteBatch batch) {
-    enemies.forEach(enemy -> batch.draw(enemy.getTexture(), enemy.getXPos(), enemy.getYPos()));
+    enemies.forEach(enemy -> enemy.batchDraw(batch));
   }
 }

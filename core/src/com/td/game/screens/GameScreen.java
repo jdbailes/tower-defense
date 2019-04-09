@@ -6,20 +6,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.td.game.TowerDefenseGame;
-import com.td.game.model.Tower;
-import com.td.game.model.Wave;
-import java.util.Random;
+import com.td.game.managers.GameManager;
 
 public class GameScreen implements Screen {
 
   private OrthographicCamera camera;
   private SpriteBatch batch;
-
-  // Creates the wave of enemies
-  private Wave wave = new Wave(10);
-
-  // Create a single tower for the game
-  private Tower tower = new Tower(896, 746);
+  private GameManager manager;
 
   private final TowerDefenseGame game;
 
@@ -28,11 +21,14 @@ public class GameScreen implements Screen {
     this.game = game;
 
     // Setup the camera
-    camera = new OrthographicCamera();
-    camera.setToOrtho(false, 1920, 1080);
+    this.camera = new OrthographicCamera();
+    this.camera.setToOrtho(false, 1920, 1080);
 
     // Initialise a new SpriteBatch for this game
-    batch = new SpriteBatch();
+    this.batch = new SpriteBatch();
+
+    // Creates a game manager
+    this.manager = new GameManager(batch);
   }
 
   @Override
@@ -46,29 +42,11 @@ public class GameScreen implements Screen {
     Gdx.gl.glClearColor(0, 0, 0.2f, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-    // Determine a spawn probability
-    Random rand = new Random();
-    float randomFloat = rand.nextFloat();
-
-    // Spawns enemies onto the map
-    if (randomFloat < 0.01) { // Spawn probability could be constant/parameterised
-      // Adds a new enemy to the wave
-      wave.addEnemy();
-    }
-
-    // Removes enemies that have reached the end of the map
-    wave.cleanUp();
-
     camera.update();
     batch.setProjectionMatrix(camera.combined);
     batch.begin();
 
-    // Updates the positions of all enemies and draws the wave
-    wave.updatePositions(100 * Gdx.graphics.getDeltaTime());
-    wave.batchDraw(batch);
-
-    // Draws the tower
-    tower.batchDraw(batch);
+    manager.render();
 
     batch.end();
   }

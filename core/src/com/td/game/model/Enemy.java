@@ -3,6 +3,7 @@ package com.td.game.model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 
 public class Enemy {
@@ -10,7 +11,7 @@ public class Enemy {
   private Sprite sprite;  // Enemy configuration
   private Circle zone;    // Encircles the enemy and acts as a detection zone
 
-  private static final String IMAGE = "alien.png";
+  private static Texture enemyTexture = new Texture(Gdx.files.internal("alien.png"));
 
   /**
    * Simple constructor for an Enemy object.
@@ -19,7 +20,7 @@ public class Enemy {
    * @param yPos the y-position of the collision box for this enemy.
    */
   Enemy(float xPos, float yPos) {
-    sprite = new Sprite();
+    sprite = new Sprite(enemyTexture);
     sprite.setX(xPos);
     sprite.setY(yPos);
 
@@ -55,19 +56,15 @@ public class Enemy {
   }
 
   /**
-   * Simple accessor method on the enemy texture.
-   *
-   * @return the texture of the enemy.
-   */
-  Texture getTexture() {
-    return new Texture(Gdx.files.internal(IMAGE));
-  }
-
-  /**
    * Simple accessor method on for the zone.
+   *
    * @return a Circle zone for this enemy.
    */
   public Circle getZone() {
     return this.zone;
+  }
+
+  public void batchDraw(SpriteBatch batch) {
+    sprite.draw(batch);
   }
 }
