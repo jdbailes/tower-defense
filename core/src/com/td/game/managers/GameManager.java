@@ -2,7 +2,6 @@ package com.td.game.managers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.td.game.model.Enemy;
 import com.td.game.model.Tower;
 import com.td.game.model.Wave;
 import java.util.Random;
@@ -19,40 +18,32 @@ public class GameManager {
   public GameManager(SpriteBatch batch) {
     this.batch = batch;
 
-    this.wave = new Wave(1);
+    this.wave = new Wave(10);
     this.tower = new Tower(896, 746);
   }
 
   public void render() {
-    cleanUp();
-    updateEnemyPositions();
-    draw();
+    // Spawns an enemy if the probability permits it
     spawnEnemy();
-  }
 
-  private void scan() {
-    for (Enemy enemy : this.wave.getEnemies()) {
-      if (this.tower.getZone().overlaps(enemy.getZone())) {
-        this.tower.setTarget(enemy);
-        break;
-      }
-    }
+    // Removes enemies that have left the map
+    wave.cleanUp();
+    // Updates the position of all enemies with a constant value
+    wave.updatePositions(100 * Gdx.graphics.getDeltaTime());
+
+    // Tower looks for enemies within it's range
+    tower.scan(wave.getEnemies());
+    // Tower locks onto a target if it has one
+    tower.lockTarget();
+
+    // Renders on the screen
+    draw();
   }
 
   private void draw() {
-    // Drawns both the tower and the wave after their values have been updated
+    // Draws both the tower and the wave after their values have been updated
     this.wave.batchDraw(batch);
     this.tower.batchDraw(batch);
-  }
-
-  private void updateEnemyPositions() {
-    // Updates the position of all enemies with a constant value
-    wave.updatePositions(100 * Gdx.graphics.getDeltaTime());
-  }
-
-  private void cleanUp() {
-    // Cleans up enemies that have left the map
-    wave.cleanUp();
   }
 
   private void spawnEnemy() {

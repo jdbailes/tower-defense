@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Vector2;
 
 public class Enemy {
 
@@ -66,5 +67,9 @@ public class Enemy {
 
   public void batchDraw(SpriteBatch batch) {
     sprite.draw(batch);
+  }
+
+  public Vector2 getVector() {
+    return new Vector2(getXPos(), getYPos());
   }
 }
