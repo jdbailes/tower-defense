@@ -21,6 +21,11 @@ On the run up to a submission, we can orchestrate a group pull request/code revi
 
 ## Useful Links
 [LibGDX documentation](https://libgdx.badlogicgames.com/documentation/)
+
 [LibGDX API docs](https://libgdx.badlogicgames.com/ci/nightlies/docs/api/overview-summary.html)
+
 [GamesFromScratch LibGDX tutorial](https://www.gamefromscratch.com/page/LibGDX-Tutorial-series.aspx)
+
 [A Simple Game in LibGDX](https://github.com/libgdx/libgdx/wiki/A-simple-game)
+
+[Tiled Map Editor](https://www.mapeditor.org/)
