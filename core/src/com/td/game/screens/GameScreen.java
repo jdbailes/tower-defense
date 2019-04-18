@@ -8,16 +8,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.td.game.TowerDefenseGame;
 import com.td.game.managers.GameManager;
 
+/**
+ * Serves the screen the game is played within.
+ */
 public class GameScreen implements Screen {
 
   private OrthographicCamera camera;
   private SpriteBatch batch;
   private GameManager manager;
 
-  private final TowerDefenseGame game;
+  private final TowerDefenseGame game; // Game is passed into the GameScreen constructor
 
   GameScreen(final TowerDefenseGame game) {
-    // Passing the game into the game screen
     this.game = game;
 
     // Setup the camera

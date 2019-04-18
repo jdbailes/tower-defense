@@ -7,12 +7,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 
-public class Enemy {
+/**
+ * Enemy class stores the state of an enemy character.
+ */
+class Enemy {
+
+  private static Texture enemyTexture = new Texture(Gdx.files.internal("alien.png"));
 
   private Sprite sprite;  // Enemy configuration
   private Circle zone;    // Encircles the enemy and acts as a detection zone
-
-  private static Texture enemyTexture = new Texture(Gdx.files.internal("alien.png"));
 
   /**
    * Simple constructor for an Enemy object.
@@ -25,7 +28,7 @@ public class Enemy {
     sprite.setX(xPos);
     sprite.setY(yPos);
 
-    zone = new Circle(sprite.getX(), sprite.getY(), 64);
+    zone = new Circle(sprite.getX(), sprite.getY(), 32);
   }
 
   /**
@@ -42,7 +45,7 @@ public class Enemy {
    *
    * @return the y-position of the collision box.
    */
-  float getYPos() {
+  private float getYPos() {
     return this.sprite.getY();
   }
 
@@ -61,15 +64,25 @@ public class Enemy {
    *
    * @return a Circle zone for this enemy.
    */
-  public Circle getZone() {
+  Circle getZone() {
     return this.zone;
   }
 
-  public void batchDraw(SpriteBatch batch) {
+  /**
+   * Renders the Sprite on the SpriteBatch.
+   *
+   * @param batch SpriteBatch to be rendered onto
+   */
+  void batchDraw(SpriteBatch batch) {
     sprite.draw(batch);
   }
 
-  public Vector2 getVector() {
+  /**
+   * Creates and returns the vector based on the x and y co-ordinates.
+   *
+   * @return the vector for this enemy
+   */
+  Vector2 getVector() {
     return new Vector2(getXPos(), getYPos());
   }
 }

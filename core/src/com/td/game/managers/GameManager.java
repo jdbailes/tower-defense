@@ -1,59 +1,33 @@
 package com.td.game.managers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.td.game.model.Tower;
-import com.td.game.model.Wave;
-import java.util.Random;
+import com.td.game.model.Level;
 
+/**
+ * GameManage class will allow us to orchestrate levels & scoring within the game.
+ */
 public class GameManager {
 
-  private Wave wave;
-  private Tower tower;
+  private final SpriteBatch batch;    // SpriteBatch to be used within the game
+  private final Level level;          // A single level (at the moment)
 
-  private Random random = new Random();
-
-  private final SpriteBatch batch;
-
+  /**
+   * Constructor for the GameManager.
+   *
+   * @param batch receives a SpriteBatch to be used in the game
+   */
   public GameManager(SpriteBatch batch) {
     this.batch = batch;
 
-    this.wave = new Wave(10);
-    this.tower = new Tower(896, 746);
+    // Configurable number of enemy for a level - will allow us to configure certain aspects of a level
+    this.level = new Level(10);
   }
 
+  /**
+   * Method called with every frame of the game.
+   */
   public void render() {
-    // Spawns an enemy if the probability permits it
-    spawnEnemy();
-
-    // Removes enemies that have left the map
-    wave.cleanUp();
-    // Updates the position of all enemies with a constant value
-    wave.updatePositions(100 * Gdx.graphics.getDeltaTime());
-
-    // Tower looks for enemies within it's range
-    tower.scan(wave.getEnemies());
-    // Tower locks onto a target if it has one
-    tower.lockTarget();
-
-    // Renders on the screen
-    draw();
-  }
-
-  private void draw() {
-    // Draws both the tower and the wave after their values have been updated
-    this.wave.batchDraw(batch);
-    this.tower.batchDraw(batch);
-  }
-
-  private void spawnEnemy() {
-    // Determine a spawn probability
-    float randomFloat = this.random.nextFloat();
-
-    // Spawns enemies onto the map
-    if (randomFloat < 0.01) { // Spawn probability could be constant/parameterised
-      // Adds a new enemy to the wave
-      wave.addEnemy();
-    }
+    this.level.update();    // Firstly, level is updated
+    this.level.draw(batch); // Level is then drawn after its been updated
   }
 }
