@@ -10,7 +10,7 @@ import java.util.Random;
  */
 public class Level {
 
-  private static final float SPAWN_PROBABILITY = 0.01f;   // The change of an enemy spawning
+  private static final float SPAWN_PROBABILITY = 0.005f;   // The change of an enemy spawning
 
   private Wave wave;    // A wave of enemies for this level
   private Ship ship;    // A single tower for this level (will be more in further releases)
@@ -23,8 +23,8 @@ public class Level {
    * @param waveSize configurable wave size
    */
   public Level(int waveSize) {
-    this.wave = new Wave(waveSize, -64, 476);
-    this.ship = new Ship(1096, 206);
+    this.wave = new Wave(20, -64, 476);
+    this.ship = new Ship(869, 700);
   }
 
   /**
@@ -40,7 +40,7 @@ public class Level {
       wave.addEnemy();    // Adds a new enemy to the wave
     }
 
-    wave.updatePositions(100 * Gdx.graphics.getDeltaTime());  // Updates the position of the enemies
+    wave.updatePositions(50 * Gdx.graphics.getDeltaTime());  // Updates the position of the enemies
 
     ship.run(wave);   // Ship looks for enemies within it's range
   }
