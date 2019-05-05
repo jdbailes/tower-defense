@@ -10,7 +10,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.td.game.TowerDefenseGame;
-import com.td.game.managers.GameManager;
+import com.td.game.offScreen.Level;
 
 /**
  * Serves the screen the game is played within.
@@ -18,13 +18,14 @@ import com.td.game.managers.GameManager;
 public class GameScreen implements Screen {
 
   private OrthographicCamera camera;
-  private SpriteBatch batch;
-  private GameManager manager;
 
   private TiledMap tiledMap;
   private TiledMapRenderer tiledMapRenderer;
 
   private final TowerDefenseGame game; // Game is passed into the GameScreen constructor
+
+  private SpriteBatch batch;
+  private Level level;
 
   GameScreen(final TowerDefenseGame game) {
     this.game = game;
@@ -39,9 +40,7 @@ public class GameScreen implements Screen {
 
     // Initialise a new SpriteBatch for this game
     this.batch = new SpriteBatch();
-
-    // Creates a game manager
-    this.manager = new GameManager(batch);
+    this.level = new Level(10);
   }
 
   @Override
@@ -55,16 +54,17 @@ public class GameScreen implements Screen {
     Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-    camera.update();
-    tiledMapRenderer.setView(camera);
-    tiledMapRenderer.render();
+    this.camera.update();
+    this.tiledMapRenderer.setView(camera);
+    this.tiledMapRenderer.render();
 
-    batch.setProjectionMatrix(camera.combined);
-    batch.begin();
+    this.batch.setProjectionMatrix(camera.combined);
+    this.batch.begin();
 
-    manager.render();
+    this.level.update();    // Firstly, level is updated
+    this.level.draw(batch); // Level is then drawn after its been updated
 
-    batch.end();
+    this.batch.end();
   }
 
   @Override

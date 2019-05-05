@@ -1,4 +1,4 @@
-package com.td.game.model;
+package com.td.game.onScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 /**
  * Stores the state of a Missile for easy tracking of Missile projections & stats.
  */
-class Missile {
+public class Missile {
 
   private static final Texture TEXTURE = new Texture(Gdx.files.internal("laser.png"));
 
@@ -23,7 +23,7 @@ class Missile {
    * @param xPos the starting x position for the missile
    * @param yPos the starting y position for the missile
    */
-  Missile(float xPos, float yPos) {
+  public Missile(float xPos, float yPos) {
     this.sprite = new Sprite(TEXTURE); // Sets the texture
     this.sprite.setSize(16, 16); // Sets the size
     this.sprite.setPosition(xPos + 64, yPos); // Set the x and y position
@@ -36,7 +36,7 @@ class Missile {
    *
    * @param direction the direction the missile needs to travel in
    */
-  void updatePosition(Vector2 direction) {
+  public void updatePosition(Vector2 direction) {
     float missileSpeed = 5.0f;
     float newXPos = sprite.getX() + missileSpeed * Gdx.graphics.getDeltaTime() * direction.x;
     float newYPos = sprite.getY() + missileSpeed * Gdx.graphics.getDeltaTime() * direction.y;
@@ -50,7 +50,7 @@ class Missile {
    *
    * @param batch SpriteBatch to be rendered onto
    */
-  void batchDraw(SpriteBatch batch) {
+  public void batchDraw(SpriteBatch batch) {
     sprite.draw(batch);
   }
 
@@ -59,7 +59,7 @@ class Missile {
    *
    * @return the collisionZone for the Missile
    */
-  Circle getCollisionZone() {
+  public Circle getCollisionZone() {
     return this.collisionZone;
   }
 }

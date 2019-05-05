@@ -1,4 +1,4 @@
-package com.td.game.model;
+package com.td.game.onScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -7,12 +7,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.td.game.offScreen.Wave;
 import java.util.List;
 
 /**
  * Ship class stores the state of a ship character.
  */
-class Ship {
+public class Ship {
 
   private static final Texture TEXTURE = new Texture(Gdx.files.internal("ship.png"));
 
@@ -28,7 +29,7 @@ class Ship {
    * @param spawnX the x-position of the collision box for this tower.
    * @param spawnY the y-position of the collision box for this tower.
    */
-  Ship(int spawnX, int spawnY) {
+  public Ship(int spawnX, int spawnY) {
     sprite = new Sprite(TEXTURE);
     sprite.setPosition(spawnX, spawnY);
 
@@ -40,7 +41,7 @@ class Ship {
    *
    * @param wave the current state of the wave for this frame
    */
-  void run(Wave wave) {
+  public void run(Wave wave) {
     // If the ship doesn't have a target, look for one
     if (this.target == null) {
       target = scanForTarget(wave.getEnemies());
@@ -112,7 +113,7 @@ class Ship {
    *
    * @param batch SpriteBatch to be rendered onto
    */
-  void batchDraw(SpriteBatch batch) {
+  public void batchDraw(SpriteBatch batch) {
     if (missile != null) {
       missile.batchDraw(batch);
     }

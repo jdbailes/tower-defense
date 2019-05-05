@@ -1,7 +1,8 @@
-package com.td.game.model;
+package com.td.game.offScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.td.game.onScreen.Ship;
 import java.util.Random;
 
 /**

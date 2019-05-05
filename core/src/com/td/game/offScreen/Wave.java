@@ -1,6 +1,7 @@
-package com.td.game.model;
+package com.td.game.offScreen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.td.game.onScreen.Enemy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,7 +9,7 @@ import java.util.stream.Collectors;
 /**
  * Manages the wave of enemies in the game.
  */
-class Wave {
+public class Wave {
 
   private List<Enemy> enemies = new ArrayList<>();  // A list of enemies in a wave
   private Integer waveSize;                         // Size of the wave

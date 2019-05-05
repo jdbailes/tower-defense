@@ -1,4 +1,4 @@
-package com.td.game.model;
+package com.td.game.onScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 /**
  * Enemy class stores the state of an enemy character.
  */
-class Enemy {
+public class Enemy {
 
   private static Texture enemyTexture = new Texture(Gdx.files.internal("alien.png"));
 
@@ -23,7 +23,7 @@ class Enemy {
    * @param xPos the x-position of the collision box for this enemy.
    * @param yPos the y-position of the collision box for this enemy.
    */
-  Enemy(float xPos, float yPos) {
+  public Enemy(float xPos, float yPos) {
     sprite = new Sprite(enemyTexture);
     sprite.setX(xPos);
     sprite.setY(yPos);
@@ -36,7 +36,7 @@ class Enemy {
    *
    * @return the x-position of the collision box.
    */
-  float getXPos() {
+  public float getXPos() {
     return this.sprite.getX();
   }
 
@@ -54,7 +54,7 @@ class Enemy {
    *
    * @param delta a delta to add to the x-position.
    */
-  void updateXPos(float delta) {
+  public void updateXPos(float delta) {
     sprite.setX(sprite.getX() + delta);
     this.zone.x += delta;
   }
@@ -64,7 +64,7 @@ class Enemy {
    *
    * @return a Circle zone for this enemy.
    */
-  Circle getZone() {
+  public Circle getZone() {
     return this.zone;
   }
 
@@ -73,7 +73,7 @@ class Enemy {
    *
    * @param batch SpriteBatch to be rendered onto
    */
-  void batchDraw(SpriteBatch batch) {
+  public void batchDraw(SpriteBatch batch) {
     sprite.draw(batch);
   }
 
@@ -82,7 +82,7 @@ class Enemy {
    *
    * @return the vector for this enemy
    */
-  Vector2 getVector() {
+  public Vector2 getVector() {
     return new Vector2(getXPos(), getYPos());
   }
 }
