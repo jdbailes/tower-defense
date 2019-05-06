@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 /**
  * Manages the wave of enemies in the game.
  */
-public class Wave {
+public class LevelManager {
 
   private List<Enemy> enemies = new ArrayList<>();  // A list of enemies in a wave
   private Integer waveSize;                         // Size of the wave
@@ -19,7 +19,7 @@ public class Wave {
    *
    * @param waveSize the maximum size the wave can be.
    */
-  Wave(int waveSize, float spawnX, float spawnY) {
+  LevelManager(int waveSize, float spawnX, float spawnY) {
     this.waveSize = waveSize;
     this.enemies.add(new Enemy(spawnX, spawnY));
   }
@@ -57,7 +57,8 @@ public class Wave {
    */
   void cleanUp() {
     // Filters out enemies that have left the screen
-    List<Enemy> cleanedEnemies = this.enemies.stream().filter(enemy -> enemy.getXPos() < 1920 - 64)
+    List<Enemy> cleanedEnemies = this.enemies.stream()
+        .filter(enemy -> enemy.getXPos() < 1920 - 64)
         .collect(Collectors.toList());
 
     // Prevent infinite spawning
@@ -65,6 +66,10 @@ public class Wave {
       this.enemies = cleanedEnemies;
       waveSize = cleanedEnemies.size();
     }
+  }
+
+  void removeEnemyIfDead() {
+    this.enemies = this.enemies.stream().filter(enemy -> !enemy.isDead()).collect(Collectors.toList());
   }
 
   /**

@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.td.game.offScreen.Wave;
+import com.td.game.offScreen.LevelManager;
 import java.util.List;
 
 /**
@@ -39,15 +39,15 @@ public class Ship {
   /**
    * Runs the ship for a single frame.
    *
-   * @param wave the current state of the wave for this frame
+   * @param levelManager the current state of the levelManager for this frame
    */
-  public void run(Wave wave) {
+  public void run(LevelManager levelManager) {
     // If the ship doesn't have a target, look for one
     if (this.target == null) {
-      target = scanForTarget(wave.getEnemies());
+      target = scanForTarget(levelManager.getEnemies());
     } else {
       // Check the target is still in range
-      if (range.overlaps(this.target.getZone())) {
+      if (range.overlaps(this.target.getCollisionCircle())) {
         engageTarget();
       } else {
         disengageTarget();
@@ -60,14 +60,18 @@ public class Ship {
    * target.
    */
   private void engageTarget() {
+    if (this.missile == null) {
+      this.missile = new Missile(sprite.getX(), sprite.getY());
+    }
+
     Vector2 shipVector = new Vector2(sprite.getX(), sprite.getY()); // Vector for the ship
     Vector2 targetVector = target.getVector();                      // Vector for the target
 
     float opp = targetVector.x - shipVector.x;  // Length of the opposite side
     float adj = shipVector.y - targetVector.y;  // Length of the adjacent side
 
-    float angle = MathUtils.radiansToDegrees * MathUtils
-        .atan2(opp, adj); // Arc tan to find angle between ship & target
+    // Arc tan to find angle between ship & target
+    float angle = MathUtils.radiansToDegrees * MathUtils.atan2(opp, adj);
 
     sprite.setRotation(angle);
 
@@ -75,12 +79,14 @@ public class Ship {
       missile = new Missile(sprite.getX(), sprite.getY());
     }
 
-    Vector2 missileDestination = targetVector
-        .sub(shipVector); // Determines the vector for the missile to head towards
-    missile.updatePosition(missileDestination);
+    // Determines the vector for the missile to head towards
+    Vector2 missileDestination = targetVector.sub(shipVector);
+    missile.updatePosition(missileDestination, sprite.getRotation());
 
-    if (missile.getCollisionZone().overlaps(target.getZone())) { // TODO This currently doesn't work
-      missile = new Missile(sprite.getX(), sprite.getY());
+    if (this.target.isMissileColliding(missile)) {
+      this.target.decreaseHealth();
+
+      this.missile = null;
     }
 
   }
@@ -103,7 +109,8 @@ public class Ship {
    */
   private Enemy scanForTarget(List<Enemy> enemies) {
     return enemies.stream()                                     // Java 8 stream
-        .filter(enemy -> enemy.getZone().overlaps(this.range))  // Filter by a given predicate
+        .filter(enemy -> enemy.getCollisionCircle()
+            .overlaps(this.range))  // Filter by a given predicate
         .findFirst()                                            // Only return the first
         .orElse(null);                                    // Return null if none found
   }

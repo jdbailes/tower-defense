@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -15,7 +16,10 @@ public class Enemy {
   private static Texture enemyTexture = new Texture(Gdx.files.internal("alien.png"));
 
   private Sprite sprite;  // Enemy configuration
-  private Circle zone;    // Encircles the enemy and acts as a detection zone
+  private Circle collisionCircle;    // Encircles the enemy and acts as a detection collisionCircle
+
+  private boolean isDead = false;
+  private int health = 20;
 
   /**
    * Simple constructor for an Enemy object.
@@ -28,7 +32,7 @@ public class Enemy {
     sprite.setX(xPos);
     sprite.setY(yPos);
 
-    zone = new Circle(sprite.getX(), sprite.getY(), 32);
+    collisionCircle = new Circle(sprite.getX(), sprite.getY(), 32);
   }
 
   /**
@@ -56,16 +60,16 @@ public class Enemy {
    */
   public void updateXPos(float delta) {
     sprite.setX(sprite.getX() + delta);
-    this.zone.x += delta;
+    this.collisionCircle.x += delta;
   }
 
   /**
-   * Simple accessor method on for the zone.
+   * Simple accessor method on for the collisionCircle.
    *
-   * @return a Circle zone for this enemy.
+   * @return a Circle collisionCircle for this enemy.
    */
-  public Circle getZone() {
-    return this.zone;
+  public Circle getCollisionCircle() {
+    return this.collisionCircle;
   }
 
   /**
@@ -84,5 +88,26 @@ public class Enemy {
    */
   public Vector2 getVector() {
     return new Vector2(getXPos(), getYPos());
+  }
+
+  public boolean isDead() {
+    return this.isDead;
+  }
+
+  public void decreaseHealth() {
+    if(this.health < 0) {
+      this.health--;
+    } else {
+      setDead(true);
+    }
+  }
+
+  public void setDead(boolean dead) {
+    isDead = dead;
+  }
+
+  public boolean isMissileColliding(Missile missile) {
+    Circle missileCollisionCircle = missile.getCollisionCircle();
+    return Intersector.overlaps(missileCollisionCircle, this.collisionCircle);
   }
 }

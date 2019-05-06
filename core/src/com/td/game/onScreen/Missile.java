@@ -12,10 +12,11 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Missile {
 
-  private static final Texture TEXTURE = new Texture(Gdx.files.internal("laser.png"));
+  private static final Texture TEXTURE = new Texture(Gdx.files.internal("laser-red.png"));
 
   private Sprite sprite;              // Missile configuration
-  private Circle collisionZone;       // Missile collision collisionZone
+  private Circle collisionCircle;       // Missile collision collisionCircle
+  private float speed = 5.0f;
 
   /**
    * Constructor for a Missile.
@@ -25,10 +26,10 @@ public class Missile {
    */
   public Missile(float xPos, float yPos) {
     this.sprite = new Sprite(TEXTURE); // Sets the texture
-    this.sprite.setSize(16, 16); // Sets the size
+
     this.sprite.setPosition(xPos + 64, yPos); // Set the x and y position
 
-    collisionZone = new Circle(sprite.getX(), sprite.getY(), 32); // Creates the collision zone
+    collisionCircle = new Circle(sprite.getX(), sprite.getY(), 32); // Creates the collision zone
   }
 
   /**
@@ -36,13 +37,15 @@ public class Missile {
    *
    * @param direction the direction the missile needs to travel in
    */
-  public void updatePosition(Vector2 direction) {
-    float missileSpeed = 5.0f;
-    float newXPos = sprite.getX() + missileSpeed * Gdx.graphics.getDeltaTime() * direction.x;
-    float newYPos = sprite.getY() + missileSpeed * Gdx.graphics.getDeltaTime() * direction.y;
+  public void updatePosition(Vector2 direction, Float rotation) {
 
-    sprite.setPosition(newXPos, newYPos);
-    collisionZone.setPosition(newXPos, newYPos);
+    this.sprite.setRotation(rotation);
+
+    float newXPos = sprite.getX() + this.speed * Gdx.graphics.getDeltaTime() * direction.x;
+    float newYPos = sprite.getY() + this.speed * Gdx.graphics.getDeltaTime() * direction.y;
+
+    this.sprite.setPosition(newXPos, newYPos);
+    this.collisionCircle.setPosition(newXPos, newYPos);
   }
 
   /**
@@ -55,11 +58,11 @@ public class Missile {
   }
 
   /**
-   * Simple accessor for the collisionZone.
+   * Simple accessor for the collisionCircle.
    *
-   * @return the collisionZone for the Missile
+   * @return the collisionCircle for the Missile
    */
-  public Circle getCollisionZone() {
-    return this.collisionZone;
+  public Circle getCollisionCircle() {
+    return this.collisionCircle;
   }
 }
