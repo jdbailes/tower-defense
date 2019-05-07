@@ -2,7 +2,7 @@
 _Current working branch is **theMVP**_
 
 - [x] Create an enemy & move across the map
-- [x] Create a levelManager of enemies that spawn & move across the map
+- [x] Create a wave of enemies that spawn & move across the map
 - [x] Create a tower (spaceship)
 - [x] Add collission circles to enemies and tower to prep for bullets (We need to know when enemies are in range etc)
 - [x] Allow the tower to shoot at an enemy when the enemy is in range of the tower

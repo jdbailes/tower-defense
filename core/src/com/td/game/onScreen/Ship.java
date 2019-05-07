@@ -6,8 +6,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.td.game.offScreen.LevelManager;
+import com.td.game.offScreen.Wave;
 import java.util.List;
 
 /**
@@ -39,12 +40,12 @@ public class Ship {
   /**
    * Runs the ship for a single frame.
    *
-   * @param levelManager the current state of the levelManager for this frame
+   * @param wave the current state of the wave for this frame
    */
-  public void run(LevelManager levelManager) {
+  public void run(Wave wave) {
     // If the ship doesn't have a target, look for one
     if (this.target == null) {
-      target = scanForTarget(levelManager.getEnemies());
+      target = scanForTarget(wave.getEnemies());
     } else {
       // Check the target is still in range
       if (range.overlaps(this.target.getCollisionCircle())) {

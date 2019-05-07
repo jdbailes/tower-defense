@@ -25,11 +25,10 @@ public class Missile {
    * @param yPos the starting y position for the missile
    */
   public Missile(float xPos, float yPos) {
-    this.sprite = new Sprite(TEXTURE); // Sets the texture
+    this.sprite = new Sprite(TEXTURE);
+    this.sprite.setPosition(xPos + 64, yPos);
 
-    this.sprite.setPosition(xPos + 64, yPos); // Set the x and y position
-
-    collisionCircle = new Circle(sprite.getX(), sprite.getY(), 32); // Creates the collision zone
+    collisionCircle = new Circle(sprite.getX(), sprite.getY(), 32);
   }
 
   /**

@@ -15,8 +15,8 @@ public class Enemy {
 
   private static Texture enemyTexture = new Texture(Gdx.files.internal("alien.png"));
 
-  private Sprite sprite;  // Enemy configuration
-  private Circle collisionCircle;    // Encircles the enemy and acts as a detection collisionCircle
+  private Sprite sprite;              // Enemy configuration
+  private Circle collisionCircle;     // Encircles the enemy and acts as a detection collisionCircle
 
   private boolean isDead = false;
   private int health = 20;

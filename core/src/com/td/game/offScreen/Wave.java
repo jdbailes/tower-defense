@@ -9,17 +9,17 @@ import java.util.stream.Collectors;
 /**
  * Manages the wave of enemies in the game.
  */
-public class LevelManager {
+public class Wave {
 
-  private List<Enemy> enemies = new ArrayList<>();  // A list of enemies in a wave
-  private Integer waveSize;                         // Size of the wave
+  private List<Enemy> enemies = new ArrayList<>();
+  private Integer waveSize;
 
   /**
    * Creates a new wave containing a single enemy.
    *
    * @param waveSize the maximum size the wave can be.
    */
-  LevelManager(int waveSize, float spawnX, float spawnY) {
+  Wave(int waveSize, float spawnX, float spawnY) {
     this.waveSize = waveSize;
     this.enemies.add(new Enemy(spawnX, spawnY));
   }
@@ -39,13 +39,12 @@ public class LevelManager {
    */
   void addEnemy() {
     if (enemies.size() < this.waveSize) {
-      if (enemies.get(enemies.size() - 1).getXPos()
-          > 64) { // Ensures enemies don't spawn on top of each other
+      // Ensures enemies don't spawn on top of each other
+      if (enemies.size() > 0 && (enemies.get(enemies.size() - 1).getXPos() > 64)) {
         // Pre-defined spawn positions for all enemies on the map
-        // 0 - 64
-        int spawnX = -64;
-        // 540 - 64
-        int spawnY = 476;
+        int spawnX = -64; // 0 - 64
+        int spawnY = 476; // 540 - 64
+
         Enemy enemy = new Enemy(spawnX, spawnY);
         enemies.add(enemy);
       }
