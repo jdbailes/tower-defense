@@ -2,11 +2,9 @@ package com.td.game.onScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.td.game.offScreen.Wave;
 import java.util.List;
@@ -14,12 +12,10 @@ import java.util.List;
 /**
  * Ship class stores the state of a ship character.
  */
-public class Ship {
+public class Ship extends Component {
 
   private static final Texture TEXTURE = new Texture(Gdx.files.internal("ship.png"));
-
-  private final Sprite sprite;    // Ship configuration
-  private final Circle range;     // Encircles the tower and acts as a detection range
+  private static final float RADIUS = 300;
 
   private Enemy target;           // Identifies the current target for the tower
   private Missile missile;        // Every ship has a missile to fire - can be created/deleted for repeat firing
@@ -27,14 +23,11 @@ public class Ship {
   /**
    * Simple constructor for a Ship object.
    *
-   * @param spawnX the x-position of the collision box for this tower.
-   * @param spawnY the y-position of the collision box for this tower.
+   * @param x the x-position of the collision box for this tower.
+   * @param y the y-position of the collision box for this tower.
    */
-  public Ship(int spawnX, int spawnY) {
-    sprite = new Sprite(TEXTURE);
-    sprite.setPosition(spawnX, spawnY);
-
-    range = new Circle(sprite.getX(), sprite.getY(), 300);
+  public Ship(int x, int y) {
+    super(x, y, 64, 64, TEXTURE, RADIUS);
   }
 
   /**
@@ -44,14 +37,18 @@ public class Ship {
    */
   public void run(Wave wave) {
     // If the ship doesn't have a target, look for one
-    if (this.target == null) {
+    if (target == null) {
       target = scanForTarget(wave.getEnemies());
     } else {
-      // Check the target is still in range
-      if (range.overlaps(this.target.getCollisionCircle())) {
-        engageTarget();
+      if(target.isDead()) {
+        wave.getEnemies().remove(target);
+        target = null;
+        sprite.setRotation(0);
+      } else if(!Intersector.overlaps(collisionCircle, target.collisionCircle)) {
+        target = null;
+        sprite.setRotation(0);
       } else {
-        disengageTarget();
+        engageTarget();
       }
     }
   }
@@ -61,12 +58,15 @@ public class Ship {
    * target.
    */
   private void engageTarget() {
+    // TODO Fix the buggy missile
+
+    // If the missile isn't initialised then initialise it
     if (this.missile == null) {
-      this.missile = new Missile(sprite.getX(), sprite.getY());
+      this.missile = new Missile(getCentreX(), getCentreY());
     }
 
-    Vector2 shipVector = new Vector2(sprite.getX(), sprite.getY()); // Vector for the ship
-    Vector2 targetVector = target.getVector();                      // Vector for the target
+    Vector2 shipVector = new Vector2(this.getCentreX(), this.getCentreY());
+    Vector2 targetVector = new Vector2(target.getCentreX(), target.getCentreY());
 
     float opp = targetVector.x - shipVector.x;  // Length of the opposite side
     float adj = shipVector.y - targetVector.y;  // Length of the adjacent side
@@ -76,29 +76,16 @@ public class Ship {
 
     sprite.setRotation(angle);
 
-    if (missile == null) {
-      missile = new Missile(sprite.getX(), sprite.getY());
-    }
-
     // Determines the vector for the missile to head towards
     Vector2 missileDestination = targetVector.sub(shipVector);
     missile.updatePosition(missileDestination, sprite.getRotation());
 
     if (this.target.isMissileColliding(missile)) {
-      this.target.decreaseHealth();
-
+      this.target.decrementHealth();
       this.missile = null;
+    } else if (this.missile.isLost()) {
+     this.missile = null;
     }
-
-  }
-
-  /**
-   * Removes engagement from target.
-   */
-  private void disengageTarget() {
-    missile = null;
-    target = null;
-    sprite.setRotation(0);
   }
 
   /**
@@ -109,11 +96,10 @@ public class Ship {
    * @return Enemy if a target is found, otherwise null
    */
   private Enemy scanForTarget(List<Enemy> enemies) {
-    return enemies.stream()                                     // Java 8 stream
-        .filter(enemy -> enemy.getCollisionCircle()
-            .overlaps(this.range))  // Filter by a given predicate
-        .findFirst()                                            // Only return the first
-        .orElse(null);                                    // Return null if none found
+    return enemies.stream()
+        .filter(enemy -> Intersector.overlaps(enemy.collisionCircle, collisionCircle))
+        .findFirst()
+        .orElse(null);
   }
 
   /**
@@ -125,6 +111,6 @@ public class Ship {
     if (missile != null) {
       missile.batchDraw(batch);
     }
-    sprite.draw(batch);
+    this.getSprite().draw(batch);
   }
 }

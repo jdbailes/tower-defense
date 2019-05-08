@@ -2,33 +2,27 @@ package com.td.game.onScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.td.game.Config;
 
 /**
  * Stores the state of a Missile for easy tracking of Missile projections & stats.
  */
-public class Missile {
+public class Missile extends Component {
 
   private static final Texture TEXTURE = new Texture(Gdx.files.internal("laser-red.png"));
+  private static final float RADIUS = 16;
 
-  private Sprite sprite;              // Missile configuration
-  private Circle collisionCircle;       // Missile collision collisionCircle
   private float speed = 5.0f;
 
   /**
    * Constructor for a Missile.
    *
-   * @param xPos the starting x position for the missile
-   * @param yPos the starting y position for the missile
+   * @param x the starting x position for the missile
+   * @param y the starting y position for the missile
    */
-  public Missile(float xPos, float yPos) {
-    this.sprite = new Sprite(TEXTURE);
-    this.sprite.setPosition(xPos + 64, yPos);
-
-    collisionCircle = new Circle(sprite.getX(), sprite.getY(), 32);
+  public Missile(float x, float y) {
+    super(x, y, 8,32, TEXTURE, RADIUS);
   }
 
   /**
@@ -38,30 +32,18 @@ public class Missile {
    */
   public void updatePosition(Vector2 direction, Float rotation) {
 
-    this.sprite.setRotation(rotation);
+    sprite.setRotation(rotation);
 
     float newXPos = sprite.getX() + this.speed * Gdx.graphics.getDeltaTime() * direction.x;
     float newYPos = sprite.getY() + this.speed * Gdx.graphics.getDeltaTime() * direction.y;
 
-    this.sprite.setPosition(newXPos, newYPos);
-    this.collisionCircle.setPosition(newXPos, newYPos);
+    sprite.setPosition(newXPos, newYPos);
+    collisionCircle.setPosition(newXPos, newYPos);
   }
 
-  /**
-   * Renders the Sprite on the SpriteBatch.
-   *
-   * @param batch SpriteBatch to be rendered onto
-   */
-  public void batchDraw(SpriteBatch batch) {
-    sprite.draw(batch);
-  }
+  public boolean isLost() {
+    return x > Config.getScreenWidth() + 100 || x < -100 || y > Config.getScreenHeight() + 100
+        || y < -100;
 
-  /**
-   * Simple accessor for the collisionCircle.
-   *
-   * @return the collisionCircle for the Missile
-   */
-  public Circle getCollisionCircle() {
-    return this.collisionCircle;
   }
 }

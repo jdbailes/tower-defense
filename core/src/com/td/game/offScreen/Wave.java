@@ -1,9 +1,11 @@
 package com.td.game.offScreen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.td.game.Config;
 import com.td.game.onScreen.Enemy;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -11,17 +13,20 @@ import java.util.stream.Collectors;
  */
 public class Wave {
 
+  private static final float SPAWN_X = -64;
+  private static final float SPAWN_Y = 476;
+
+  private static final Random RANDOM = new Random();
+
+
   private List<Enemy> enemies = new ArrayList<>();
-  private Integer waveSize;
+  private int waveSize = 16;
 
   /**
    * Creates a new wave containing a single enemy.
-   *
-   * @param waveSize the maximum size the wave can be.
    */
-  Wave(int waveSize, float spawnX, float spawnY) {
-    this.waveSize = waveSize;
-    this.enemies.add(new Enemy(spawnX, spawnY));
+  public Wave() {
+    this.enemies.add(new Enemy(SPAWN_X, SPAWN_Y));
   }
 
   /**
@@ -33,14 +38,23 @@ public class Wave {
     return enemies;
   }
 
+  public void spawnEnemy(float spawnProbability) {
+    float randomFloat = RANDOM.nextFloat();    // Determine a spawn probability
+
+    // Spawns enemies onto the map
+    if (randomFloat < spawnProbability) {
+      addEnemy();
+    }
+  }
+
   /**
    * Checks that the max wave size will not be exceeded by the addition of a new enemy. Creates a
    * new enemy and adds it to the wave.
    */
-  void addEnemy() {
+  private void addEnemy() {
     if (enemies.size() < this.waveSize) {
       // Ensures enemies don't spawn on top of each other
-      if (enemies.size() > 0 && (enemies.get(enemies.size() - 1).getXPos() > 64)) {
+      if (enemies.size() > 0 && (enemies.get(enemies.size() - 1).getX() > 64)) {
         // Pre-defined spawn positions for all enemies on the map
         int spawnX = -64; // 0 - 64
         int spawnY = 476; // 540 - 64
@@ -57,7 +71,7 @@ public class Wave {
   void cleanUp() {
     // Filters out enemies that have left the screen
     List<Enemy> cleanedEnemies = this.enemies.stream()
-        .filter(enemy -> enemy.getXPos() < 1920 - 64)
+        .filter(enemy -> !isDead(enemy) || !isLost(enemy))
         .collect(Collectors.toList());
 
     // Prevent infinite spawning
@@ -67,8 +81,12 @@ public class Wave {
     }
   }
 
-  void removeEnemyIfDead() {
-    this.enemies = this.enemies.stream().filter(enemy -> !enemy.isDead()).collect(Collectors.toList());
+  private boolean isDead(Enemy enemy) {
+    return enemy.getHealth() < 0;
+  }
+
+  private boolean isLost(Enemy enemy) {
+    return enemy.getX() > Config.getScreenHeight() - 64;
   }
 
   /**
@@ -76,8 +94,8 @@ public class Wave {
    *
    * @param delta a given delta to be added to the x-positions.
    */
-  void updatePositions(float delta) {
-    enemies.forEach(e -> e.updateXPos(delta));
+  public void updatePositions(float delta) {
+    enemies.forEach(e -> e.updateX(delta));
   }
 
   /**
@@ -85,7 +103,7 @@ public class Wave {
    *
    * @param batch SpriteBatch to be rendered onto
    */
-  void batchDraw(SpriteBatch batch) {
+  public void batchDraw(SpriteBatch batch) {
     enemies.forEach(enemy -> enemy.batchDraw(batch));
   }
 }

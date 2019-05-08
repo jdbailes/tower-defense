@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.td.game.Config;
 import com.td.game.TowerDefenseGame;
 import com.td.game.offScreen.Level;
 
@@ -32,7 +33,7 @@ public class GameScreen implements Screen {
 
     // Setup the camera
     this.camera = new OrthographicCamera();
-    this.camera.setToOrtho(false, 1920, 1080);
+    this.camera.setToOrtho(false, Config.getScreenWidth(), Config.getScreenHeight());
     this.camera.update();
 
     this.tiledMap = new TmxMapLoader().load("tiled.tmx");
@@ -40,7 +41,7 @@ public class GameScreen implements Screen {
 
     // Initialise a new SpriteBatch for this game
     this.batch = new SpriteBatch();
-    this.level = new Level(10);
+    this.level = new Level();
   }
 
   @Override

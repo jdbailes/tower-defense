@@ -2,8 +2,6 @@ package com.td.game.offScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.td.game.onScreen.Ship;
-import java.util.Random;
 
 /**
  * Level class stores the state of a level. By having this in a Level class rather than the
@@ -13,37 +11,26 @@ public class Level {
 
   private static final float SPAWN_PROBABILITY = 0.005f;   // The change of an enemy spawning
 
-  private Wave wave;    // A wave of enemies for this level
-  private Ship ship;    // A single tower for this level (will be more in further releases)
-  private Random random = new Random();   // Used to generate random number for spawn prob
+  private Wave wave;
+  private Fleet fleet;
 
   /**
    * Constructor for a Level.
-   *
-   * @param waveSize configurable wave size
    */
-  public Level(int waveSize) {
-    this.wave = new Wave(20, -64, 476);
-    this.ship = new Ship(869, 700);
+  public Level() {
+    this.wave = new Wave();
+    this.fleet = new Fleet();
   }
 
   /**
    * Method invoked by GameManager with the rendering of each frame.
    */
   public void update() {
-    wave.cleanUp();   // Cleans up enemy enemies that have left the map
-    wave.removeEnemyIfDead();
+    this.wave.cleanUp();
+    this.wave.spawnEnemy(SPAWN_PROBABILITY);
+    this.wave.updatePositions(100 * Gdx.graphics.getDeltaTime());
 
-    float randomFloat = this.random.nextFloat();    // Determine a spawn probability
-
-    // Spawns enemies onto the map
-    if (randomFloat < SPAWN_PROBABILITY) {
-      wave.addEnemy();    // Adds a new enemy to the wave
-    }
-
-    wave.updatePositions(100 * Gdx.graphics.getDeltaTime());  // Updates the position of the enemies
-
-    ship.run(wave);   // Ship looks for enemies within it's range
+    this.fleet.run(this.wave);
   }
 
   /**
@@ -54,6 +41,6 @@ public class Level {
    */
   public void draw(SpriteBatch batch) {
     this.wave.batchDraw(batch);
-    this.ship.batchDraw(batch);
+    this.fleet.batchDraw(batch);
   }
 }

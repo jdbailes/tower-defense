@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.td.game.Config;
 import com.td.game.TowerDefenseGame;
 
 /**
@@ -18,7 +19,7 @@ public class MenuScreen implements Screen {
     this.game = game;
 
     camera = new OrthographicCamera();
-    camera.setToOrtho(false, 1920, 1080);
+    camera.setToOrtho(false, Config.getScreenWidth(), Config.getScreenHeight());
   }
 
   @Override
