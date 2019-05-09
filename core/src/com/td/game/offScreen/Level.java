@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public class Level {
 
-  private static final float SPAWN_PROBABILITY = 0.005f;   // The change of an enemy spawning
+  private static final float SPAWN_PROBABILITY = 0.05f;   // The change of an enemy spawning
 
   private Wave wave;
   private Fleet fleet;
@@ -31,6 +31,10 @@ public class Level {
     this.wave.updatePositions(100 * Gdx.graphics.getDeltaTime());
 
     this.fleet.run(this.wave);
+  }
+
+  public void addShip(int x, int y) {
+    this.fleet.addShip(x, y);
   }
 
   /**

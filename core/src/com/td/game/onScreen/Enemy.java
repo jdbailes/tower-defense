@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Intersector;
 public class Enemy extends Component {
 
   private static final Texture TEXTURE = new Texture(Gdx.files.internal("alien.png"));
-  private static final float RADIUS = 32;
+  private static final float RADIUS = 64;
 
   private int health = 20;
 
@@ -22,7 +22,7 @@ public class Enemy extends Component {
    * @param y the y-position of the collision box for this enemy.
    */
   public Enemy(float x, float y) {
-    super(x, y, 64, 64, TEXTURE, RADIUS);
+    super(x, y, 128, 128, TEXTURE, RADIUS);
   }
 
   public int getHealth() {

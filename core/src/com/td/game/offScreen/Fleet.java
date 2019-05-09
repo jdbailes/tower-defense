@@ -20,6 +20,11 @@ public class Fleet {
     });
   }
 
+  public void addShip(int x, int y) {
+    Ship newShip = new Ship(x, y);
+    this.ships.add(newShip);
+  }
+
   public void batchDraw(SpriteBatch batch) {
     this.ships.forEach(ship -> ship.batchDraw(batch));
   }

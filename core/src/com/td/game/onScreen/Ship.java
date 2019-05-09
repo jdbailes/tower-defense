@@ -59,7 +59,6 @@ public class Ship extends Component {
    */
   private void engageTarget() {
     // TODO Fix the buggy missile
-
     // If the missile isn't initialised then initialise it
     if (this.missile == null) {
       this.missile = new Missile(getCentreX(), getCentreY());
