@@ -2,6 +2,7 @@ package com.td.game.offScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.td.game.onScreen.Base;
 
 /**
  * Level class stores the state of a level. By having this in a Level class rather than the
@@ -13,6 +14,8 @@ public class Level {
 
   private Wave wave;
   private Fleet fleet;
+  private Base base;
+
 
   /**
    * Constructor for a Level.
@@ -20,6 +23,8 @@ public class Level {
   public Level() {
     this.wave = new Wave();
     this.fleet = new Fleet();
+    this.base = new Base(1700, 450);
+
   }
 
   /**
@@ -28,6 +33,7 @@ public class Level {
   public void update() {
     this.wave.cleanUp();
     this.wave.spawnEnemy(SPAWN_PROBABILITY);
+
     this.wave.updatePositions(100 * Gdx.graphics.getDeltaTime());
 
     this.fleet.run(this.wave);
@@ -42,5 +48,6 @@ public class Level {
   public void draw(SpriteBatch batch) {
     this.wave.batchDraw(batch);
     this.fleet.batchDraw(batch);
+    this.base.batchDraw(batch);
   }
 }
