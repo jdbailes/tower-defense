@@ -2,6 +2,7 @@ package com.td.game.offScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
  * Level class stores the state of a level. By having this in a Level class rather than the
@@ -9,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public class Level {
 
-  private static final float SPAWN_PROBABILITY = 0.05f;   // The change of an enemy spawning
+  private static final float SPAWN_PROBABILITY = 0.1f;   // The change of an enemy spawning
 
   private Wave wave;
   private Fleet fleet;
@@ -44,7 +45,12 @@ public class Level {
    * batch
    */
   public void draw(SpriteBatch batch) {
-    this.wave.batchDraw(batch);
-    this.fleet.batchDraw(batch);
+    this.wave.draw(batch);
+    this.fleet.draw(batch);
+  }
+
+  public void draw(SpriteBatch batch, ShapeRenderer renderer) {
+    this.wave.draw(batch, renderer);
+    this.fleet.draw(batch, renderer);
   }
 }
