@@ -84,7 +84,11 @@ public class Wave {
    * @param delta a given delta to be added to the x-positions.
    */
   public void updatePositions(float delta) {
-    enemies.forEach(e -> e.updateX(delta));
+    enemies.forEach(e -> {
+      if (!e.isAttackingBase()) {
+        e.updateX(delta);
+      }
+    });
   }
 
   /**

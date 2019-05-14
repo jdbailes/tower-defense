@@ -1,0 +1,74 @@
+package com.td.game.onScreen;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
+import com.td.game.offScreen.Wave;
+
+public class Base {
+
+  private static final Texture TEXTURE = new Texture(Gdx.files.internal("spaceBuilding_005.png"));
+
+  private final Sprite sprite;
+  private final Rectangle collisionRectangle;
+
+  private double health = 2000;
+
+  /**
+   * Default constructor.
+   *
+   * @param xPosition the x-position of the Base
+   * @param yPosition the y-position of the Base
+   */
+  public Base(float xPosition, float yPosition) {
+    // Create and configure a new sprite
+    this.sprite = new Sprite(TEXTURE);
+    this.sprite.setX(xPosition);
+    this.sprite.setY(yPosition);
+    this.sprite.setSize(128, 128);
+
+    // Create and configure a new collision rectangle
+    this.collisionRectangle = new Rectangle();
+    this.collisionRectangle.setX(xPosition);
+    this.collisionRectangle.setY(yPosition);
+    this.collisionRectangle.setHeight(128);
+    this.collisionRectangle.setWidth(128);
+  }
+
+  public void run(Wave wave) {
+    System.out.println(health);
+    wave.getEnemies().forEach(enemy -> {
+      boolean collision = Intersector.overlaps(enemy.getCollisionCircle(), this.collisionRectangle);
+      if (collision) {
+        enemy.setAttackingBase(true);
+        this.health--;
+      } else {
+        enemy.setAttackingBase(false);
+      }
+    });
+  }
+
+  public double getHealth() {
+    return this.health;
+  }
+
+  /**
+   * Renders the Sprite on the SpriteBatch.
+   *
+   * @param batch SpriteBatch to be rendered onto
+   */
+  public void draw(SpriteBatch batch) {
+    this.sprite.draw(batch);
+  }
+
+  public void draw(SpriteBatch batch, ShapeRenderer renderer) {
+    renderer
+        .rect(this.collisionRectangle.x, this.collisionRectangle.y, this.collisionRectangle.width,
+            this.collisionRectangle.height);
+    this.sprite.draw(batch);
+  }
+}

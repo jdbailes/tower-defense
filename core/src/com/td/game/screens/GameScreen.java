@@ -3,7 +3,6 @@ package com.td.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -30,6 +29,8 @@ public class GameScreen implements Screen {
   private ShapeRenderer shapeRenderer;
   private SpriteBatch batch;
   private Level level;
+
+  private boolean isDebug = false;
 
   GameScreen(final TowerDefenseGame game) {
     this.game = game;
@@ -66,6 +67,13 @@ public class GameScreen implements Screen {
     this.tiledMapRenderer.setView(camera);
     this.tiledMapRenderer.render();
 
+    // TODO Move to private method
+    // Will switch to/from debug mode if tab is pressed
+    if (Gdx.input.isKeyJustPressed(Keys.TAB)) {
+      this.isDebug = !this.isDebug;
+    }
+
+    // TODO Move to private method
     if (Gdx.input.isKeyJustPressed(Keys.T)) {
       // Get the coordinates of the current mouse position
       int x = Gdx.input.getX();
@@ -82,7 +90,7 @@ public class GameScreen implements Screen {
 
     this.level.update();    // Firstly, level is updated
 
-    if (Config.isDebug()) {
+    if (this.isDebug) {
       // Configure the shape renderer for debug mode
       this.shapeRenderer.setProjectionMatrix(camera.projection);
       this.shapeRenderer.setTransformMatrix(camera.view);

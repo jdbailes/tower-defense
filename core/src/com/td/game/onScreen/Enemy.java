@@ -15,6 +15,7 @@ public class Enemy extends Component {
   private static final float RADIUS = 16;
 
   private int health = 50;
+  private boolean attackingBase = false;
 
   /**
    * Simple constructor for an Enemy object.
@@ -36,9 +37,16 @@ public class Enemy extends Component {
 
   public void decrementHealth() {
     if (this.health - 1 >= 0) {
-      System.out.println("Health decreased from [" + health + "] to [" + (health - 1) + "]");
       health--;
     }
+  }
+
+  public void setAttackingBase(boolean attackingBase) {
+    this.attackingBase = attackingBase;
+  }
+
+  public boolean isAttackingBase() {
+    return attackingBase;
   }
 
   public boolean isMissileColliding(Missile missile) {
