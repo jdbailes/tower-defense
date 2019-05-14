@@ -35,7 +35,7 @@ public class Level {
   /**
    * Method invoked by GameManager with the rendering of each frame.
    */
-  public void update() {
+  public boolean update() {
     this.wave.cleanUp();
     this.wave.spawnEnemy(SPAWN_PROBABILITY);
     this.wave.updatePositions(100 * Gdx.graphics.getDeltaTime());
@@ -51,6 +51,8 @@ public class Level {
         this.wave.getEnemies().forEach(enemy -> enemy.setAttackingBase(false));
       }
     }
+
+    return this.baseDestroyed;
   }
 
   /**

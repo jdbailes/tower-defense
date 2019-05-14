@@ -74,7 +74,7 @@ public class GameScreen implements Screen {
     }
 
     // TODO Move to private method
-    if (Gdx.input.isKeyJustPressed(Keys.T)) {
+    if (Gdx.input.isKeyJustPressed(Keys.NUM_1)) {
       // Get the coordinates of the current mouse position
       int x = Gdx.input.getX();
       int y = Gdx.input.getY();
@@ -88,7 +88,12 @@ public class GameScreen implements Screen {
     this.batch.setProjectionMatrix(camera.combined);
     this.batch.begin();
 
-    this.level.update();    // Firstly, level is updated
+    boolean gameOver =this.level.update();
+
+    if(gameOver) {
+      game.setScreen(new GameOverScreen(game));
+      dispose();
+    }
 
     if (this.isDebug) {
       // Configure the shape renderer for debug mode
