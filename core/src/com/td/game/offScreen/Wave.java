@@ -87,8 +87,13 @@ public class Wave {
     enemies.forEach(e -> {
       if (!e.isAttackingBase()) {
         e.updateX(delta);
+        e.getHealthBar().updateX(delta);
       }
     });
+  }
+
+  public void updateHealthBars() {
+    this.getEnemies().forEach(Enemy::updateHealthBar);
   }
 
   /**

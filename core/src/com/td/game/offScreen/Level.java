@@ -39,6 +39,7 @@ public class Level {
     this.wave.cleanUp();
     this.wave.spawnEnemy(SPAWN_PROBABILITY);
     this.wave.updatePositions(100 * Gdx.graphics.getDeltaTime());
+    this.wave.updateHealthBars();
 
     this.fleet.run(this.wave);
 

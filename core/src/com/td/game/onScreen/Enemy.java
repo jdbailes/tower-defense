@@ -2,6 +2,7 @@ package com.td.game.onScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.td.game.Config;
@@ -13,7 +14,9 @@ public class Enemy extends Component {
 
   private static final Texture TEXTURE = new Texture(Gdx.files.internal("spaceAstronauts_005.png"));
   private static final float RADIUS = 16;
+  private HealthBar healthbar;
 
+  private static final int STARTING_HEALTH = 50;
   private int health = 50;
   private boolean attackingBase = false;
 
@@ -25,6 +28,15 @@ public class Enemy extends Component {
    */
   public Enemy(float x, float y) {
     super(x, y, 32, 32, TEXTURE, RADIUS);
+    this.healthbar = new HealthBar(x, y + 30);
+  }
+
+  public HealthBar getHealthBar() {
+    return this.healthbar;
+  }
+
+  public void updateHealthBar() {
+    // TODO update the size of the health bar based on the enemy health
   }
 
   public boolean isDead() {
@@ -52,5 +64,11 @@ public class Enemy extends Component {
   public boolean isMissileColliding(Missile missile) {
     Circle missileCollisionCircle = missile.getCollisionCircle();
     return Intersector.overlaps(missileCollisionCircle, super.getCollisionCircle());
+  }
+
+  @Override
+  public void draw(SpriteBatch batch) {
+    this.getSprite().draw(batch);
+    this.healthbar.draw(batch);
   }
 }
