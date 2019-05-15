@@ -20,6 +20,7 @@ public class Enemy extends Component {
   private int health = 50;
   private boolean attackingBase = false;
 
+
   /**
    * Simple constructor for an Enemy object.
    *
@@ -36,7 +37,8 @@ public class Enemy extends Component {
   }
 
   public void updateHealthBar() {
-    // TODO update the size of the health bar based on the enemy health
+    this.healthbar.getSprite().setSize(5, this.health);
+
   }
 
   public boolean isDead() {

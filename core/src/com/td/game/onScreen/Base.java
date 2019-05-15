@@ -16,7 +16,9 @@ public class Base {
   private final Sprite sprite;
   private final Rectangle collisionRectangle;
 
-  private double health = 2000;
+  private float health = 1900;
+
+  private HealthBar healthbar;
 
   /**
    * Default constructor.
@@ -37,7 +39,12 @@ public class Base {
     this.collisionRectangle.setY(yPosition);
     this.collisionRectangle.setHeight(128);
     this.collisionRectangle.setWidth(128);
+
+    this.healthbar = new HealthBar(1875, 0);
+    this.healthbar.getSprite().setSize(25, 1900);
   }
+
+
 
   public void run(Wave wave) {
     System.out.println(health);
@@ -46,6 +53,8 @@ public class Base {
       if (collision) {
         enemy.setAttackingBase(true);
         this.health--;
+        updateHealthBar();
+
       } else {
         enemy.setAttackingBase(false);
       }
@@ -56,6 +65,11 @@ public class Base {
     return this.health;
   }
 
+
+  public void updateHealthBar() {
+    this.healthbar.getSprite().setSize(10, this.health);
+
+  }
   /**
    * Renders the Sprite on the SpriteBatch.
    *
@@ -63,6 +77,7 @@ public class Base {
    */
   public void draw(SpriteBatch batch) {
     this.sprite.draw(batch);
+    this.healthbar.draw(batch);
   }
 
   public void draw(SpriteBatch batch, ShapeRenderer renderer) {
@@ -70,5 +85,6 @@ public class Base {
         .rect(this.collisionRectangle.x, this.collisionRectangle.y, this.collisionRectangle.width,
             this.collisionRectangle.height);
     this.sprite.draw(batch);
+
   }
 }

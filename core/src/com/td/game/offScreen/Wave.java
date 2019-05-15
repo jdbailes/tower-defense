@@ -2,6 +2,7 @@ package com.td.game.offScreen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.td.game.onScreen.Base;
 import com.td.game.onScreen.Enemy;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +95,7 @@ public class Wave {
 
   public void updateHealthBars() {
     this.getEnemies().forEach(Enemy::updateHealthBar);
+
   }
 
   /**
