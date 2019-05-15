@@ -3,27 +3,25 @@ package com.td.game.onScreen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Component {
 
-  float x;
-  float y;
+  private final Sprite sprite;
+  private final Circle collisionCircle;
 
-  final Sprite sprite;
-  final Circle collisionCircle;
-
-  public Component(float x, float y, float width, float height, Texture texture, float radius) {
-    this.x = x;
-    this.y = y;
-
+  public Component(float x, float y, float height, float width, Texture texture,
+      float collisionCircleRadius) {
     this.sprite = new Sprite(texture);
     this.sprite.setX(x);
     this.sprite.setY(y);
-    this.sprite.setSize(width, height);
 
-    this.collisionCircle = new Circle(x, y, radius);
+    this.collisionCircle = new Circle();
+    this.collisionCircle.setX(x + (width / 2));
+    this.collisionCircle.setY(y + (height / 2));
+    this.collisionCircle.setRadius(collisionCircleRadius);
   }
 
   public Sprite getSprite() {
@@ -35,37 +33,30 @@ public abstract class Component {
   }
 
   public void setX(float x) {
-    this.x = x;
     this.sprite.setX(x);
-    this.collisionCircle.setY(y);
-  }
-
-  public void updateX(float delta) {
-    this.x += delta;
-    this.sprite.setX(this.sprite.getX() + delta);
-    this.collisionCircle.x += delta;
+    this.collisionCircle.setX(x);
   }
 
   public void setY(float y) {
-    this.y = y;
     this.sprite.setY(y);
     this.collisionCircle.setY(y);
   }
 
+  public void updateX(float delta) {
+    this.sprite.setX(this.sprite.getX() + delta);
+    this.collisionCircle.setX(this.collisionCircle.x + delta);
+  }
+
+  public void setRotation(float rotation) {
+    this.sprite.setRotation(rotation);
+  }
+
   public float getX() {
-    return x;
+    return sprite.getX();
   }
 
   public float getY() {
-    return y;
-  }
-
-  public float getCentreX() {
-    return x + (sprite.getWidth() / 2);
-  }
-
-  public float getCentreY() {
-    return y + (sprite.getHeight() / 2);
+    return sprite.getY();
   }
 
   /**
@@ -74,7 +65,7 @@ public abstract class Component {
    * @return the vector for this enemy
    */
   public Vector2 getVector() {
-    return new Vector2(this.x, this.y);
+    return new Vector2(collisionCircle.x , collisionCircle.y);
   }
 
   /**
@@ -82,7 +73,12 @@ public abstract class Component {
    *
    * @param batch SpriteBatch to be rendered onto
    */
-  public void batchDraw(SpriteBatch batch) {
+  public void draw(SpriteBatch batch) {
+    this.sprite.draw(batch);
+  }
+
+  public void draw(SpriteBatch batch, ShapeRenderer renderer) {
+    renderer.circle(collisionCircle.x, collisionCircle.y, collisionCircle.radius);
     this.sprite.draw(batch);
   }
 }
