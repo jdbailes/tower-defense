@@ -11,7 +11,7 @@ import com.td.game.onScreen.Base;
  */
 public class Level {
 
-  private static final float SPAWN_PROBABILITY = 0.005f;  // The the chance of an enemy spawning in a frame
+  private static final float SPAWN_PROBABILITY = 0.01f;  // The the chance of an enemy spawning in a frame
   private static final float BASE_X_POSITION = 1750;    // The default x-position of the base
   private static final float BASE_Y_POSITION = 420;     // The default y-position of the base
 

@@ -30,6 +30,8 @@ public class GameScreen implements Screen {
   private SpriteBatch batch;
   private Level level;
 
+  private int shipCount;
+
   private boolean isDebug = false;
 
   GameScreen(final TowerDefenseGame game) {
@@ -48,6 +50,8 @@ public class GameScreen implements Screen {
     this.level = new Level();
 
     this.shapeRenderer = new ShapeRenderer();
+
+    this.shipCount = 0;
   }
 
   @Override
@@ -74,7 +78,7 @@ public class GameScreen implements Screen {
     }
 
     // TODO Move to private method
-    if (Gdx.input.isKeyJustPressed(Keys.NUM_1)) {
+    if (Gdx.input.isKeyJustPressed(Keys.NUM_1) && this.shipCount < 10) {
       // Get the coordinates of the current mouse position
       int x = Gdx.input.getX();
       int y = Gdx.input.getY();
@@ -82,6 +86,7 @@ public class GameScreen implements Screen {
 
       // Create a new tower in the fleet with these towers
       level.addShip((int) worldCoords.x, (int) worldCoords.y);
+      this.shipCount ++;
     }
 
     // Render the game
