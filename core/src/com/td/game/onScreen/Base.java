@@ -67,7 +67,7 @@ public class Base {
 
 
   public void updateHealthBar() {
-    this.healthbar.getSprite().setSize(10, this.health);
+    this.healthbar.getSprite().setSize(25, this.health);
 
   }
   /**
