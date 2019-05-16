@@ -2,7 +2,6 @@ package com.td.game.offScreen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.td.game.onScreen.Base;
 import com.td.game.onScreen.Enemy;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,7 @@ import java.util.stream.Collectors;
 public class Wave {
 
   private static final float SPAWN_X = -64;
-  private static final float SPAWN_Y = 476;
+  private static final float SPAWN_Y = 575;
   private static final Random RANDOM = new Random();
 
   private List<Enemy> enemies = new ArrayList<>();
@@ -51,18 +50,16 @@ public class Wave {
    * new enemy and adds it to the wave.
    */
   private void addEnemy() {
-    if (waveSize > 0) {
-      if (enemies.size() < this.waveSize) {
-        // Ensures enemies don't spawn on top of each other
-        if (enemies.size() > 0 && (enemies.get(enemies.size() - 1).getX() > 64)) {
-          // Pre-defined spawn positions for all enemies on the map
-          int spawnX = -64; // 0 - 64
-          int spawnY = 476; // 540 - 64
+    if (enemies.size() < this.waveSize) {
+//       Ensures enemies don't spawn on top of each other
+      if (enemies.size() > 0 && (enemies.get(enemies.size() - 1).getX() > 64)) {
+//         Pre-defined spawn positions for all enemies on the map
+        int spawnX = -64; // 0 - 64
+        int spawnY = 575; // 540 - 64
 
-          Enemy enemy = new Enemy(spawnX, spawnY);
-          enemies.add(enemy);
-          waveSize--;
-        }
+        Enemy enemy = new Enemy(spawnX, spawnY);
+        enemies.add(enemy);
+        waveSize--;
       }
     }
   }
