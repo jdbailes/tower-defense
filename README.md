@@ -1,5 +1,5 @@
 # 🛡 tower-defense 🛡
-_Current working branch is **theMVP**_
+_Current working branch is **thePolishedProduct**_
 
 ## Initial Setup
 IntelliJ would be the recomended IDE for this project, rather than Eclipse - but if you're familier with Eclipse then that's fine. Any instructions in this README will be targetted at an IntelliJ setup.
