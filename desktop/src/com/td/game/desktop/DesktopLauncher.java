@@ -2,6 +2,7 @@ package com.td.game.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.td.game.Config;
 import com.td.game.TowerDefenseGame;
 
 public class DesktopLauncher {
@@ -11,8 +12,8 @@ public class DesktopLauncher {
 
     // Manual config override
     config.title = "Tower Defense by Team Apollo";
-    config.width = 1920;
-    config.height = 1080;
+    config.width = Config.getScreenWidth();
+    config.height = Config.getScreenHeight();
 
     new LwjglApplication(new TowerDefenseGame(), config);
   }

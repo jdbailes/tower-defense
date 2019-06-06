@@ -10,12 +10,12 @@ import com.td.game.TowerDefenseGame;
 /**
  * Serves the Main Menu screen in the game.
  */
-public class MenuScreen implements Screen {
+public class GameOverScreen implements Screen {
 
   private final TowerDefenseGame game;
   private OrthographicCamera camera;
 
-  public MenuScreen(final TowerDefenseGame game) {
+  public GameOverScreen(final TowerDefenseGame game) {
     this.game = game;
 
     camera = new OrthographicCamera();
@@ -38,13 +38,13 @@ public class MenuScreen implements Screen {
     game.batch.setProjectionMatrix(camera.combined);
 
     game.batch.begin();
-    game.font.draw(game.batch, "TOWER DEFENSE ", 900, 540);
-    game.font.draw(game.batch, "Tap anywhere to begin!", 900, 500);
+    game.font.draw(game.batch, "GAME OVER :(", 900, 540);
+    game.font.draw(game.batch, "Tap anywhere to try again!", 900, 500);
     game.batch.end();
 
     // Check to see if the screen has been touched and switches to game screen if so
     if (Gdx.input.isTouched()) {
-      game.setScreen(new GameScreen(game));
+      game.setScreen(new MenuScreen(game));
       dispose();
     }
 

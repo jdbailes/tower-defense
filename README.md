@@ -1,14 +1,6 @@
 # 🛡 tower-defense 🛡
 _Current working branch is **theMVP**_
 
-- [x] Create an enemy & move across the map
-- [x] Create a wave of enemies that spawn & move across the map
-- [x] Create a tower (spaceship)
-- [x] Add collission circles to enemies and tower to prep for bullets (We need to know when enemies are in range etc)
-- [x] Allow the tower to shoot at an enemy when the enemy is in range of the tower
-- [ ] Add map/background using tiled map editor
-- [ ] Improve the missile-to-enemy implementation (it's a bit buggy at the moment)
-
 ## Initial Setup
 IntelliJ would be the recomended IDE for this project, rather than Eclipse - but if you're familier with Eclipse then that's fine. Any instructions in this README will be targetted at an IntelliJ setup.
 
