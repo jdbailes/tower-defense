@@ -3,7 +3,7 @@ package com.td.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.td.game.screens.MenuScreen;
+import com.td.game.screens.MainMenuScreen;
 
 /**
  * Game abstract class provides an implementation of ApplicationListener for you to use, along with
@@ -21,7 +21,7 @@ public class TowerDefenseGame extends Game {
     batch = new SpriteBatch();
     font = new BitmapFont();
 
-    this.setScreen(new MenuScreen(this));
+    this.setScreen(new MainMenuScreen(this));
   }
 
   @Override
