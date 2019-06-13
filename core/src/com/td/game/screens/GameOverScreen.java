@@ -19,7 +19,7 @@ public class GameOverScreen implements Screen {
     this.game = game;
 
     camera = new OrthographicCamera();
-    camera.setToOrtho(false, Config.getScreenWidth(), Config.getScreenHeight());
+    camera.setToOrtho(false, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
   }
 
   @Override
@@ -44,7 +44,7 @@ public class GameOverScreen implements Screen {
 
     // Check to see if the screen has been touched and switches to game screen if so
     if (Gdx.input.isTouched()) {
-      game.setScreen(new MenuScreen(game));
+      game.setScreen(new MainMenuScreen(game));
       dispose();
     }
 
