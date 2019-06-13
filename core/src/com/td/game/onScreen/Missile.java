@@ -72,7 +72,7 @@ public class Missile extends Component {
   }
 
   private boolean isLost() {
-    return getX() > Config.getScreenWidth() + 100 || getX() < -100
-        || getY() > Config.getScreenHeight() + 100 || getY() < -100;
+    return getX() > Config.SCREEN_WIDTH + 100 || getX() < -100
+        || getY() > Config.SCREEN_HEIGHT + 100 || getY() < -100;
   }
 }

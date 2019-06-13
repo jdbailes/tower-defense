@@ -46,7 +46,7 @@ public class Enemy extends Component {
   }
 
   public boolean isLost() {
-    return this.getX() > Config.getScreenWidth() - 64;
+    return this.getX() > Config.SCREEN_WIDTH - 64;
   }
 
   public void decrementHealth() {

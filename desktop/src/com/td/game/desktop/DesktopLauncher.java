@@ -12,8 +12,8 @@ public class DesktopLauncher {
 
     // Manual config override
     config.title = "Tower Defense by Team Apollo";
-    config.width = Config.getScreenWidth();
-    config.height = Config.getScreenHeight();
+    config.width = Config.SCREEN_WIDTH;
+    config.height = Config.SCREEN_HEIGHT;
 
     new LwjglApplication(new TowerDefenseGame(), config);
   }

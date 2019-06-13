@@ -37,7 +37,7 @@ public class GameScreen implements Screen {
 
     // Setup the camera
     this.camera = new OrthographicCamera();
-    this.camera.setToOrtho(false, Config.getScreenWidth(), Config.getScreenHeight());
+    this.camera.setToOrtho(false, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
     this.camera.update();
 
     this.tiledMap = new TmxMapLoader().load("Level_1.tmx");
