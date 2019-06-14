@@ -11,9 +11,9 @@ import com.td.game.TowerDefenseGame;
 
 public class MainMenuScreen implements Screen {
 
-  private static final int TITLE_Y = 800;
-  private static final int RESUME_BUTTON_Y = 500;
-  private static final int NEW_GAME_BUTTON_Y = 300;
+  private static final int TITLE_Y = 500;
+  private static final int RESUME_BUTTON_Y = 300;
+  private static final int NEW_GAME_BUTTON_Y = 200;
   private static final int EXIT_BUTTON_Y = 100;
 
   private final int titleX;
