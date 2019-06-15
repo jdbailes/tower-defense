@@ -65,18 +65,14 @@ public class MainMenuScreen implements Screen {
 
   @Override
   public void render(float delta) {
-    // Render the tilemap
+    clearScreen();
+
     this.camera.update();
-
-    // Clear the screen
-    Gdx.gl.glClearColor(0, 0, 0.2f, 1);
-    Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-    game.batch.begin();
+    this.game.batch.begin();
 
     drawTitle();
 
+    // Render exit button
     if (isTouchingExitButton(exitButtonX) && Gdx.input.isTouched()) {
       safeExit();
     } else if (isTouchingExitButton(exitButtonX)) {
@@ -85,6 +81,7 @@ public class MainMenuScreen implements Screen {
       drawExitButton(exitButtonX, EXIT_BUTTON_Y, false);
     }
 
+    // Render resume button
     if (isTouchingResumeButton(resumeButtonX) && Gdx.input.isTouched()) {
       switchScreen(new GameScreen(game));
     } else if (isTouchingResumeButton(resumeButtonX)) {
@@ -93,6 +90,7 @@ public class MainMenuScreen implements Screen {
       drawResumeButton(resumeButtonX, RESUME_BUTTON_Y, false);
     }
 
+    // Render new game button
     if ((isTouchingNewGameButton(newGameButtonX)) && Gdx.input.isTouched()) {
       switchScreen(new GameScreen(game));
     } else if (isTouchingNewGameButton(newGameButtonX)) {
@@ -101,7 +99,7 @@ public class MainMenuScreen implements Screen {
       drawNewGameButton(newGameButtonX, NEW_GAME_BUTTON_Y, false);
     }
 
-    game.batch.end();
+    this.game.batch.end();
   }
 
   @Override
@@ -188,5 +186,11 @@ public class MainMenuScreen implements Screen {
 
   private int getCentrePoint(int width) {
     return (Config.SCREEN_WIDTH / 2) - (width / 2);
+  }
+
+  private void clearScreen() {
+    Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+    Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
   }
 }
