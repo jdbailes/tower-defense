@@ -14,6 +14,7 @@ public class DesktopLauncher {
     config.title = "Tower Defense by Team Apollo";
     config.width = Config.SCREEN_WIDTH;
     config.height = Config.SCREEN_HEIGHT;
+    config.resizable = false;
 
     new LwjglApplication(new TowerDefenseGame(), config);
   }
