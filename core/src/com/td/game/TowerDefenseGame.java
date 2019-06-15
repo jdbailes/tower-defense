@@ -1,7 +1,6 @@
 package com.td.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.td.game.screens.MainMenuScreen;
 
@@ -13,13 +12,10 @@ public class TowerDefenseGame extends Game {
 
   // SpriteBatch used to render objects on the screen
   public SpriteBatch batch;
-  // Bitmap font used alongside SpriteBatch to render text on the screen
-  public BitmapFont font;
 
   @Override
   public void create() {
-    batch = new SpriteBatch();
-    font = new BitmapFont();
+    this.batch = new SpriteBatch();
 
     this.setScreen(new MainMenuScreen(this));
   }
@@ -32,7 +28,6 @@ public class TowerDefenseGame extends Game {
   @Override
   public void dispose() {
     // Kills batch and font
-    batch.dispose();
-    font.dispose();
+    this.batch.dispose();
   }
 }
