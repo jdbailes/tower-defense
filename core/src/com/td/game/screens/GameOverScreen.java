@@ -31,8 +31,8 @@ public class GameOverScreen extends AbstractScreen {
     this.menuButtonInactive = new Texture("fonts/menu_button_inactive.png");
 
     // Calculate x-coordinates for screen items
-    this.gameOverX = getCentrePoint(gameOver.getWidth());
-    this.menuButtonX = getCentrePoint(menuButtonInactive.getWidth());
+    this.gameOverX = getCentrePointX(gameOver.getWidth());
+    this.menuButtonX = getCentrePointX(menuButtonInactive.getWidth());
   }
 
   @Override
