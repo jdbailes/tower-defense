@@ -35,14 +35,14 @@ public class LevelMenuScreen extends AbstractScreen {
     super(game);
 
     // Load images to texture
-    this.title = new Texture("core/assets/fonts/level_select_title.png");
-    this.levelOneSelectionInactive = new Texture("core/assets/fonts/level1_selection_inactive.png");
-    this.levelOneSelectionActive = new Texture("core/assets/fonts/level1_selection_active.png");
-    this.levelTwoSelectionInactive = new Texture("core/assets/fonts/level2_selection_inactive.png");
-    this.levelTwoSelectionActive = new Texture("core/assets/fonts/level2_selection_active.png");
+    this.title = new Texture("fonts/level_select_title.png");
+    this.levelOneSelectionInactive = new Texture("fonts/level1_selection_inactive.png");
+    this.levelOneSelectionActive = new Texture("fonts/level1_selection_active.png");
+    this.levelTwoSelectionInactive = new Texture("fonts/level2_selection_inactive.png");
+    this.levelTwoSelectionActive = new Texture("fonts/level2_selection_active.png");
     this.levelThreeSelectionInactive = new Texture(
-        "core/assets/fonts/level3_selection_inactive.png");
-    this.levelThreeSelectionActive = new Texture("core/assets/fonts/level3_selection_active.png");
+        "fonts/level3_selection_inactive.png");
+    this.levelThreeSelectionActive = new Texture("fonts/level3_selection_active.png");
 
     // Calculate x-coordinates for screen items
     this.titleX = getCentrePoint(this.title.getWidth());
@@ -56,11 +56,14 @@ public class LevelMenuScreen extends AbstractScreen {
   public void render(float delta) {
     super.render(delta);
 
+    this.camera.update();
+    this.game.batch.begin();
+
     drawLevelSelectTitle();
 
     if (isTouchingLevelOne(levelOneSelectionX) && Gdx.input.justTouched()) {
-      logger.info("Exiting level menu screen");
-      safeExit();
+      logger.info("Switching to game screen [level 1]");
+      switchScreen(new LoadingScreen(game));
     } else if (isTouchingLevelOne(levelOneSelectionX)) {
       drawLevelOne(levelOneSelectionX, LEVEL_ONE_SELECTION_Y, true);
     } else {
