@@ -26,9 +26,9 @@ public class GameOverScreen extends AbstractScreen {
     super(game);
 
     // Load images to texture
-    this.gameOver = new Texture("core/assets/fonts/game_over_title.png");
-    this.menuButtonActive = new Texture("core/assets/fonts/menu_button_active.png");
-    this.menuButtonInactive = new Texture("core/assets/fonts/menu_button_inactive.png");
+    this.gameOver = new Texture("fonts/game_over_title.png");
+    this.menuButtonActive = new Texture("fonts/menu_button_active.png");
+    this.menuButtonInactive = new Texture("fonts/menu_button_inactive.png");
 
     // Calculate x-coordinates for screen items
     this.gameOverX = getCentrePoint(gameOver.getWidth());
@@ -43,6 +43,9 @@ public class GameOverScreen extends AbstractScreen {
   @Override
   public void render(float delta) {
     super.render(delta);
+
+    this.camera.update();
+    this.game.batch.begin();
 
     drawGameOverTitle();
 
