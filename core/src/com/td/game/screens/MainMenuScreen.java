@@ -43,10 +43,10 @@ public class MainMenuScreen extends AbstractScreen {
     this.exitButtonInactive = new Texture("fonts/exit_button_inactive.png");
 
     // Calculate x-coordinates for screen items
-    this.titleX = getCentrePoint(title.getWidth());
-    this.resumeButtonX = getCentrePoint(resumeButtonInactive.getWidth());
-    this.newGameButtonX = getCentrePoint(newGameButtonInactive.getWidth());
-    this.exitButtonX = getCentrePoint(exitButtonInactive.getWidth());
+    this.titleX = getCentrePointX(title.getWidth());
+    this.resumeButtonX = getCentrePointX(resumeButtonInactive.getWidth());
+    this.newGameButtonX = getCentrePointX(newGameButtonInactive.getWidth());
+    this.exitButtonX = getCentrePointX(exitButtonInactive.getWidth());
   }
 
   @Override

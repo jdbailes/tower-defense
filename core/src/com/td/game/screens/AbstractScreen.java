@@ -64,8 +64,12 @@ public class AbstractScreen implements Screen {
     dispose();
   }
 
-  int getCentrePoint(int width) {
+  int getCentrePointX(int width) {
     return (Config.SCREEN_WIDTH / 2) - (width / 2);
+  }
+  
+  int getCentrePointY(int height) {
+    return (Config.SCREEN_HEIGHT / 2) - (height / 2);
   }
 
   float getInputX() {

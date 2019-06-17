@@ -45,7 +45,7 @@ public class LevelMenuScreen extends AbstractScreen {
     this.levelThreeSelectionActive = new Texture("fonts/level3_selection_active.png");
 
     // Calculate x-coordinates for screen items
-    this.titleX = getCentrePoint(this.title.getWidth());
+    this.titleX = getCentrePointX(this.title.getWidth());
     this.levelOneSelectionX = getLevelOneCentrePoint(this.levelOneSelectionInactive.getWidth());
     this.levelTwoSelectionX = getLevelTwoCentrePoint(this.levelTwoSelectionInactive.getWidth());
     this.levelThreeSelectionX = getLevelThreeCentrePoint(
