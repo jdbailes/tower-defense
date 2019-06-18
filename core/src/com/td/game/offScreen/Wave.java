@@ -19,12 +19,16 @@ public class Wave {
 
   private List<Enemy> enemies = new ArrayList<>();
   private int waveSize = 100;
+  private static List<Enemy> killedEnemies = new ArrayList<>();
+  private int killCounter;
 
   /**
    * Creates a new wave containing a single enemy.
    */
   public Wave() {
     this.enemies.add(new Enemy(SPAWN_X, SPAWN_Y));
+
+
   }
 
   /**
@@ -64,6 +68,11 @@ public class Wave {
     }
   }
 
+
+
+
+
+
   /**
    * Checks for enemies that have reached the end of the map and removes them from the wave.
    */
@@ -74,6 +83,7 @@ public class Wave {
         .collect(Collectors.toList());
 
     this.enemies = cleanedEnemies;
+
   }
 
   /**
@@ -88,6 +98,17 @@ public class Wave {
         e.getHealthBar().updateX(delta);
       }
     });
+    enemies.forEach(e -> {
+      if(e.isDead()){
+        killCounter++;
+      }
+    });
+    System.out.println(killCounter);
+  }
+
+  public int getKillCounter(){
+    System.out.println(killCounter);
+    return killCounter;
   }
 
   public void updateHealthBars() {

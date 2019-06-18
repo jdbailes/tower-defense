@@ -4,6 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.td.game.onScreen.Base;
+import com.td.game.onScreen.Enemy;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Level class stores the state of a level. By having this in a Level class rather than the
@@ -19,26 +23,36 @@ public class Level {
   private final Wave wave;
   private final Fleet fleet;
   private final Base base;
+  private final Statistics stats;
 
   // Flag is flipped once the base is destroyed
   private boolean baseDestroyed = false;
-
+  private static List<Enemy> deadEnemies = new ArrayList<>();
   /**
    * Constructor for a Level.
    */
   public Level() {
     this.wave = new Wave();
+    this.stats = new Statistics();
+    this.stats.registerWave(wave);
     this.fleet = new Fleet();
     this.base = new Base(BASE_X_POSITION, BASE_Y_POSITION);
+
   }
 
   /**
    * Method invoked by GameManager with the rendering of each frame.
    */
   public boolean update() {
+    //this.wave.countUp();
+
+    this.wave.updatePositions(100 * Gdx.graphics.getDeltaTime());
+    this.wave.getKillCounter();
+    this.stats.setCurrentCurrency();
+    this.stats.setCurrentXP();
     this.wave.cleanUp();
     this.wave.spawnEnemy(SPAWN_PROBABILITY);
-    this.wave.updatePositions(100 * Gdx.graphics.getDeltaTime());
+    //this.wave.updatePositions(100 * Gdx.graphics.getDeltaTime());
     this.wave.updateHealthBars();
 
     this.fleet.run(this.wave);
