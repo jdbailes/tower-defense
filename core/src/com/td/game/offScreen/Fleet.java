@@ -18,12 +18,25 @@ public class Fleet {
 
   private int shipCount;
 
+  private Statistics stats;
+
+  private int currentStatistics;
+
+  private int currentFleet;
+
   public Fleet() {
     this.ships = new ArrayList<>();
     this.missiles = new ArrayList<>();
 
     this.shipCount = 0;
+
+
   }
+
+  public void registerStats(Statistics stats) {
+    this.stats = stats;
+  }
+
 
   public void run(Wave wave) {
     this.ships.forEach(ship -> {
@@ -68,7 +81,9 @@ public class Fleet {
   }
 
   public void addShip(int x, int y) {
-    if(this.shipCount < 6) {
+    //if the player has enough currency, they will be able to spawn a turret
+    if(this.stats.setCurrentCurrency() > 49 && currentFleet <= 10) {
+      currentFleet++;
       Ship newShip = new Ship(x, y);
       Circle circle1 = new Circle(newShip.getCollisionCircle().x, newShip.getCollisionCircle().y,
           64);
@@ -83,6 +98,10 @@ public class Fleet {
         shipCount++;
       }
     }
+  }
+
+  public int getCurrentFleet(){
+    return currentFleet;
   }
 
   public void draw(SpriteBatch batch) {

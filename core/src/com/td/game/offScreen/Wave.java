@@ -18,8 +18,8 @@ public class Wave {
   private static final Random RANDOM = new Random();
 
   private List<Enemy> enemies = new ArrayList<>();
-  private int waveSize = 100;
-  private static List<Enemy> killedEnemies = new ArrayList<>();
+  private int waveSize = 1000;
+
   private int killCounter;
 
   /**
@@ -47,6 +47,7 @@ public class Wave {
     if (randomFloat < spawnProbability) {
       addEnemy();
     }
+
   }
 
   /**
@@ -67,11 +68,6 @@ public class Wave {
       }
     }
   }
-
-
-
-
-
 
   /**
    * Checks for enemies that have reached the end of the map and removes them from the wave.
@@ -103,11 +99,9 @@ public class Wave {
         killCounter++;
       }
     });
-    System.out.println(killCounter);
   }
 
   public int getKillCounter(){
-    System.out.println(killCounter);
     return killCounter;
   }
 

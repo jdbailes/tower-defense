@@ -2,15 +2,19 @@ package com.td.game.offScreen;
 
 public class Statistics {
 
-    private int startingCurrency = 200;
+    private int startingCurrency = 140;
     private int startingXP;
-    private int currencyPerKill = 50;
-    private int experiencePerKill = 100;
+    private int currencyPerKill = 20;
+    private int experiencePerKill = 50;
     private int currentCurrency;
     private int currentXP;
     private int killCounter;
+    private int currentFleet;
+    private int shipCost = 50;
+
 
     private Wave wave;
+    private Fleet fleet;
 
     public Statistics(){
 
@@ -19,21 +23,30 @@ public class Statistics {
 
     public void registerWave(Wave wave) {
         this.wave = wave;
-        //killCounter = this.wave.getKillCounter();
+
     }
 
+    public void registerFleet(Fleet fleet) {
+        this.fleet = fleet;
 
+    }
 
-    public void setCurrentCurrency() {
+    public int setCurrentCurrency() {
         killCounter = this.wave.getKillCounter();
-        currentCurrency = (startingCurrency + (currencyPerKill * killCounter));
-        System.out.println(currentCurrency);
+        currentCurrency = (startingCurrency + (currencyPerKill * killCounter) - shipCost);
+
+        return currentCurrency;
+    }
+
+    public int setCurrentXP(){
+        currentXP = (currentXP + (experiencePerKill * killCounter));
+        return currentXP;
 
     }
 
-    public void setCurrentXP(){
-        currentXP = (startingXP + (experiencePerKill * killCounter));
-        System.out.println(currentXP);
+    public void setCurrentFleet(){
+        currentFleet = this.fleet.getCurrentFleet();
+        shipCost = currentFleet * shipCost;
 
     }
 }
