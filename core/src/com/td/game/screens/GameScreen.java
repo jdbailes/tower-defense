@@ -38,7 +38,7 @@ public class GameScreen extends AbstractScreen {
     this.camera.setToOrtho(false, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
     this.camera.update();
 
-    this.tiledMap = this.game.getAssetManager().get("tester-tilemap.tmx");
+    this.tiledMap = this.game.getAssetManager().get("Level_1.tmx");
     this.tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
     // Initialise a new SpriteBatch for this game

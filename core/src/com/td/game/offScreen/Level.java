@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.td.game.Config;
 import com.td.game.onScreen.Base;
 import com.td.game.onScreen.Enemy;
 
@@ -103,10 +104,10 @@ public class Level {
    */
   public void draw(SpriteBatch batch) {
     this.wave.draw(batch);
-    font.draw(batch, "Currency:", 450, 1000);
-    font.draw(batch, String.valueOf(this.stats.setCurrentCurrency()), 700, 1000);
-    font.draw(batch, "XP:", 1100, 1000);
-    font.draw(batch, String.valueOf(this.stats.setCurrentXP()), 1200, 1000);
+    font.draw(batch, "Currency:", Config.SCREEN_WIDTH - 1000, Config.SCREEN_HEIGHT - 150);
+    font.draw(batch, String.valueOf(this.stats.setCurrentCurrency()), Config.SCREEN_WIDTH - 700, Config.SCREEN_HEIGHT - 150);
+    font.draw(batch, "XP:", 1100, Config.SCREEN_HEIGHT - 150);
+    font.draw(batch, String.valueOf(this.stats.setCurrentXP()), 1200, Config.SCREEN_HEIGHT -150);
     this.fleet.draw(batch);
     if (!baseDestroyed) {
       this.base.draw(batch);

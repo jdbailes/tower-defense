@@ -40,7 +40,7 @@ public class LoadingScreen extends AbstractScreen {
 
   @Override
   public void show() {
-    game.getAssetManager().load("tester-tilemap.tmx", TiledMap.class);
+    game.getAssetManager().load("Level_1.tmx", TiledMap.class);
 
     camera = new OrthographicCamera();
     camera.position.set(Config.SCREEN_WIDTH / 2, Config.SCREEN_HEIGHT / 2, 0);
