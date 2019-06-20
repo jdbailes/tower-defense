@@ -18,13 +18,17 @@ public class Wave {
   private static final Random RANDOM = new Random();
 
   private List<Enemy> enemies = new ArrayList<>();
-  private int waveSize = 100;
+  private int waveSize = 1000;
+
+  private int killCounter;
 
   /**
    * Creates a new wave containing a single enemy.
    */
   public Wave() {
     this.enemies.add(new Enemy(SPAWN_X, SPAWN_Y));
+
+
   }
 
   /**
@@ -43,6 +47,7 @@ public class Wave {
     if (randomFloat < spawnProbability) {
       addEnemy();
     }
+
   }
 
   /**
@@ -74,6 +79,7 @@ public class Wave {
         .collect(Collectors.toList());
 
     this.enemies = cleanedEnemies;
+
   }
 
   /**
@@ -88,6 +94,15 @@ public class Wave {
         e.getHealthBar().updateX(delta);
       }
     });
+    enemies.forEach(e -> {
+      if(e.isDead()){
+        killCounter++;
+      }
+    });
+  }
+
+  public int getKillCounter(){
+    return killCounter;
   }
 
   public void updateHealthBars() {

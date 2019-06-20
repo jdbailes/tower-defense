@@ -1,9 +1,15 @@
 package com.td.game.offScreen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.td.game.onScreen.Base;
+import com.td.game.onScreen.Enemy;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Level class stores the state of a level. By having this in a Level class rather than the
@@ -11,7 +17,7 @@ import com.td.game.onScreen.Base;
  */
 public class Level {
 
-  private static final float SPAWN_PROBABILITY = 0.01f;  // The the chance of an enemy spawning in a frame
+  private static final float SPAWN_PROBABILITY = 0.02f;  // The the chance of an enemy spawning in a frame
   private static final float BASE_X_POSITION = 1750;    // The default x-position of the base
   private static final float BASE_Y_POSITION = 525;     // The default y-position of the base
 
@@ -19,30 +25,51 @@ public class Level {
   private final Wave wave;
   private final Fleet fleet;
   private final Base base;
+  private final Statistics stats;
 
   // Flag is flipped once the base is destroyed
   private boolean baseDestroyed = false;
+
+
+
+  private BitmapFont font;
+
+
 
   /**
    * Constructor for a Level.
    */
   public Level() {
     this.wave = new Wave();
+    this.stats = new Statistics();
+    this.stats.registerWave(wave);
     this.fleet = new Fleet();
+    this.fleet.registerStats(stats);
+    this.stats.registerFleet(fleet);
     this.base = new Base(BASE_X_POSITION, BASE_Y_POSITION);
+
+    font = new BitmapFont();
+    font.setColor(Color.BLACK);
+    font.getData().setScale(4, 4);
+
+
   }
 
   /**
    * Method invoked by GameManager with the rendering of each frame.
    */
   public boolean update() {
+
+
+    this.wave.updatePositions(100 * Gdx.graphics.getDeltaTime());
+    this.wave.getKillCounter();
+    this.stats.setCurrentCurrency();
+    this.stats.setCurrentFleet();
+    this.stats.setCurrentXP();
     this.wave.cleanUp();
     this.wave.spawnEnemy(SPAWN_PROBABILITY);
-    this.wave.updatePositions(100 * Gdx.graphics.getDeltaTime());
     this.wave.updateHealthBars();
-
     this.fleet.run(this.wave);
-
     if (!this.baseDestroyed) {
       this.base.run(this.wave);
 
@@ -55,6 +82,8 @@ public class Level {
 
     return this.baseDestroyed;
   }
+
+
 
   /**
    * Encapsulates addShip() method in Fleet.
@@ -74,6 +103,10 @@ public class Level {
    */
   public void draw(SpriteBatch batch) {
     this.wave.draw(batch);
+    font.draw(batch, "Currency:", 450, 1000);
+    font.draw(batch, String.valueOf(this.stats.setCurrentCurrency()), 700, 1000);
+    font.draw(batch, "XP:", 1100, 1000);
+    font.draw(batch, String.valueOf(this.stats.setCurrentXP()), 1200, 1000);
     this.fleet.draw(batch);
     if (!baseDestroyed) {
       this.base.draw(batch);
