@@ -19,9 +19,7 @@ import com.td.game.offScreen.Level;
 /**
  * Serves the screen the game is played within.
  */
-public class GameScreen implements Screen {
-
-  private final TowerDefenseGame game;
+public class GameScreen extends AbstractScreen {
 
   private OrthographicCamera camera;
   private TiledMap tiledMap;
@@ -33,14 +31,14 @@ public class GameScreen implements Screen {
   private boolean isDebug = false;
 
   GameScreen(final TowerDefenseGame game) {
-    this.game = game;
+    super(game);
 
     // Setup the camera
     this.camera = new OrthographicCamera();
-    this.camera.setToOrtho(false, Config.getScreenWidth(), Config.getScreenHeight());
+    this.camera.setToOrtho(false, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
     this.camera.update();
 
-    this.tiledMap = new TmxMapLoader().load("Level_1.tmx");
+    this.tiledMap = this.game.getAssetManager().get("tester-tilemap.tmx");
     this.tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
     // Initialise a new SpriteBatch for this game
@@ -48,11 +46,6 @@ public class GameScreen implements Screen {
     this.level = new Level();
 
     this.shapeRenderer = new ShapeRenderer();
-  }
-
-  @Override
-  public void show() {
-
   }
 
   @Override
@@ -109,28 +102,7 @@ public class GameScreen implements Screen {
     this.batch.end();
   }
 
-  @Override
-  public void resize(int width, int height) {
-
-  }
-
-  @Override
-  public void pause() {
-
-  }
-
-  @Override
-  public void resume() {
-
-  }
-
-  @Override
-  public void hide() {
-
-  }
-
-  @Override
-  public void dispose() {
-
+  public TiledMap getTiledMap() {
+    return tiledMap;
   }
 }

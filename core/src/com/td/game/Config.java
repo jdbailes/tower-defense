@@ -1,16 +1,8 @@
 package com.td.game;
 
-public abstract class Config {
+public final class Config {
 
-  private static final int SCREEN_HEIGHT = 1080;
-  private static final int SCREEN_WIDTH = 1920;
-
-  public static int getScreenHeight() {
-    return SCREEN_HEIGHT;
-  }
-
-  public static int getScreenWidth() {
-    return SCREEN_WIDTH;
-  }
+  public static final int SCREEN_HEIGHT = 720;
+  public static final int SCREEN_WIDTH = 1280;
 
 }
