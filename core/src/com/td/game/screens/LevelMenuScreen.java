@@ -31,8 +31,10 @@ public class LevelMenuScreen extends AbstractScreen {
   /**
    * Default constructor for MainMenuScreen.
    */
-  public LevelMenuScreen(TowerDefenseGame game) {
+  LevelMenuScreen(TowerDefenseGame game) {
     super(game);
+
+    // TODO Move to constants.
 
     // Load images to texture
     this.title = new Texture("ui/level_select_title.png");
@@ -40,8 +42,7 @@ public class LevelMenuScreen extends AbstractScreen {
     this.levelOneSelectionActive = new Texture("ui/level1_selection_active.png");
     this.levelTwoSelectionInactive = new Texture("ui/level2_selection_inactive.png");
     this.levelTwoSelectionActive = new Texture("ui/level2_selection_active.png");
-    this.levelThreeSelectionInactive = new Texture(
-        "ui/level3_selection_inactive.png");
+    this.levelThreeSelectionInactive = new Texture("ui/level3_selection_inactive.png");
     this.levelThreeSelectionActive = new Texture("ui/level3_selection_active.png");
 
     // Calculate x-coordinates for screen items
@@ -63,29 +64,29 @@ public class LevelMenuScreen extends AbstractScreen {
 
     if (isTouchingLevelOne(levelOneSelectionX) && Gdx.input.justTouched()) {
       logger.info("Switching to game screen [level 1]");
-      switchScreen(new LoadingScreen(game));
+      switchScreen(new LoadingScreen(game, 1));
     } else if (isTouchingLevelOne(levelOneSelectionX)) {
-      drawLevelOne(levelOneSelectionX, LEVEL_ONE_SELECTION_Y, true);
+      drawLevelOne(levelOneSelectionX, true);
     } else {
-      drawLevelOne(levelOneSelectionX, LEVEL_ONE_SELECTION_Y, false);
+      drawLevelOne(levelOneSelectionX, false);
     }
 
     if (isTouchingLevelTwo(levelTwoSelectionX) && Gdx.input.justTouched()) {
-      logger.info("Exiting level menu screen");
-      safeExit();
+      logger.info("Switching to game screen [level 2]");
+      switchScreen(new LoadingScreen(game, 2));
     } else if (isTouchingLevelTwo(levelTwoSelectionX)) {
-      drawLevelTwo(levelTwoSelectionX, LEVEL_TWO_SELECTION_Y, true);
+      drawLevelTwo(levelTwoSelectionX, true);
     } else {
-      drawLevelTwo(levelTwoSelectionX, LEVEL_TWO_SELECTION_Y, false);
+      drawLevelTwo(levelTwoSelectionX, false);
     }
 
     if (isTouchingLevelThree(levelThreeSelectionX) && Gdx.input.justTouched()) {
-      logger.info("Exiting level menu screen");
-      safeExit();
+      logger.info("Switching to game screen [level 3]");
+      switchScreen(new LoadingScreen(game, 3));
     } else if (isTouchingLevelThree(levelThreeSelectionX)) {
-      drawLevelThree(levelThreeSelectionX, LEVEL_THREE_SELECTION_Y, true);
+      drawLevelThree(levelThreeSelectionX, true);
     } else {
-      drawLevelThree(levelThreeSelectionX, LEVEL_THREE_SELECTION_Y, false);
+      drawLevelThree(levelThreeSelectionX, false);
     }
 
     this.game.batch.end();
@@ -98,9 +99,9 @@ public class LevelMenuScreen extends AbstractScreen {
         && getInputY() > LEVEL_ONE_SELECTION_Y;
   }
 
-  private void drawLevelOne(float x, float y, boolean active) {
+  private void drawLevelOne(float x, boolean active) {
     Texture texture = active ? this.levelOneSelectionActive : this.levelOneSelectionInactive;
-    game.batch.draw(texture, x, y);
+    game.batch.draw(texture, x, (float) LevelMenuScreen.LEVEL_ONE_SELECTION_Y);
   }
 
   private boolean isTouchingLevelTwo(int x) {
@@ -110,9 +111,9 @@ public class LevelMenuScreen extends AbstractScreen {
         && getInputY() > LEVEL_TWO_SELECTION_Y;
   }
 
-  private void drawLevelTwo(float x, float y, boolean active) {
+  private void drawLevelTwo(float x, boolean active) {
     Texture texture = active ? this.levelTwoSelectionActive : this.levelTwoSelectionInactive;
-    game.batch.draw(texture, x, y);
+    game.batch.draw(texture, x, (float) LevelMenuScreen.LEVEL_TWO_SELECTION_Y);
   }
 
   private boolean isTouchingLevelThree(int x) {
@@ -122,9 +123,9 @@ public class LevelMenuScreen extends AbstractScreen {
         && getInputY() > LEVEL_THREE_SELECTION_Y;
   }
 
-  private void drawLevelThree(float x, float y, boolean active) {
+  private void drawLevelThree(float x, boolean active) {
     Texture texture = active ? this.levelThreeSelectionActive : this.levelThreeSelectionInactive;
-    game.batch.draw(texture, x, y);
+    game.batch.draw(texture, x, (float) LevelMenuScreen.LEVEL_THREE_SELECTION_Y);
   }
 
   private void drawLevelSelectTitle() {

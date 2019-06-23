@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
  */
 public class Wave {
 
-  private static final float SPAWN_X = -64;
-  private static final float SPAWN_Y = 575;
+  private final float spawnX;
+  private final float spawnY;
   private static final Random RANDOM = new Random();
 
   private List<Enemy> enemies = new ArrayList<>();
@@ -25,9 +25,12 @@ public class Wave {
   /**
    * Creates a new wave containing a single enemy.
    */
-  public Wave() {
-    this.enemies.add(new Enemy(SPAWN_X, SPAWN_Y));
+  public Wave(float spawnX, float spawnY) {
 
+    this.spawnX = spawnX;
+    this.spawnY = spawnY;
+
+    this.enemies.add(new Enemy(spawnX, spawnY));
 
   }
 
@@ -59,10 +62,7 @@ public class Wave {
 //       Ensures enemies don't spawn on top of each other
       if (enemies.size() > 0 && (enemies.get(enemies.size() - 1).getX() > 64)) {
 //         Pre-defined spawn positions for all enemies on the map
-        int spawnX = -64; // 0 - 64
-        int spawnY = 575; // 540 - 64
-
-        Enemy enemy = new Enemy(spawnX, spawnY);
+        Enemy enemy = new Enemy(this.spawnX, this.spawnY);
         enemies.add(enemy);
         waveSize--;
       }
@@ -95,13 +95,13 @@ public class Wave {
       }
     });
     enemies.forEach(e -> {
-      if(e.isDead()){
+      if (e.isDead()) {
         killCounter++;
       }
     });
   }
 
-  public int getKillCounter(){
+  public int getKillCounter() {
     return killCounter;
   }
 

@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -19,6 +21,8 @@ import com.td.game.offScreen.Level;
  */
 public class GameScreen extends AbstractScreen {
 
+  private static final String NAVIGATION_KEY = "NAVIGATION_LAYER";
+
   private OrthographicCamera camera;
   private TiledMap tiledMap;
   private TiledMapRenderer tiledMapRenderer;
@@ -28,30 +32,30 @@ public class GameScreen extends AbstractScreen {
 
   private boolean isDebug = false;
 
-  GameScreen(final TowerDefenseGame game) {
+  GameScreen(final TowerDefenseGame game, int level) {
     super(game);
+    setupCamera();
 
-    // Setup the camera
-    this.camera = new OrthographicCamera();
-    this.camera.setToOrtho(false, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
-    this.camera.update();
+    this.tiledMap = this.game.getAssetManager().get(Config.getLevelFilepath(level));
 
-    this.tiledMap = this.game.getAssetManager().get("tiles/tester-tilemap.tmx");
+    MapObjects mapObjects = this.tiledMap.getLayers().get(NAVIGATION_KEY).getObjects();
+    this.level = new Level(mapObjects);
+
     this.tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-
-    // Initialise a new SpriteBatch for this game
-    this.batch = new SpriteBatch();
-    this.level = new Level();
-
     this.shapeRenderer = new ShapeRenderer();
+    this.batch = new SpriteBatch();
+  }
+
+  @Override
+  public void show() {
+
+
+
   }
 
   @Override
   public void render(float delta) {
-    // Clear the screen
-    Gdx.gl.glClearColor(1, 0, 0, 1);
-    Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    super.render(delta);
 
     // Render the tilemap
     this.camera.update();
@@ -102,5 +106,12 @@ public class GameScreen extends AbstractScreen {
 
   public TiledMap getTiledMap() {
     return tiledMap;
+  }
+
+
+  private void setupCamera() {
+    this.camera = new OrthographicCamera();
+    this.camera.setToOrtho(false, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
+    this.camera.update();
   }
 }

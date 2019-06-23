@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="15">
- <tileset firstgid="1" source="tester-tileset.tsx"/>
+ <tileset firstgid="1" source="../tower-defense-tileset.tsx"/>
  <layer id="2" name="Background_Layer" width="40" height="23">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -55,7 +55,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="6" name="BREAD_CRUMBS">
+ <objectgroup id="6" name="NAVIGATION_LAYER">
   <object id="9" name="SPAWN" x="0" y="480">
    <point/>
   </object>

@@ -5,12 +5,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.math.Vector2;
 import com.td.game.Config;
 import com.td.game.onScreen.Base;
-import com.td.game.onScreen.Enemy;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Level class stores the state of a level. By having this in a Level class rather than the
@@ -19,8 +20,6 @@ import java.util.List;
 public class Level {
 
   private static final float SPAWN_PROBABILITY = 0.02f;  // The the chance of an enemy spawning in a frame
-  private static final float BASE_X_POSITION = 1750;    // The default x-position of the base
-  private static final float BASE_Y_POSITION = 525;     // The default y-position of the base
 
   // The core on-screen components of the level
   private final Wave wave;
@@ -30,24 +29,36 @@ public class Level {
 
   // Flag is flipped once the base is destroyed
   private boolean baseDestroyed = false;
-
-
-
   private BitmapFont font;
 
+  private float spawnX;
+  private float spawnY;
 
+  private float endX;
+  private float endY;
+
+  private Map<Integer, Vector2> breadCrumbs;
 
   /**
    * Constructor for a Level.
    */
-  public Level() {
-    this.wave = new Wave();
+  public Level(MapObjects mapObjects) {
+
+    this.breadCrumbs = new HashMap<>();
+
+    extractProperties(mapObjects);
+    System.out.println(breadCrumbs.toString());
+
+    this.spawnX = (float) mapObjects.get("SPAWN").getProperties().get("x");
+    this.spawnY = (float) mapObjects.get("SPAWN").getProperties().get("y");
+
+    this.wave = new Wave(spawnX, spawnY);
     this.stats = new Statistics();
     this.stats.registerWave(wave);
     this.fleet = new Fleet();
     this.fleet.registerStats(stats);
     this.stats.registerFleet(fleet);
-    this.base = new Base(BASE_X_POSITION, BASE_Y_POSITION);
+    this.base = new Base(endX, endY);
 
     font = new BitmapFont();
     font.setColor(Color.BLACK);
@@ -60,7 +71,6 @@ public class Level {
    * Method invoked by GameManager with the rendering of each frame.
    */
   public boolean update() {
-
 
     this.wave.updatePositions(100 * Gdx.graphics.getDeltaTime());
     this.wave.getKillCounter();
@@ -84,8 +94,6 @@ public class Level {
     return this.baseDestroyed;
   }
 
-
-
   /**
    * Encapsulates addShip() method in Fleet.
    *
@@ -105,9 +113,10 @@ public class Level {
   public void draw(SpriteBatch batch) {
     this.wave.draw(batch);
     font.draw(batch, "Currency:", Config.SCREEN_WIDTH - 1000, Config.SCREEN_HEIGHT - 150);
-    font.draw(batch, String.valueOf(this.stats.setCurrentCurrency()), Config.SCREEN_WIDTH - 700, Config.SCREEN_HEIGHT - 150);
+    font.draw(batch, String.valueOf(this.stats.setCurrentCurrency()), Config.SCREEN_WIDTH - 700,
+        Config.SCREEN_HEIGHT - 150);
     font.draw(batch, "XP:", 1100, Config.SCREEN_HEIGHT - 150);
-    font.draw(batch, String.valueOf(this.stats.setCurrentXP()), 1200, Config.SCREEN_HEIGHT -150);
+    font.draw(batch, String.valueOf(this.stats.setCurrentXP()), 1200, Config.SCREEN_HEIGHT - 150);
     this.fleet.draw(batch);
     if (!baseDestroyed) {
       this.base.draw(batch);
@@ -127,6 +136,27 @@ public class Level {
     this.fleet.draw(batch, renderer);
     if (!baseDestroyed) {
       this.base.draw(batch, renderer);
+    }
+  }
+
+  private void extractProperties(MapObjects mapObjects) {
+    int size = mapObjects.getCount();
+
+    for (int i = 0; i < size; i++) {
+      MapObject mapObject = mapObjects.get(i);
+
+      if (mapObject.getName().equals("SPAWN")) {
+        this.spawnX = (float) mapObject.getProperties().get("x");
+        this.spawnY = (float) mapObject.getProperties().get("y");
+      } else if (mapObject.getName().equals("END")) {
+        this.endX = (float) mapObject.getProperties().get("x");
+        this.endY = (float) mapObject.getProperties().get("y");
+      } else {
+        Vector2 vector2 = new Vector2((float) mapObject.getProperties().get("x"),
+            (float) mapObject.getProperties().get("y"));
+
+        breadCrumbs.put(Integer.valueOf(mapObject.getName()), vector2);
+      }
     }
   }
 }

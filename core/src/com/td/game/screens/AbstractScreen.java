@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.td.game.Config;
 import com.td.game.TowerDefenseGame;
 
-public class AbstractScreen implements Screen {
+public abstract class AbstractScreen implements Screen {
 
   TowerDefenseGame game;
   OrthographicCamera camera;

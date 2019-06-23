@@ -3,25 +3,28 @@ package com.td.game.screens;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.td.game.Config;
 import com.td.game.TowerDefenseGame;
 
 public class LoadingScreen extends AbstractScreen {
 
-  private Viewport viewport;
+  private static final String TITLE_PATH = "ui/loading_title.png";
+
   private OrthographicCamera camera;
 
   private Texture title;
   private final int titleX;
   private final int titleY;
 
-  public LoadingScreen(TowerDefenseGame game) {
+  private int level;
+
+  LoadingScreen(TowerDefenseGame game, int level) {
     super(game);
 
+    this.level = level;
+
     // Load images to texture
-    this.title = new Texture("ui/loading_title.png");
+    this.title = new Texture(TITLE_PATH);
 
     // Setup the camera
     this.camera = new OrthographicCamera();
@@ -34,18 +37,12 @@ public class LoadingScreen extends AbstractScreen {
   }
 
   @Override
-  public void resize(int width, int height) {
-    viewport.update(width, height);
-  }
-
-  @Override
   public void show() {
-    game.getAssetManager().load("tiles/tester-tilemap.tmx", TiledMap.class);
+    this.game.getAssetManager().load(Config.getLevelFilepath(this.level), TiledMap.class);
 
-    camera = new OrthographicCamera();
-    camera.position.set(Config.SCREEN_WIDTH / 2, Config.SCREEN_HEIGHT / 2, 0);
-    camera.update();
-    viewport = new FitViewport(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT, camera);
+    this.camera = new OrthographicCamera();
+    this.camera.position.set(Config.SCREEN_WIDTH / 2, Config.SCREEN_HEIGHT / 2, 0);
+    this.camera.update();
   }
 
   @Override
@@ -55,7 +52,10 @@ public class LoadingScreen extends AbstractScreen {
     this.camera.update();
     this.game.batch.begin();
 
-    update();
+    if (this.game.getAssetManager().update()) {
+      this.game.setScreen(new GameScreen(this.game, this.level));
+    }
+
     drawTitle();
 
     this.game.batch.end();
@@ -63,11 +63,5 @@ public class LoadingScreen extends AbstractScreen {
 
   private void drawTitle() {
     game.batch.draw(title, titleX, titleY);
-  }
-
-  private void update() {
-    if (game.getAssetManager().update()) {
-      game.setScreen(new GameScreen(game));
-    }
   }
 }

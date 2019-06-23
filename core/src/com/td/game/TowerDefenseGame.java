@@ -13,9 +13,9 @@ import com.td.game.screens.MainMenuScreen;
  * some helper methods to set and handle Screen rendering.
  */
 public class TowerDefenseGame extends Game {
+
   private final AssetManager assetManager = new AssetManager();
 
-  // SpriteBatch used to render objects on the screen
   public SpriteBatch batch;
 
   @Override

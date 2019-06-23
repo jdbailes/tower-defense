@@ -33,6 +33,8 @@ public class MainMenuScreen extends AbstractScreen {
   public MainMenuScreen(TowerDefenseGame game) {
     super(game);
 
+    logger.info("Creating menu screen");
+
     // Load images to texture
     this.title = new Texture("ui/game_title.png");
     this.resumeButtonActive = new Texture("ui/resume_button_active.png");
@@ -63,9 +65,9 @@ public class MainMenuScreen extends AbstractScreen {
       logger.info("Exiting main menu screen");
       safeExit();
     } else if (isTouchingExitButton(exitButtonX)) {
-      drawExitButton(exitButtonX, EXIT_BUTTON_Y, true);
+      drawExitButton(exitButtonX, true);
     } else {
-      drawExitButton(exitButtonX, EXIT_BUTTON_Y, false);
+      drawExitButton(exitButtonX, false);
     }
 
     // Render resume button
@@ -73,9 +75,9 @@ public class MainMenuScreen extends AbstractScreen {
       logger.info("Switching to level menu screen");
       switchScreen(new LevelMenuScreen(game));
     } else if (isTouchingResumeButton(resumeButtonX)) {
-      drawResumeButton(resumeButtonX, RESUME_BUTTON_Y, true);
+      drawResumeButton(resumeButtonX, true);
     } else {
-      drawResumeButton(resumeButtonX, RESUME_BUTTON_Y, false);
+      drawResumeButton(resumeButtonX, false);
     }
 
     // Render new game button
@@ -83,9 +85,9 @@ public class MainMenuScreen extends AbstractScreen {
       logger.info("Switching to level menu screen");
       switchScreen(new LevelMenuScreen(game));
     } else if (isTouchingNewGameButton(newGameButtonX)) {
-      drawNewGameButton(newGameButtonX, NEW_GAME_BUTTON_Y, true);
+      drawNewGameButton(newGameButtonX, true);
     } else {
-      drawNewGameButton(newGameButtonX, NEW_GAME_BUTTON_Y, false);
+      drawNewGameButton(newGameButtonX, false);
     }
 
     this.game.batch.end();
@@ -95,19 +97,19 @@ public class MainMenuScreen extends AbstractScreen {
     game.batch.draw(title, titleX, TITLE_Y);
   }
 
-  private void drawExitButton(float x, float y, boolean active) {
+  private void drawExitButton(float x, boolean active) {
     Texture texture = active ? this.exitButtonActive : this.exitButtonInactive;
-    game.batch.draw(texture, x, y);
+    game.batch.draw(texture, x, (float) MainMenuScreen.EXIT_BUTTON_Y);
   }
 
-  private void drawResumeButton(float x, float y, boolean active) {
+  private void drawResumeButton(float x, boolean active) {
     Texture texture = active ? this.resumeButtonActive : this.resumeButtonInactive;
-    game.batch.draw(texture, x, y);
+    game.batch.draw(texture, x, (float) MainMenuScreen.RESUME_BUTTON_Y);
   }
 
-  private void drawNewGameButton(float x, float y, boolean active) {
+  private void drawNewGameButton(float x, boolean active) {
     Texture texture = active ? this.newGameButtonActive : this.newGameButtonInactive;
-    game.batch.draw(texture, x, y);
+    game.batch.draw(texture, x, (float) MainMenuScreen.NEW_GAME_BUTTON_Y);
   }
 
   private boolean isTouchingNewGameButton(int x) {
