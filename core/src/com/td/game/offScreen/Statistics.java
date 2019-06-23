@@ -1,52 +1,47 @@
 package com.td.game.offScreen;
 
+/**
+ * @author tautvydasponelis
+ */
 public class Statistics {
 
-    private int startingCurrency = 140;
-    private int startingXP;
-    private int currencyPerKill = 20;
-    private int experiencePerKill = 50;
-    private int currentCurrency;
-    private int currentXP;
-    private int killCounter;
-    private int currentFleet;
-    private int shipCost = 50;
+  private int killCounter;
+  private int currentFleet;
 
 
-    private Wave wave;
-    private Fleet fleet;
+  private Wave wave;
+  private Fleet fleet;
 
-    public Statistics(){
+  Statistics() {
+  }
 
-    }
+  void registerWave(Wave wave) {
+    this.wave = wave;
 
+  }
 
-    public void registerWave(Wave wave) {
-        this.wave = wave;
+  void registerFleet(Fleet fleet) {
+    this.fleet = fleet;
 
-    }
+  }
 
-    public void registerFleet(Fleet fleet) {
-        this.fleet = fleet;
+  int setCurrentCurrency() {
+    killCounter = this.wave.getKillCounter();
+    int shipCost = 50;
+    int currencyPerKill = 20;
+    int startingCurrency = 140;
 
-    }
+    return (startingCurrency + (currencyPerKill * killCounter) - (currentFleet
+        * shipCost));
+  }
 
-    public int setCurrentCurrency() {
-        killCounter = this.wave.getKillCounter();
-        currentCurrency = (startingCurrency + (currencyPerKill * killCounter) - (currentFleet * shipCost));
+  int setCurrentXP() {
+    int experiencePerKill = 50;
+    return (experiencePerKill * killCounter);
 
-        return currentCurrency;
-    }
+  }
 
-    public int setCurrentXP(){
-        currentXP = (experiencePerKill * killCounter);
-        return currentXP;
-
-    }
-
-    public void setCurrentFleet(){
-        currentFleet = this.fleet.getCurrentFleet();
-
-
-    }
+  void setCurrentFleet() {
+    currentFleet = this.fleet.getCurrentFleet();
+  }
 }

@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class HealthBar {
 
-  private static final Texture TEXTURE = new Texture(Gdx.files.internal("laserGreen02.png"));
+  private static final Texture TEXTURE = new Texture(Gdx.files.internal("game/green-laser.png"));
 
   private final Sprite sprite;
 

@@ -35,14 +35,14 @@ public class LevelMenuScreen extends AbstractScreen {
     super(game);
 
     // Load images to texture
-    this.title = new Texture("fonts/level_select_title.png");
-    this.levelOneSelectionInactive = new Texture("fonts/level1_selection_inactive.png");
-    this.levelOneSelectionActive = new Texture("fonts/level1_selection_active.png");
-    this.levelTwoSelectionInactive = new Texture("fonts/level2_selection_inactive.png");
-    this.levelTwoSelectionActive = new Texture("fonts/level2_selection_active.png");
+    this.title = new Texture("ui/level_select_title.png");
+    this.levelOneSelectionInactive = new Texture("ui/level1_selection_inactive.png");
+    this.levelOneSelectionActive = new Texture("ui/level1_selection_active.png");
+    this.levelTwoSelectionInactive = new Texture("ui/level2_selection_inactive.png");
+    this.levelTwoSelectionActive = new Texture("ui/level2_selection_active.png");
     this.levelThreeSelectionInactive = new Texture(
-        "fonts/level3_selection_inactive.png");
-    this.levelThreeSelectionActive = new Texture("fonts/level3_selection_active.png");
+        "ui/level3_selection_inactive.png");
+    this.levelThreeSelectionActive = new Texture("ui/level3_selection_active.png");
 
     // Calculate x-coordinates for screen items
     this.titleX = getCentrePointX(this.title.getWidth());

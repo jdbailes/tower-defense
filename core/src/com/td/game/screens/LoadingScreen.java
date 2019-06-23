@@ -21,7 +21,7 @@ public class LoadingScreen extends AbstractScreen {
     super(game);
 
     // Load images to texture
-    this.title = new Texture("fonts/loading_title.png");
+    this.title = new Texture("ui/loading_title.png");
 
     // Setup the camera
     this.camera = new OrthographicCamera();
@@ -40,7 +40,7 @@ public class LoadingScreen extends AbstractScreen {
 
   @Override
   public void show() {
-    game.getAssetManager().load("Level_1.tmx", TiledMap.class);
+    game.getAssetManager().load("tiles/tester-tilemap.tmx", TiledMap.class);
 
     camera = new OrthographicCamera();
     camera.position.set(Config.SCREEN_WIDTH / 2, Config.SCREEN_HEIGHT / 2, 0);

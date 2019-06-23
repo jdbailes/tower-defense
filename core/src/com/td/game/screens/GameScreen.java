@@ -2,14 +2,12 @@ package com.td.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.td.game.Config;
@@ -38,7 +36,7 @@ public class GameScreen extends AbstractScreen {
     this.camera.setToOrtho(false, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
     this.camera.update();
 
-    this.tiledMap = this.game.getAssetManager().get("Level_1.tmx");
+    this.tiledMap = this.game.getAssetManager().get("tiles/tester-tilemap.tmx");
     this.tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
     // Initialise a new SpriteBatch for this game
@@ -81,9 +79,9 @@ public class GameScreen extends AbstractScreen {
     this.batch.setProjectionMatrix(camera.combined);
     this.batch.begin();
 
-    boolean gameOver =this.level.update();
+    boolean gameOver = this.level.update();
 
-    if(gameOver) {
+    if (gameOver) {
       game.setScreen(new GameOverScreen(game));
       dispose();
     }

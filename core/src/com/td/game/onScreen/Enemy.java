@@ -12,7 +12,7 @@ import com.td.game.Config;
  */
 public class Enemy extends Component {
 
-  private static final Texture TEXTURE = new Texture(Gdx.files.internal("spaceAstronauts_005.png"));
+  private static final Texture TEXTURE = new Texture(Gdx.files.internal("game/space-enemy.png"));
   private static final float RADIUS = 16;
   private HealthBar healthbar;
 

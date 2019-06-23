@@ -65,7 +65,7 @@ public abstract class Component {
    * @return the vector for this enemy
    */
   public Vector2 getVector() {
-    return new Vector2(collisionCircle.x , collisionCircle.y);
+    return new Vector2(collisionCircle.x, collisionCircle.y);
   }
 
   /**

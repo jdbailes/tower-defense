@@ -34,13 +34,13 @@ public class MainMenuScreen extends AbstractScreen {
     super(game);
 
     // Load images to texture
-    this.title = new Texture("fonts/game_title.png");
-    this.resumeButtonActive = new Texture("fonts/resume_button_active.png");
-    this.resumeButtonInactive = new Texture("fonts/resume_button_inactive.png");
-    this.newGameButtonActive = new Texture("fonts/newgame_button_active.png");
-    this.newGameButtonInactive = new Texture("fonts/newgame_button_inactive.png");
-    this.exitButtonActive = new Texture("fonts/exit_button_active.png");
-    this.exitButtonInactive = new Texture("fonts/exit_button_inactive.png");
+    this.title = new Texture("ui/game_title.png");
+    this.resumeButtonActive = new Texture("ui/resume_button_active.png");
+    this.resumeButtonInactive = new Texture("ui/resume_button_inactive.png");
+    this.newGameButtonActive = new Texture("ui/newgame_button_active.png");
+    this.newGameButtonInactive = new Texture("ui/newgame_button_inactive.png");
+    this.exitButtonActive = new Texture("ui/exit_button_active.png");
+    this.exitButtonInactive = new Texture("ui/exit_button_inactive.png");
 
     // Calculate x-coordinates for screen items
     this.titleX = getCentrePointX(title.getWidth());

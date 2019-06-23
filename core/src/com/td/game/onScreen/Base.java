@@ -11,7 +11,7 @@ import com.td.game.offScreen.Wave;
 
 public class Base {
 
-  private static final Texture TEXTURE = new Texture(Gdx.files.internal("spaceBuilding_005.png"));
+  private static final Texture TEXTURE = new Texture(Gdx.files.internal("game/space-base.png"));
 
   private final Sprite sprite;
   private final Rectangle collisionRectangle;
@@ -45,9 +45,7 @@ public class Base {
   }
 
 
-
   public void run(Wave wave) {
-    System.out.println(health);
     wave.getEnemies().forEach(enemy -> {
       boolean collision = Intersector.overlaps(enemy.getCollisionCircle(), this.collisionRectangle);
       if (collision) {
@@ -70,6 +68,7 @@ public class Base {
     this.healthbar.getSprite().setSize(25, this.health);
 
   }
+
   /**
    * Renders the Sprite on the SpriteBatch.
    *

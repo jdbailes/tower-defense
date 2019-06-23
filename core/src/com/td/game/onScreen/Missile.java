@@ -11,7 +11,7 @@ import com.td.game.Config;
  */
 public class Missile extends Component {
 
-  private static final Texture TEXTURE = new Texture(Gdx.files.internal("spaceMissiles_006.png"));
+  private static final Texture TEXTURE = new Texture(Gdx.files.internal("game/space-missile.png"));
   private static final float RADIUS = 10;
   private static final float SPEED = 8.0f;
 

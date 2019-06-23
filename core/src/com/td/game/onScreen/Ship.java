@@ -10,7 +10,7 @@ import com.td.game.offScreen.Wave;
  */
 public class Ship extends Component {
 
-  private static final Texture TEXTURE = new Texture(Gdx.files.internal("spaceShips_002.png"));
+  private static final Texture TEXTURE = new Texture(Gdx.files.internal("game/space-ship.png"));
   private static final float RADIUS = 320;
 
   private Enemy currentTarget = null;
