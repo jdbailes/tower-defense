@@ -2,6 +2,7 @@ package com.td.game.offScreen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.td.game.onScreen.Enemy;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,8 @@ public class Wave {
   private final float spawnY;
   private static final Random RANDOM = new Random();
 
-  private List<Enemy> enemies = new ArrayList<>();
+  private List<Vector2> breadCrumbs;
+  private List<Enemy> enemies;
   private int waveSize = 1000;
 
   private int killCounter;
@@ -25,13 +27,17 @@ public class Wave {
   /**
    * Creates a new wave containing a single enemy.
    */
-  public Wave(float spawnX, float spawnY) {
+  public Wave(List<Vector2> breadCrumbs) {
 
-    this.spawnX = spawnX;
-    this.spawnY = spawnY;
+    this.breadCrumbs = breadCrumbs;
 
-    this.enemies.add(new Enemy(spawnX, spawnY));
+    System.out.println(breadCrumbs.toString());
+    this.enemies = new ArrayList<>();
 
+    this.spawnX = breadCrumbs.get(0).x;
+    this.spawnY = breadCrumbs.get(0).y;
+
+    addEnemy();
   }
 
   /**
@@ -51,6 +57,8 @@ public class Wave {
       addEnemy();
     }
 
+//    System.out.println(this.enemies.toString());
+
   }
 
   /**
@@ -59,10 +67,14 @@ public class Wave {
    */
   private void addEnemy() {
     if (enemies.size() < this.waveSize) {
-//       Ensures enemies don't spawn on top of each other
-      if (enemies.size() > 0 && (enemies.get(enemies.size() - 1).getX() > 64)) {
-//         Pre-defined spawn positions for all enemies on the map
-        Enemy enemy = new Enemy(this.spawnX, this.spawnY);
+      // Ensures enemies don't spawn on top of each other
+      if (enemies.size() == 0) {
+        Enemy enemy = new Enemy(spawnX, spawnY, breadCrumbs.get(1));
+        enemies.add(enemy);
+        waveSize--;
+      } else if (enemies.get(enemies.size() - 1).getX() > 64) {
+        // Pre-defined spawn positions for all enemies on the map
+        Enemy enemy = new Enemy(spawnX, spawnY, breadCrumbs.get(1));
         enemies.add(enemy);
         waveSize--;
       }
@@ -90,8 +102,18 @@ public class Wave {
   public void updatePositions(float delta) {
     enemies.forEach(e -> {
       if (!e.isAttackingBase()) {
-        e.updateX(delta);
-        e.getHealthBar().updateX(delta);
+
+        // Set new breadcrumb if current breadcrumb has been reached
+        if (e.hasReachedDestination()) {
+          int currentIndex = breadCrumbs.indexOf(e.getDestination());
+          int nextIndex = currentIndex + 1;
+
+          if (nextIndex < breadCrumbs.size()) {
+            e.setDestination(breadCrumbs.get(nextIndex));
+          }
+        }
+
+        e.updatePosition(delta);
       }
     });
     enemies.forEach(e -> {
@@ -107,7 +129,6 @@ public class Wave {
 
   public void updateHealthBars() {
     this.getEnemies().forEach(Enemy::updateHealthBar);
-
   }
 
   /**

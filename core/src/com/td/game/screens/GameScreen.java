@@ -2,19 +2,21 @@ package com.td.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.td.game.Config;
 import com.td.game.TowerDefenseGame;
 import com.td.game.offScreen.Level;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Serves the screen the game is played within.
@@ -30,8 +32,6 @@ public class GameScreen extends AbstractScreen {
   private SpriteBatch batch;
   private Level level;
 
-  private boolean isDebug = false;
-
   GameScreen(final TowerDefenseGame game, int level) {
     super(game);
     setupCamera();
@@ -39,7 +39,9 @@ public class GameScreen extends AbstractScreen {
     this.tiledMap = this.game.getAssetManager().get(Config.getLevelFilepath(level));
 
     MapObjects mapObjects = this.tiledMap.getLayers().get(NAVIGATION_KEY).getObjects();
-    this.level = new Level(mapObjects);
+    List<Vector2> breadCrumbs = getBreadCrumbs(mapObjects);
+
+    this.level = new Level(breadCrumbs);
 
     this.tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
     this.shapeRenderer = new ShapeRenderer();
@@ -48,8 +50,6 @@ public class GameScreen extends AbstractScreen {
 
   @Override
   public void show() {
-
-
 
   }
 
@@ -61,12 +61,6 @@ public class GameScreen extends AbstractScreen {
     this.camera.update();
     this.tiledMapRenderer.setView(camera);
     this.tiledMapRenderer.render();
-
-    // TODO Move to private method
-    // Will switch to/from debug mode if tab is pressed
-    if (Gdx.input.isKeyJustPressed(Keys.TAB)) {
-      this.isDebug = !this.isDebug;
-    }
 
     // TODO Move to private method
     if (Gdx.input.isKeyJustPressed(Keys.NUM_1)) {
@@ -90,28 +84,33 @@ public class GameScreen extends AbstractScreen {
       dispose();
     }
 
-    if (this.isDebug) {
-      // Configure the shape renderer for debug mode
-      this.shapeRenderer.setProjectionMatrix(camera.projection);
-      this.shapeRenderer.setTransformMatrix(camera.view);
-      this.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-      this.level.draw(batch, shapeRenderer);
-    } else {
-      this.level.draw(batch);
-    }
+    this.level.draw(batch);
 
     this.shapeRenderer.end();
     this.batch.end();
   }
 
-  public TiledMap getTiledMap() {
-    return tiledMap;
-  }
-
-
   private void setupCamera() {
     this.camera = new OrthographicCamera();
     this.camera.setToOrtho(false, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
     this.camera.update();
+  }
+
+  private List<Vector2> getBreadCrumbs(MapObjects mapObjects) {
+
+    List<Vector2> breadCrumbs = new ArrayList<>();
+
+    for (int i = 0; i < mapObjects.getCount(); i++) {
+      MapObject mapObject = mapObjects.get(i);
+
+      Vector2 vector2 = new Vector2(
+          (float) mapObject.getProperties().get("x"),
+          (float) mapObject.getProperties().get("y")
+      );
+
+      breadCrumbs.add(Integer.valueOf(mapObject.getName()), vector2);
+    }
+
+    return breadCrumbs;
   }
 }

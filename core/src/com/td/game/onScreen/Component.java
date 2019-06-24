@@ -47,6 +47,26 @@ public abstract class Component {
     this.collisionCircle.setX(this.collisionCircle.x + delta);
   }
 
+  public void increaseX(float delta) {
+    this.sprite.setX(this.sprite.getX() - delta);
+    this.collisionCircle.setX(this.collisionCircle.x - delta);
+  }
+
+  public void decreaseX(float delta) {
+    this.sprite.setX(this.sprite.getX() + delta);
+    this.collisionCircle.setX(this.collisionCircle.x + delta);
+  }
+
+  public void increaseY(float delta) {
+    this.sprite.setY(this.sprite.getY() + delta);
+    this.collisionCircle.setY(this.collisionCircle.y + delta);
+  }
+
+  public void decreaseY(float delta) {
+    this.sprite.setY(this.sprite.getY() - delta);
+    this.collisionCircle.setY(this.collisionCircle.y - delta);
+  }
+
   public void setRotation(float rotation) {
     this.sprite.setRotation(rotation);
   }

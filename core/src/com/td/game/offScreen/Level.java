@@ -5,13 +5,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.math.Vector2;
 import com.td.game.Config;
 import com.td.game.onScreen.Base;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * Level class stores the state of a level. By having this in a Level class rather than the
@@ -31,39 +28,27 @@ public class Level {
   private boolean baseDestroyed = false;
   private BitmapFont font;
 
-  private float spawnX;
-  private float spawnY;
-
-  private float endX;
-  private float endY;
-
-  private Map<Integer, Vector2> breadCrumbs;
-
   /**
    * Constructor for a Level.
    */
-  public Level(MapObjects mapObjects) {
+  public Level(List<Vector2> breadCrumbs) {
 
-    this.breadCrumbs = new HashMap<>();
+    this.wave = new Wave(breadCrumbs);
 
-    extractProperties(mapObjects);
-    System.out.println(breadCrumbs.toString());
-
-    this.spawnX = (float) mapObjects.get("SPAWN").getProperties().get("x");
-    this.spawnY = (float) mapObjects.get("SPAWN").getProperties().get("y");
-
-    this.wave = new Wave(spawnX, spawnY);
     this.stats = new Statistics();
     this.stats.registerWave(wave);
+
     this.fleet = new Fleet();
     this.fleet.registerStats(stats);
+
     this.stats.registerFleet(fleet);
-    this.base = new Base(endX, endY);
+
+    Vector2 baseVector = breadCrumbs.get(breadCrumbs.size() - 1);
+    this.base = new Base(baseVector.x, baseVector.y);
 
     font = new BitmapFont();
     font.setColor(Color.BLACK);
     font.getData().setScale(4, 4);
-
 
   }
 
@@ -73,14 +58,17 @@ public class Level {
   public boolean update() {
 
     this.wave.updatePositions(100 * Gdx.graphics.getDeltaTime());
-    this.wave.getKillCounter();
+
     this.stats.setCurrentCurrency();
     this.stats.setCurrentFleet();
     this.stats.setCurrentXP();
+
     this.wave.cleanUp();
     this.wave.spawnEnemy(SPAWN_PROBABILITY);
     this.wave.updateHealthBars();
+
     this.fleet.run(this.wave);
+
     if (!this.baseDestroyed) {
       this.base.run(this.wave);
 
@@ -136,27 +124,6 @@ public class Level {
     this.fleet.draw(batch, renderer);
     if (!baseDestroyed) {
       this.base.draw(batch, renderer);
-    }
-  }
-
-  private void extractProperties(MapObjects mapObjects) {
-    int size = mapObjects.getCount();
-
-    for (int i = 0; i < size; i++) {
-      MapObject mapObject = mapObjects.get(i);
-
-      if (mapObject.getName().equals("SPAWN")) {
-        this.spawnX = (float) mapObject.getProperties().get("x");
-        this.spawnY = (float) mapObject.getProperties().get("y");
-      } else if (mapObject.getName().equals("END")) {
-        this.endX = (float) mapObject.getProperties().get("x");
-        this.endY = (float) mapObject.getProperties().get("y");
-      } else {
-        Vector2 vector2 = new Vector2((float) mapObject.getProperties().get("x"),
-            (float) mapObject.getProperties().get("y"));
-
-        breadCrumbs.put(Integer.valueOf(mapObject.getName()), vector2);
-      }
     }
   }
 }

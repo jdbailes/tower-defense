@@ -56,7 +56,7 @@
 </data>
  </layer>
  <objectgroup id="6" name="NAVIGATION_LAYER">
-  <object id="9" name="SPAWN" x="0" y="480">
+  <object id="9" name="0" x="0" y="480">
    <point/>
   </object>
   <object id="10" name="1" x="352" y="480">
@@ -71,7 +71,7 @@
   <object id="13" name="4" x="928" y="480">
    <point/>
   </object>
-  <object id="14" name="END" x="1152" y="480">
+  <object id="14" name="5" x="1152" y="480">
    <point/>
   </object>
  </objectgroup>
