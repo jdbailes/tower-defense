@@ -3,7 +3,10 @@ package com.td.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Logger;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.td.game.TowerDefenseGame;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * The first screen that's displayed upon starting the game application. Gives the user options of
@@ -48,8 +51,8 @@ public class MainMenuScreen extends AbstractScreen {
   /**
    * Default constructor for MainMenuScreen.
    */
-  public MainMenuScreen(TowerDefenseGame game) {
-    super(game);
+  public MainMenuScreen(TowerDefenseGame game, UserConfig userConfig) {
+    super(game, userConfig);
 
     logger.debug("Creating menu screen");
 
@@ -78,55 +81,67 @@ public class MainMenuScreen extends AbstractScreen {
 
     drawTitle();
 
-    // Render exit button
+    renderExitButton();
+
+    if (userConfig.isNewGame()) {
+      renderNewGameButton();
+    } else {
+      renderNewGameButton();
+      renderResumeButton();
+    }
+
+    this.game.batch.end();
+  }
+
+  private void renderExitButton() {
     if (isTouchingExitButton(exitXPos) && Gdx.input.justTouched()) {
       logger.debug("Exiting main menu screen");
       safeExit();
     } else if (isTouchingExitButton(exitXPos)) {
-      drawExitButton(exitXPos, true);
+      drawExitButton(exitXPos, exitButtonActive);
     } else {
-      drawExitButton(exitXPos, false);
+      drawExitButton(exitXPos, exitButtonInactive);
     }
 
-    // Render resume button
-    if (isTouchingResumeButton(resumeXPos) && Gdx.input.justTouched()) {
-      logger.debug("Switching to level menu screen");
-      switchScreen(new LevelMenuScreen(game));
-    } else if (isTouchingResumeButton(resumeXPos)) {
-      drawResumeButton(resumeXPos, true);
-    } else {
-      drawResumeButton(resumeXPos, false);
-    }
+  }
 
+  private void renderNewGameButton() {
     // Render new game button
     if ((isTouchingNewGameButton(newGameXPos)) && Gdx.input.justTouched()) {
       logger.debug("Switching to level menu screen");
-      switchScreen(new LevelMenuScreen(game));
+      resetUserConfig();
+      switchScreen(new LevelMenuScreen(game, userConfig));
     } else if (isTouchingNewGameButton(newGameXPos)) {
-      drawNewGameButton(newGameXPos, true);
+      drawNewGameButton(newGameXPos, newGameButtonActive);
     } else {
-      drawNewGameButton(newGameXPos, false);
+      drawNewGameButton(newGameXPos, newGameButtonInactive);
     }
+  }
 
-    this.game.batch.end();
+  private void renderResumeButton() {
+    if (isTouchingResumeButton(resumeXPos) && Gdx.input.justTouched()) {
+      logger.debug("Switching to level menu screen");
+      switchScreen(new LevelMenuScreen(game, userConfig));
+    } else if (isTouchingResumeButton(resumeXPos)) {
+      drawResumeButton(resumeXPos, resumeButtonActive);
+    } else {
+      drawResumeButton(resumeXPos, resumeButtonInactive);
+    }
   }
 
   private void drawTitle() {
     game.batch.draw(title, titleXPos, TITLE_Y_POS);
   }
 
-  private void drawExitButton(float x, boolean active) {
-    Texture texture = active ? this.exitButtonActive : this.exitButtonInactive;
+  private void drawExitButton(float x, Texture texture) {
     game.batch.draw(texture, x, (float) EXIT_Y_POS);
   }
 
-  private void drawResumeButton(float x, boolean active) {
-    Texture texture = active ? this.resumeButtonActive : this.resumeButtonInactive;
+  private void drawResumeButton(float x, Texture texture) {
     game.batch.draw(texture, x, (float) RESUME_Y_POS);
   }
 
-  private void drawNewGameButton(float x, boolean active) {
-    Texture texture = active ? this.newGameButtonActive : this.newGameButtonInactive;
+  private void drawNewGameButton(float x, Texture texture) {
     game.batch.draw(texture, x, (float) NEW_GAME_Y_POS);
   }
 
@@ -149,6 +164,22 @@ public class MainMenuScreen extends AbstractScreen {
         && getInputX() > x
         && getInputY() < EXIT_Y_POS + exitButtonInactive.getHeight()
         && getInputY() > EXIT_Y_POS;
+  }
+
+  private void resetUserConfig() {
+
+    ObjectMapper mapper = new ObjectMapper();
+
+    userConfig.setNewGame(false);
+    userConfig.setLevelOneUnlocked(true);
+    userConfig.setLevelTwoUnlocked(false);
+    userConfig.setLevelThreeUnlocked(false);
+
+    try {
+      mapper.writeValue(new File("configuration/user_configuration.json"), userConfig);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override

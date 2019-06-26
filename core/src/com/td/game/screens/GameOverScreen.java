@@ -22,8 +22,8 @@ public class GameOverScreen extends AbstractScreen {
   private Texture menuButtonActive;
   private Texture menuButtonInactive;
 
-  public GameOverScreen(final TowerDefenseGame game) {
-    super(game);
+  public GameOverScreen(final TowerDefenseGame game, UserConfig userConfig) {
+    super(game, userConfig);
 
     // Load images to texture
     this.gameOver = new Texture("ui/game_over_title.png");
@@ -52,7 +52,7 @@ public class GameOverScreen extends AbstractScreen {
     // Render exit button
     if (isTouchingMenuButton(menuButtonX) && Gdx.input.justTouched()) {
       logger.info("Switching to main menu screen");
-      switchScreen(new LevelMenuScreen(game));
+      switchScreen(new LevelMenuScreen(game, userConfig));
     } else if (isTouchingMenuButton(menuButtonX)) {
       drawMenuButton(menuButtonX, MENU_BUTTON_Y, true);
     } else {

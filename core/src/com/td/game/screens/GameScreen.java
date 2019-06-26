@@ -12,9 +12,12 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.td.game.Config;
 import com.td.game.TowerDefenseGame;
 import com.td.game.offScreen.Level;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +34,13 @@ public class GameScreen extends AbstractScreen {
   private ShapeRenderer shapeRenderer;
   private SpriteBatch batch;
   private Level level;
+  private int levelNumber;
 
-  GameScreen(final TowerDefenseGame game, int level) {
-    super(game);
+  GameScreen(final TowerDefenseGame game, int level, UserConfig userConfig) {
+    super(game, userConfig);
     setupCamera();
 
+    this.levelNumber = level;
     this.tiledMap = this.game.getAssetManager().get(Config.getLevelFilepath(level));
 
     MapObjects mapObjects = this.tiledMap.getLayers().get(NAVIGATION_KEY).getObjects();
@@ -79,12 +84,30 @@ public class GameScreen extends AbstractScreen {
     boolean gameOver = this.level.update();
 
     if (gameOver) {
-      switchScreen(new GameOverScreen(game));
+      switchScreen(new GameOverScreen(game, userConfig));
       dispose();
     }
 
     if (level.levelComplete()) {
-      switchScreen(new LevelCompleteScreen(game));
+
+      switch(levelNumber) {
+        case 1:
+          userConfig.setLevelTwoUnlocked(true);
+          break;
+        case 2:
+          userConfig.setLevelThreeUnlocked(true);
+          break;
+
+      }
+
+      ObjectMapper mapper = new ObjectMapper();
+      try {
+        mapper.writeValue(new File("configuration/user_configuration.json"), userConfig);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+
+      switchScreen(new LevelCompleteScreen(game, userConfig));
       dispose();
     }
 

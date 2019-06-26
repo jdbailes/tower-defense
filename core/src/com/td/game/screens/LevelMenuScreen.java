@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Logger;
 import com.td.game.Config;
 import com.td.game.TowerDefenseGame;
+import javax.xml.soap.Text;
 
 public class LevelMenuScreen extends AbstractScreen {
 
@@ -21,29 +22,40 @@ public class LevelMenuScreen extends AbstractScreen {
   private final int levelThreeSelectionX;
 
   private Texture title;
+
   private Texture levelOneSelectionInactive;
   private Texture levelOneSelectionActive;
+  private Texture levelOneSelectionLocked;
+
   private Texture levelTwoSelectionInactive;
   private Texture levelTwoSelectionActive;
+  private Texture levelTwoSelectionLocked;
+
   private Texture levelThreeSelectionInactive;
   private Texture levelThreeSelectionActive;
+  private Texture levelThreeSelectionLocked;
 
   /**
    * Default constructor for MainMenuScreen.
    */
-  LevelMenuScreen(TowerDefenseGame game) {
-    super(game);
-
-    // TODO Move to constants.
+  LevelMenuScreen(TowerDefenseGame game, UserConfig userConfig) {
+    super(game, userConfig);
 
     // Load images to texture
     this.title = new Texture("ui/level_select_title.png");
+
     this.levelOneSelectionInactive = new Texture("ui/level1_selection_inactive.png");
     this.levelOneSelectionActive = new Texture("ui/level1_selection_active.png");
+    this.levelOneSelectionLocked = new Texture("ui/level1_selection_locked.png");
+
     this.levelTwoSelectionInactive = new Texture("ui/level2_selection_inactive.png");
     this.levelTwoSelectionActive = new Texture("ui/level2_selection_active.png");
+    this.levelTwoSelectionLocked = new Texture("ui/level2_selection_locked.png");
+
     this.levelThreeSelectionInactive = new Texture("ui/level3_selection_inactive.png");
     this.levelThreeSelectionActive = new Texture("ui/level3_selection_active.png");
+    this.levelThreeSelectionLocked = new Texture("ui/level3_selection_locked.png");
+
 
     // Calculate x-coordinates for screen items
     this.titleX = getCentrePointX(this.title.getWidth());
@@ -62,31 +74,43 @@ public class LevelMenuScreen extends AbstractScreen {
 
     drawLevelSelectTitle();
 
-    if (isTouchingLevelOne(levelOneSelectionX) && Gdx.input.justTouched()) {
-      logger.info("Switching to game screen [level 1]");
-      switchScreen(new LoadingScreen(game, 1));
-    } else if (isTouchingLevelOne(levelOneSelectionX)) {
-      drawLevelOne(levelOneSelectionX, true);
+    if(userConfig.isLevelOneUnlocked()) {
+      if (isTouchingLevelOne(levelOneSelectionX) && Gdx.input.justTouched()) {
+        logger.info("Switching to game screen [level 1]");
+        switchScreen(new LoadingScreen(game, 1, userConfig));
+      } else if (isTouchingLevelOne(levelOneSelectionX)) {
+        drawLevelOne(levelOneSelectionX, levelOneSelectionActive);
+      } else {
+        drawLevelOne(levelOneSelectionX, levelOneSelectionInactive);
+      }
     } else {
-      drawLevelOne(levelOneSelectionX, false);
+      drawLevelOne(levelOneSelectionX, levelOneSelectionLocked);
     }
 
-    if (isTouchingLevelTwo(levelTwoSelectionX) && Gdx.input.justTouched()) {
-      logger.info("Switching to game screen [level 2]");
-      switchScreen(new LoadingScreen(game, 2));
-    } else if (isTouchingLevelTwo(levelTwoSelectionX)) {
-      drawLevelTwo(levelTwoSelectionX, true);
+    if(userConfig.isLevelTwoUnlocked()) {
+      if (isTouchingLevelTwo(levelTwoSelectionX) && Gdx.input.justTouched()) {
+        logger.info("Switching to game screen [level 2]");
+        switchScreen(new LoadingScreen(game, 2, userConfig));
+      } else if (isTouchingLevelTwo(levelTwoSelectionX)) {
+        drawLevelTwo(levelTwoSelectionX, levelTwoSelectionActive);
+      } else {
+        drawLevelTwo(levelTwoSelectionX, levelTwoSelectionInactive);
+      }
     } else {
-      drawLevelTwo(levelTwoSelectionX, false);
+      drawLevelTwo(levelTwoSelectionX, levelTwoSelectionLocked);
     }
 
-    if (isTouchingLevelThree(levelThreeSelectionX) && Gdx.input.justTouched()) {
-      logger.info("Switching to game screen [level 3]");
-      switchScreen(new LoadingScreen(game, 3));
-    } else if (isTouchingLevelThree(levelThreeSelectionX)) {
-      drawLevelThree(levelThreeSelectionX, true);
+    if(userConfig.isLevelThreeUnlocked()) {
+      if (isTouchingLevelThree(levelThreeSelectionX) && Gdx.input.justTouched()) {
+        logger.info("Switching to game screen [level 3]");
+        switchScreen(new LoadingScreen(game, 3, userConfig));
+      } else if (isTouchingLevelThree(levelThreeSelectionX)) {
+        drawLevelThree(levelThreeSelectionX, levelThreeSelectionActive);
+      } else {
+        drawLevelThree(levelThreeSelectionX, levelThreeSelectionInactive);
+      }
     } else {
-      drawLevelThree(levelThreeSelectionX, false);
+      drawLevelThree(levelThreeSelectionX, levelThreeSelectionLocked);
     }
 
     this.game.batch.end();
@@ -99,8 +123,7 @@ public class LevelMenuScreen extends AbstractScreen {
         && getInputY() > LEVEL_ONE_SELECTION_Y;
   }
 
-  private void drawLevelOne(float x, boolean active) {
-    Texture texture = active ? this.levelOneSelectionActive : this.levelOneSelectionInactive;
+  private void drawLevelOne(float x, Texture texture) {
     game.batch.draw(texture, x, (float) LevelMenuScreen.LEVEL_ONE_SELECTION_Y);
   }
 
@@ -111,8 +134,7 @@ public class LevelMenuScreen extends AbstractScreen {
         && getInputY() > LEVEL_TWO_SELECTION_Y;
   }
 
-  private void drawLevelTwo(float x, boolean active) {
-    Texture texture = active ? this.levelTwoSelectionActive : this.levelTwoSelectionInactive;
+  private void drawLevelTwo(float x, Texture texture) {
     game.batch.draw(texture, x, (float) LevelMenuScreen.LEVEL_TWO_SELECTION_Y);
   }
 
@@ -123,8 +145,7 @@ public class LevelMenuScreen extends AbstractScreen {
         && getInputY() > LEVEL_THREE_SELECTION_Y;
   }
 
-  private void drawLevelThree(float x, boolean active) {
-    Texture texture = active ? this.levelThreeSelectionActive : this.levelThreeSelectionInactive;
+  private void drawLevelThree(float x, Texture texture) {
     game.batch.draw(texture, x, (float) LevelMenuScreen.LEVEL_THREE_SELECTION_Y);
   }
 

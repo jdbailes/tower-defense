@@ -18,8 +18,8 @@ public class LoadingScreen extends AbstractScreen {
 
   private int level;
 
-  LoadingScreen(TowerDefenseGame game, int level) {
-    super(game);
+  LoadingScreen(TowerDefenseGame game, int level, UserConfig userConfig) {
+    super(game, userConfig);
 
     this.level = level;
 
@@ -53,7 +53,7 @@ public class LoadingScreen extends AbstractScreen {
     this.game.batch.begin();
 
     if (this.game.getAssetManager().update()) {
-      this.game.setScreen(new GameScreen(this.game, this.level));
+      this.game.setScreen(new GameScreen(this.game, this.level, userConfig));
     }
 
     drawTitle();
