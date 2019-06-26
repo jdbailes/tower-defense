@@ -7,12 +7,13 @@ public class Statistics {
 
   private int killCounter;
   private int currentFleet;
-
+  private int startingCurrency;
 
   private Wave wave;
   private Fleet fleet;
 
-  Statistics() {
+  Statistics(int startingCurrency) {
+    this.startingCurrency = startingCurrency;
   }
 
   void registerWave(Wave wave) {
@@ -29,9 +30,9 @@ public class Statistics {
     killCounter = this.wave.getKillCounter();
     int shipCost = 50;
     int currencyPerKill = 20;
-    int startingCurrency = 140;
+    int currency = this.startingCurrency;
 
-    return (startingCurrency + (currencyPerKill * killCounter) - (currentFleet
+    return (currency + (currencyPerKill * killCounter) - (currentFleet
         * shipCost));
   }
 

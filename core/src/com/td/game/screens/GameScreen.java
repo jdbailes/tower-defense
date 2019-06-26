@@ -41,7 +41,7 @@ public class GameScreen extends AbstractScreen {
     MapObjects mapObjects = this.tiledMap.getLayers().get(NAVIGATION_KEY).getObjects();
     List<Vector2> breadCrumbs = getBreadCrumbs(mapObjects);
 
-    this.level = new Level(breadCrumbs);
+    this.level = new Level(breadCrumbs, level);
 
     this.tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
     this.shapeRenderer = new ShapeRenderer();
@@ -62,7 +62,6 @@ public class GameScreen extends AbstractScreen {
     this.tiledMapRenderer.setView(camera);
     this.tiledMapRenderer.render();
 
-    // TODO Move to private method
     if (Gdx.input.isKeyJustPressed(Keys.NUM_1)) {
       // Get the coordinates of the current mouse position
       int x = Gdx.input.getX();

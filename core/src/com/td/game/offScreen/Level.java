@@ -6,8 +6,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.td.game.Config;
 import com.td.game.onScreen.Base;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -16,7 +19,13 @@ import java.util.List;
  */
 public class Level {
 
-  private static final float SPAWN_PROBABILITY = 0.02f;  // The the chance of an enemy spawning in a frame
+  private float spawnProbability;  // The the chance of an enemy spawning in a frame
+
+  private static final int STATS_Y_POS = Config.SCREEN_HEIGHT - 30;
+  private static final int CURRENCY_X_POS = 50;
+  private static final int CURRENCY_VALUE_X_POS = 350;
+  private static final int XP_X_POS = Config.SCREEN_WIDTH - 200;
+  private static final int XP_VALUE_X_POS = Config.SCREEN_WIDTH - 100;
 
   // The core on-screen components of the level
   private final Wave wave;
@@ -31,11 +40,22 @@ public class Level {
   /**
    * Constructor for a Level.
    */
-  public Level(List<Vector2> breadCrumbs) {
+  public Level(List<Vector2> breadCrumbs, int level) {
 
-    this.wave = new Wave(breadCrumbs);
+    ObjectMapper mapper = new ObjectMapper();
+    //JSON file to Java object
+    LevelConfig levelConfig = new LevelConfig();
+    try {
+      levelConfig = mapper.readValue(new File(Config.getConfigFilepath(level)), LevelConfig.class);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
 
-    this.stats = new Statistics();
+    spawnProbability = levelConfig.getSpawnProbability();
+
+    this.wave = new Wave(breadCrumbs, levelConfig.getWaveSize(), levelConfig.getEnemyHealth());
+
+    this.stats = new Statistics(levelConfig.getStartingCredit());
     this.stats.registerWave(wave);
 
     this.fleet = new Fleet();
@@ -47,7 +67,7 @@ public class Level {
     this.base = new Base(baseVector.x, baseVector.y);
 
     font = new BitmapFont();
-    font.setColor(Color.BLACK);
+    font.setColor(Color.WHITE);
     font.getData().setScale(4, 4);
 
   }
@@ -64,7 +84,7 @@ public class Level {
     this.stats.setCurrentXP();
 
     this.wave.cleanUp();
-    this.wave.spawnEnemy(SPAWN_PROBABILITY);
+    this.wave.spawnEnemy(spawnProbability);
     this.wave.updateHealthBars();
 
     this.fleet.run(this.wave);
@@ -100,15 +120,22 @@ public class Level {
    */
   public void draw(SpriteBatch batch) {
     this.wave.draw(batch);
-    font.draw(batch, "Currency:", Config.SCREEN_WIDTH - 1000, Config.SCREEN_HEIGHT - 150);
-    font.draw(batch, String.valueOf(this.stats.setCurrentCurrency()), Config.SCREEN_WIDTH - 700,
-        Config.SCREEN_HEIGHT - 150);
-    font.draw(batch, "XP:", 1100, Config.SCREEN_HEIGHT - 150);
-    font.draw(batch, String.valueOf(this.stats.setCurrentXP()), 1200, Config.SCREEN_HEIGHT - 150);
+
+    displayStats(batch);
+
     this.fleet.draw(batch);
     if (!baseDestroyed) {
       this.base.draw(batch);
     }
+  }
+
+  private void displayStats(SpriteBatch batch) {
+    font.draw(batch, "Currency:", CURRENCY_X_POS, STATS_Y_POS);
+    font.draw(batch, String.valueOf(this.stats.setCurrentCurrency()), CURRENCY_VALUE_X_POS, STATS_Y_POS);
+
+
+    font.draw(batch, "XP:", XP_X_POS, STATS_Y_POS);
+    font.draw(batch, String.valueOf(this.stats.setCurrentXP()), XP_VALUE_X_POS, STATS_Y_POS);
   }
 
   /**

@@ -52,7 +52,7 @@ public class GameOverScreen extends AbstractScreen {
     // Render exit button
     if (isTouchingMenuButton(menuButtonX) && Gdx.input.justTouched()) {
       logger.info("Switching to main menu screen");
-      switchScreen(new MainMenuScreen(game));
+      switchScreen(new LevelMenuScreen(game));
     } else if (isTouchingMenuButton(menuButtonX)) {
       drawMenuButton(menuButtonX, MENU_BUTTON_Y, true);
     } else {

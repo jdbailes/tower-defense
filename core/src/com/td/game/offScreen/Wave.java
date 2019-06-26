@@ -20,14 +20,17 @@ public class Wave {
 
   private List<Vector2> breadCrumbs;
   private List<Enemy> enemies;
-  private int waveSize = 1000;
+  private int waveSize;
+  private int enemyHealth;
 
   private int killCounter;
 
   /**
    * Creates a new wave containing a single enemy.
    */
-  public Wave(List<Vector2> breadCrumbs) {
+  public Wave(List<Vector2> breadCrumbs, int waveSize, int enemyHealth) {
+    this.waveSize = waveSize;
+    this.enemyHealth = enemyHealth;
 
     this.breadCrumbs = breadCrumbs;
 
