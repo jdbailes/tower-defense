@@ -5,20 +5,38 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Logger;
 import com.td.game.TowerDefenseGame;
 
+/**
+ * The first screen that's displayed upon starting the game application. Gives the user options of
+ * resuming a game, starting a new game, or exiting the game application.
+ *
+ * @author joebailey
+ */
 public class MainMenuScreen extends AbstractScreen {
 
-  private final static Logger logger = new Logger("MainMenuScreen", Logger.INFO);
+  private static final Logger logger = new Logger("MainMenuScreen", Logger.DEBUG);
 
-  private static final int TITLE_Y = 620;
-  private static final int RESUME_BUTTON_Y = 300;
-  private static final int NEW_GAME_BUTTON_Y = 200;
-  private static final int EXIT_BUTTON_Y = 100;
+  // All file paths for the textures of all screen components
+  private static final String RESUME_ACTIVE_FILEPATH = "ui/resume_button_active.png";
+  private static final String RESUME_INACTIVE_FILEPATH = "ui/resume_button_inactive.png";
+  private static final String NEW_GAME_ACTIVE_FILEPATH = "ui/newgame_button_active.png";
+  private static final String NEW_GAME_INACTIVE_FILEPATH = "ui/newgame_button_inactive.png";
+  private static final String EXIT_ACTIVE_FILEPATH = "ui/exit_button_active.png";
+  private static final String EXIT_INACTIVE_FILEPATH = "ui/exit_button_inactive.png";
 
-  private final int titleX;
-  private final int resumeButtonX;
-  private final int newGameButtonX;
-  private final int exitButtonX;
+  // y-positions of all screen components
+  private static final String TITLE_PATH = "ui/game_title.png";
+  private static final int TITLE_Y_POS = 620;
+  private static final int RESUME_Y_POS = 300;
+  private static final int NEW_GAME_Y_POS = 200;
+  private static final int EXIT_Y_POS = 100;
 
+  // x-positions of all screen components
+  private final int titleXPos;
+  private final int resumeXPos;
+  private final int newGameXPos;
+  private final int exitXPos;
+
+  // All textures for screen components
   private Texture title;
   private Texture resumeButtonActive;
   private Texture resumeButtonInactive;
@@ -33,104 +51,104 @@ public class MainMenuScreen extends AbstractScreen {
   public MainMenuScreen(TowerDefenseGame game) {
     super(game);
 
-    logger.info("Creating menu screen");
+    logger.debug("Creating menu screen");
 
     // Load images to texture
-    this.title = new Texture("ui/game_title.png");
-    this.resumeButtonActive = new Texture("ui/resume_button_active.png");
-    this.resumeButtonInactive = new Texture("ui/resume_button_inactive.png");
-    this.newGameButtonActive = new Texture("ui/newgame_button_active.png");
-    this.newGameButtonInactive = new Texture("ui/newgame_button_inactive.png");
-    this.exitButtonActive = new Texture("ui/exit_button_active.png");
-    this.exitButtonInactive = new Texture("ui/exit_button_inactive.png");
+    title = new Texture(TITLE_PATH);
+    resumeButtonActive = new Texture(RESUME_ACTIVE_FILEPATH);
+    resumeButtonInactive = new Texture(RESUME_INACTIVE_FILEPATH);
+    newGameButtonActive = new Texture(NEW_GAME_ACTIVE_FILEPATH);
+    newGameButtonInactive = new Texture(NEW_GAME_INACTIVE_FILEPATH);
+    exitButtonActive = new Texture(EXIT_ACTIVE_FILEPATH);
+    exitButtonInactive = new Texture(EXIT_INACTIVE_FILEPATH);
 
     // Calculate x-coordinates for screen items
-    this.titleX = getCentrePointX(title.getWidth());
-    this.resumeButtonX = getCentrePointX(resumeButtonInactive.getWidth());
-    this.newGameButtonX = getCentrePointX(newGameButtonInactive.getWidth());
-    this.exitButtonX = getCentrePointX(exitButtonInactive.getWidth());
+    titleXPos = getCentrePointX(title.getWidth());
+    resumeXPos = getCentrePointX(resumeButtonInactive.getWidth());
+    newGameXPos = getCentrePointX(newGameButtonInactive.getWidth());
+    exitXPos = getCentrePointX(exitButtonInactive.getWidth());
   }
 
   @Override
   public void render(float delta) {
     super.render(delta);
 
-    this.camera.update();
-    this.game.batch.begin();
+    camera.update();
+    game.batch.begin();
 
     drawTitle();
 
     // Render exit button
-    if (isTouchingExitButton(exitButtonX) && Gdx.input.justTouched()) {
-      logger.info("Exiting main menu screen");
+    if (isTouchingExitButton(exitXPos) && Gdx.input.justTouched()) {
+      logger.debug("Exiting main menu screen");
       safeExit();
-    } else if (isTouchingExitButton(exitButtonX)) {
-      drawExitButton(exitButtonX, true);
+    } else if (isTouchingExitButton(exitXPos)) {
+      drawExitButton(exitXPos, true);
     } else {
-      drawExitButton(exitButtonX, false);
+      drawExitButton(exitXPos, false);
     }
 
     // Render resume button
-    if (isTouchingResumeButton(resumeButtonX) && Gdx.input.justTouched()) {
-      logger.info("Switching to level menu screen");
+    if (isTouchingResumeButton(resumeXPos) && Gdx.input.justTouched()) {
+      logger.debug("Switching to level menu screen");
       switchScreen(new LevelMenuScreen(game));
-    } else if (isTouchingResumeButton(resumeButtonX)) {
-      drawResumeButton(resumeButtonX, true);
+    } else if (isTouchingResumeButton(resumeXPos)) {
+      drawResumeButton(resumeXPos, true);
     } else {
-      drawResumeButton(resumeButtonX, false);
+      drawResumeButton(resumeXPos, false);
     }
 
     // Render new game button
-    if ((isTouchingNewGameButton(newGameButtonX)) && Gdx.input.justTouched()) {
-      logger.info("Switching to level menu screen");
+    if ((isTouchingNewGameButton(newGameXPos)) && Gdx.input.justTouched()) {
+      logger.debug("Switching to level menu screen");
       switchScreen(new LevelMenuScreen(game));
-    } else if (isTouchingNewGameButton(newGameButtonX)) {
-      drawNewGameButton(newGameButtonX, true);
+    } else if (isTouchingNewGameButton(newGameXPos)) {
+      drawNewGameButton(newGameXPos, true);
     } else {
-      drawNewGameButton(newGameButtonX, false);
+      drawNewGameButton(newGameXPos, false);
     }
 
     this.game.batch.end();
   }
 
   private void drawTitle() {
-    game.batch.draw(title, titleX, TITLE_Y);
+    game.batch.draw(title, titleXPos, TITLE_Y_POS);
   }
 
   private void drawExitButton(float x, boolean active) {
     Texture texture = active ? this.exitButtonActive : this.exitButtonInactive;
-    game.batch.draw(texture, x, (float) MainMenuScreen.EXIT_BUTTON_Y);
+    game.batch.draw(texture, x, (float) EXIT_Y_POS);
   }
 
   private void drawResumeButton(float x, boolean active) {
     Texture texture = active ? this.resumeButtonActive : this.resumeButtonInactive;
-    game.batch.draw(texture, x, (float) MainMenuScreen.RESUME_BUTTON_Y);
+    game.batch.draw(texture, x, (float) RESUME_Y_POS);
   }
 
   private void drawNewGameButton(float x, boolean active) {
     Texture texture = active ? this.newGameButtonActive : this.newGameButtonInactive;
-    game.batch.draw(texture, x, (float) MainMenuScreen.NEW_GAME_BUTTON_Y);
+    game.batch.draw(texture, x, (float) NEW_GAME_Y_POS);
   }
 
   private boolean isTouchingNewGameButton(int x) {
     return getInputX() < x + newGameButtonInactive.getWidth()
         && getInputX() > x
-        && getInputY() < NEW_GAME_BUTTON_Y + newGameButtonInactive.getHeight()
-        && getInputY() > NEW_GAME_BUTTON_Y;
+        && getInputY() < NEW_GAME_Y_POS + newGameButtonInactive.getHeight()
+        && getInputY() > NEW_GAME_Y_POS;
   }
 
   private boolean isTouchingResumeButton(int x) {
     return getInputX() < x + resumeButtonInactive.getWidth()
         && getInputX() > x
-        && getInputY() < RESUME_BUTTON_Y + resumeButtonInactive.getHeight()
-        && getInputY() > RESUME_BUTTON_Y;
+        && getInputY() < RESUME_Y_POS + resumeButtonInactive.getHeight()
+        && getInputY() > RESUME_Y_POS;
   }
 
   private boolean isTouchingExitButton(int x) {
     return getInputX() < x + exitButtonInactive.getWidth()
         && getInputX() > x
-        && getInputY() < EXIT_BUTTON_Y + exitButtonInactive.getHeight()
-        && getInputY() > EXIT_BUTTON_Y;
+        && getInputY() < EXIT_Y_POS + exitButtonInactive.getHeight()
+        && getInputY() > EXIT_Y_POS;
   }
 
   @Override

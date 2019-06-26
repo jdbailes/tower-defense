@@ -2,8 +2,8 @@ package com.td.game;
 
 public final class Config {
 
-  public static final int SCREEN_HEIGHT = 720;
-  public static final int SCREEN_WIDTH = 1280;
+  public static final int SCREEN_HEIGHT = 960;
+  public static final int SCREEN_WIDTH = 1920;
 
   private static final String LEVEL_1_FILEPATH = "tiles/level-one.tmx";
   private static final String LEVEL_2_FILEPATH = "tiles/level-two.tmx";
