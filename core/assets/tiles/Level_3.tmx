@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="13">
- <tileset firstgid="1" source="../Tilesets/terrainTiles_default.tsx"/>
- <tileset firstgid="161" source="../Tilesets/scifi_tilesheet.tsx"/>
- <tileset firstgid="665" source="../Tilesets/allSprites_default.tsx"/>
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="13">
+ <tileset firstgid="1" source="terrainTiles_default.tsx"/>
+ <tileset firstgid="161" source="scifi_tilesheet.tsx"/>
+ <tileset firstgid="665" source="allSprites_default.tsx"/>
  <layer id="3" name="Tile Layer 1" width="60" height="30">
   <data encoding="base64" compression="zlib">
    eJztV9sNwjAMDHQDmAx2KDuUHWBmqESlCNnxOWlyfUW6v7bx43znhnCc42zn3ATcNwwp3y2jT4AdWw2w+bV0Po/vPFaMFJ/3wnFPr731YoNds9baw653zV7t0W9L+bB2sP2hNZ4JzMmH1D0t4fEaZD60utbm6RvEEjRkDp6ydcGDOPdcnrJ1IWen1fqP8NQzv2w9GX5Adoox1pcAdH5zd0qPRliYYh4EoJqZ6lk8O1pdPbsc4j9ID6S+WfnH8Wg9aLGzeL1Ym20r/+Gv5pZWsP3Is9PMsQOz/3E8+0wP9M/KV+IHC1Y9xmdKfVjSCBaseiCaN+V96kI4d7r3pb5X2381bUbrMvU/jv/yzfXaYR6Q6+Wl/oveXcKLDzq1c5M=
@@ -28,41 +28,41 @@
    eJztlslKA0EURasrbhw3ulFwFhzAOOwVnAVNQEH/Q0FBwWGnG904xaXDD+jGERT0F3SjoKCgv6AbPU26yCat6aRNqqUuXDoFr4t7qFcvLYSRkdFvWrCEWLT028tvLZFrGe/hfZ8y+rmX3zog16Gm2YyMjPRQtRSiRibWa8yMdQ3nxhgZx6X7OlX18U4/bsRN+AjWYw15Z8g2K93XXjXCu6PO+zvwxjRk/itdwHoZIN4Hsj4GKG+m+rJZM+htI6Ncqp7ebfDQvxPUTmrU75VkqcJ33MN7Z+6shIRYDSWvH6J22EP+OWrnNeLtIUsv/oD10+GNwbrrwvsfVAtvnUZn4KZCzqPIh/++AVgHcTmukD/3cy7VBmu7w3uFrzPcrwvWbqlfP9/CmE+uApngfMGvaeylzlRnvcPbSsawTJ9TSZ3pE3s+pzCfc6UI2aJ4C2/7cIdDMOc556xbP9t9PAXjND7D5ynyblC3GcBv+7DLfVN32k0nsJ4GkNeeVzdW/Kn62pa600rF/C75o1nUzL4tWZpz9rx6s+JP1dfJ2DpYd6aQqZSaMo/ZI9RHs8T7DZlxPmY=
   </data>
  </layer>
- <objectgroup id="7" name="Object Layer 1">
-  <object id="1" x="4" y="484">
+ <objectgroup id="7" name="NAVIGATION_LAYER">
+  <object id="1" name="0" x="4" y="484">
    <point/>
   </object>
-  <object id="2" x="248" y="482">
+  <object id="2" name="1" x="248" y="482">
    <point/>
   </object>
-  <object id="3" x="258" y="790">
+  <object id="3" name="2" x="258" y="790">
    <point/>
   </object>
-  <object id="4" x="314" y="794">
+  <object id="4" name="3" x="314" y="794">
    <point/>
   </object>
-  <object id="5" x="322" y="738">
+  <object id="5" name="4" x="322" y="738">
    <point/>
   </object>
-  <object id="6" x="556" y="738">
+  <object id="6" name="5" x="556" y="738">
    <point/>
   </object>
-  <object id="7" x="572" y="486">
+  <object id="7" name="6" x="572" y="486">
    <point/>
   </object>
-  <object id="8" x="858" y="490">
+  <object id="8" name="7" x="858" y="490">
    <point/>
   </object>
-  <object id="9" x="864" y="852">
+  <object id="9" name="8" x="864" y="852">
    <point/>
   </object>
-  <object id="10" x="1334" y="858">
+  <object id="10" name="9" x="1334" y="858">
    <point/>
   </object>
-  <object id="11" x="1342" y="520">
+  <object id="11" name="10" x="1342" y="520">
    <point/>
   </object>
-  <object id="12" x="1910" y="514">
+  <object id="12" name="11" x="1910" y="514">
    <point/>
   </object>
  </objectgroup>

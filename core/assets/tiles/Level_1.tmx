@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="19" nextobjectid="5">
- <tileset firstgid="1" source="../Tilesets/scifi_tilesheet.tsx"/>
- <tileset firstgid="505" source="../tmp/tileSand_roadEast.tsx"/>
- <tileset firstgid="509" source="../Tilesets/Preview_KenneyNL.tsx"/>
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="19" nextobjectid="5">
+ <tileset firstgid="1" source="scifi_tilesheet.tsx"/>
+ <tileset firstgid="505" source="tileSand_roadEast.tsx"/>
+ <tileset firstgid="509" source="Preview_KenneyNL.tsx"/>
  <layer id="9" name="Tile Layer 1" width="60" height="30">
   <data encoding="base64" compression="zlib">
    eJzt2P2OgjAQBHB69lW88/2fUP2DZDM3M/2gFSGQkCil2/1ZulWX5Tqu4zzHz+u8vc4UXmd4j20Pcs/d9HGx3udvuM7GSiQGi6n6xmsjvKnSi3liDJUzi72n9w5zpLyY92jv+77FOGZ5XT7qORjhLTlmeZXJPQff7o1r42heV0eUN/Y5mtfVEedVe9HlPY83fdBbqv+9XhcvQzvbi0Z5Ve6jve67UoZ2VquUqcWLYx7Nm0zbGb3r9T/xWaAz3s++r+/hVbWq1RtjOG9NfSnlvsWralWtl31mW72lvUXVZ/dMKG9pDrEtxpnlRVuPt7R20Yu593pz5/we1fuo9GK8GV63Rp2X1YBv8sb+MdcaU8nLYo/wxlitXrX3tnrT8t+r9ra1X9yHXU3a4q3d61q96zXnzaRvqxfHL3lVW8xPrd0bGW8PLxtbre+a3zpqbvGZZWPO9LLc2J7i1kLr2lXtvV72/zvLWY3d4u2pVaO9ce6cV+X2BNPjRWs=
@@ -23,11 +23,11 @@
    eJztl0lOwzAUht0V7EGCDUgMd4Adg8SQqjeAHWwYr8CwZ7gDww4khg3DHRgkhg2DBHuQ2gPwB9XiyX127CRNU+pP+tXaeXl+v2M7ihAej6eRtBWEaC/Yx18h9tohvtl5g9f3FvLraT38nm4OPqDPRheRIfTdxHmX6/Y/zIvqgXsvy3Xr+s62YQj5hjPcEzYe6lnTDPLO5uwMyGNNHo9K1meFjj6oHxqABhPERJH2vlxDrnUm3xK0bLhvApqEpqDpBDE23KC+25Q87yHPPpNrB9pNZ4gazqBzQ1uljPoqCf0eQcekzT3PL+i7+v8C410axhzBtVHLmp6gZ+gEOiXtenIH3ZO2fJ7UYwfq76x6eMHvq8HPHK7NOz6DB+hR8GeSbp8lRR2Legxx+Z4KoKJFHJ3TEO5M0u2zpNCx1DpC6PdUGaoYcgXCzrM6p42Cq4POQReudRvqXBF/nqVvk/cN5NqM6bsU77ZfFqBFTZ/rs5CepddVJkbuzQPo0DJ3iVFctqDtiD55ltrUpPMqr7vuTc5rWt51yLM0qh66pouamDj1ZenVFbqmQ9T6eqBe5R6uT6VEfvPiVRKI2rNL1jgGjSvxXF8SfgDVlWn0
   </data>
  </layer>
- <objectgroup id="18" name="Object Layer 1">
-  <object id="3" x="18" y="476">
+ <objectgroup id="18" name="NAVIGATION_LAYER">
+  <object id="3" name="0" x="4.66667" y="480">
    <point/>
   </object>
-  <object id="4" x="1900" y="476">
+  <object id="4" name="1" x="1918.67" y="481.333">
    <point/>
   </object>
  </objectgroup>
