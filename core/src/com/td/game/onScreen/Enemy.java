@@ -17,7 +17,7 @@ public class Enemy extends Component {
   private static final float RADIUS = 16;
   private HealthBar healthbar;
 
-  private int health = 50;
+  private int health;
   private boolean attackingBase = false;
 
   private Vector2 destination;
@@ -28,9 +28,10 @@ public class Enemy extends Component {
    * @param x the x-position of the collision box for this enemy.
    * @param y the y-position of the collision box for this enemy.
    */
-  public Enemy(float x, float y, Vector2 destination) {
+  public Enemy(float x, float y, Vector2 destination, int health) {
     super(x, y, 32, 32, TEXTURE, RADIUS);
 
+    this.health = health;
     this.destination = destination;
 
     this.healthbar = new HealthBar(x, y + 30);

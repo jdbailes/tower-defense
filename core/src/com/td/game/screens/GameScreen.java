@@ -79,7 +79,12 @@ public class GameScreen extends AbstractScreen {
     boolean gameOver = this.level.update();
 
     if (gameOver) {
-      game.setScreen(new GameOverScreen(game));
+      switchScreen(new GameOverScreen(game));
+      dispose();
+    }
+
+    if (level.levelComplete()) {
+      switchScreen(new LevelCompleteScreen(game));
       dispose();
     }
 

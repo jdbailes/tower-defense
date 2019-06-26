@@ -77,12 +77,13 @@ public class Level {
    */
   public boolean update() {
 
-    this.wave.updatePositions(100 * Gdx.graphics.getDeltaTime());
-
     this.stats.setCurrentCurrency();
     this.stats.setCurrentFleet();
     this.stats.setCurrentXP();
 
+    float delta = 100 * Gdx.graphics.getDeltaTime();
+
+    this.wave.updatePositions(delta);
     this.wave.cleanUp();
     this.wave.spawnEnemy(spawnProbability);
     this.wave.updateHealthBars();
@@ -100,6 +101,10 @@ public class Level {
     }
 
     return this.baseDestroyed;
+  }
+
+  public boolean levelComplete() {
+    return wave.waveKilled();
   }
 
   /**
