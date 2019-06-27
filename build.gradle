@@ -45,6 +45,7 @@ project(":desktop") {
 
     dependencies {
         compile project(":core")
+        
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         
@@ -56,6 +57,7 @@ project(":core") {
 
 
     dependencies {
+        compile "com.fasterxml.jackson.core:jackson-databind:2.9.9"
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         
     }

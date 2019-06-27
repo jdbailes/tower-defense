@@ -5,10 +5,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.td.game.Config;
 import com.td.game.onScreen.Base;
-import com.td.game.onScreen.Enemy;
-
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -17,9 +19,13 @@ import java.util.List;
  */
 public class Level {
 
-  private static final float SPAWN_PROBABILITY = 0.01f;  // The the chance of an enemy spawning in a frame
-  private static final float BASE_X_POSITION = 1750;    // The default x-position of the base
-  private static final float BASE_Y_POSITION = 525;     // The default y-position of the base
+  private float spawnProbability;  // The the chance of an enemy spawning in a frame
+
+  private static final int STATS_Y_POS = Config.SCREEN_HEIGHT - 30;
+  private static final int CURRENCY_X_POS = 50;
+  private static final int CURRENCY_VALUE_X_POS = 350;
+  private static final int XP_X_POS = Config.SCREEN_WIDTH - 200;
+  private static final int XP_VALUE_X_POS = Config.SCREEN_WIDTH - 100;
 
   // The core on-screen components of the level
   private final Wave wave;
@@ -29,29 +35,40 @@ public class Level {
 
   // Flag is flipped once the base is destroyed
   private boolean baseDestroyed = false;
-
-
-
   private BitmapFont font;
-
-
 
   /**
    * Constructor for a Level.
    */
-  public Level() {
-    this.wave = new Wave();
-    this.stats = new Statistics();
+  public Level(List<Vector2> breadCrumbs, int level) {
+
+    ObjectMapper mapper = new ObjectMapper();
+    //JSON file to Java object
+    LevelConfig levelConfig = new LevelConfig();
+    try {
+      levelConfig = mapper.readValue(new File(Config.getConfigFilepath(level)), LevelConfig.class);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    spawnProbability = levelConfig.getSpawnProbability();
+
+    this.wave = new Wave(breadCrumbs, levelConfig.getWaveSize(), levelConfig.getEnemyHealth());
+
+    this.stats = new Statistics(levelConfig.getStartingCredit());
     this.stats.registerWave(wave);
+
     this.fleet = new Fleet();
     this.fleet.registerStats(stats);
+
     this.stats.registerFleet(fleet);
-    this.base = new Base(BASE_X_POSITION, BASE_Y_POSITION);
+
+    Vector2 baseVector = breadCrumbs.get(breadCrumbs.size() - 1);
+    this.base = new Base(baseVector.x, baseVector.y);
 
     font = new BitmapFont();
-    font.setColor(Color.BLACK);
+    font.setColor(Color.WHITE);
     font.getData().setScale(4, 4);
-
 
   }
 
@@ -60,17 +77,19 @@ public class Level {
    */
   public boolean update() {
 
-
-    this.wave.updatePositions(100 * Gdx.graphics.getDeltaTime());
-    this.wave.getKillCounter();
     this.stats.setCurrentCurrency();
     this.stats.setCurrentFleet();
-    this.stats.setCurrentFleetBig();
     this.stats.setCurrentXP();
+
+    float delta = 100 * Gdx.graphics.getDeltaTime();
+
+    this.wave.updatePositions(delta);
     this.wave.cleanUp();
-    this.wave.spawnEnemy(SPAWN_PROBABILITY);
+    this.wave.spawnEnemy(spawnProbability);
     this.wave.updateHealthBars();
+
     this.fleet.run(this.wave);
+
     if (!this.baseDestroyed) {
       this.base.run(this.wave);
 
@@ -84,7 +103,9 @@ public class Level {
     return this.baseDestroyed;
   }
 
-
+  public boolean levelComplete() {
+    return wave.waveKilled();
+  }
 
   /**
    * Encapsulates addShip() method in Fleet.
@@ -97,8 +118,8 @@ public class Level {
   }
 
   public void addBigShip(int x, int y) {
-        this.fleet.addBigShip(x, y);
-    }
+    this.fleet.addBigShip(x, y);
+  }
 
   /**
    * Method invoked by GameManager and calls rendering methods on wave and ship.
@@ -108,14 +129,22 @@ public class Level {
    */
   public void draw(SpriteBatch batch) {
     this.wave.draw(batch);
-    font.draw(batch, "Currency:", 450, 1000);
-    font.draw(batch, String.valueOf(this.stats.setCurrentCurrency()), 700, 1000);
-    font.draw(batch, "XP:", 1100, 1000);
-    font.draw(batch, String.valueOf(this.stats.setCurrentXP()), 1200, 1000);
+
+    displayStats(batch);
+
     this.fleet.draw(batch);
     if (!baseDestroyed) {
       this.base.draw(batch);
     }
+  }
+
+  private void displayStats(SpriteBatch batch) {
+    font.draw(batch, "Currency:", CURRENCY_X_POS, STATS_Y_POS);
+    font.draw(batch, String.valueOf(this.stats.setCurrentCurrency()), CURRENCY_VALUE_X_POS, STATS_Y_POS);
+
+
+    font.draw(batch, "XP:", XP_X_POS, STATS_Y_POS);
+    font.draw(batch, String.valueOf(this.stats.setCurrentXP()), XP_VALUE_X_POS, STATS_Y_POS);
   }
 
   /**

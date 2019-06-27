@@ -2,10 +2,8 @@ package com.td.game.offScreen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.td.game.onScreen.BigEnemy;
+import com.badlogic.gdx.math.Vector2;
 import com.td.game.onScreen.Enemy;
-import com.td.game.onScreen.NormalEnemy;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,21 +14,33 @@ import java.util.stream.Collectors;
  */
 public class Wave {
 
-  private static final float SPAWN_X = -64;
-  private static final float SPAWN_Y = 575;
+  private final float spawnX;
+  private final float spawnY;
   private static final Random RANDOM = new Random();
 
-  private List<Enemy> enemies = new ArrayList<>();
-  private int waveSize = 1000;
+  private List<Vector2> breadCrumbs;
+  private List<Enemy> enemies;
+  private final int waveSize;
+  private int spawnCount;
+  private int enemyHealth;
 
   private int killCounter;
 
   /**
    * Creates a new wave containing a single enemy.
    */
-  public Wave() {
-    this.enemies.add(new NormalEnemy(SPAWN_X, SPAWN_Y));
-    this.enemies.add(new BigEnemy(SPAWN_X, SPAWN_Y));
+  public Wave(List<Vector2> breadCrumbs, int waveSize, int enemyHealth) {
+    this.waveSize = waveSize;
+    this.enemyHealth = enemyHealth;
+
+    this.breadCrumbs = breadCrumbs;
+
+    this.enemies = new ArrayList<>();
+
+    this.spawnX = breadCrumbs.get(0).x;
+    this.spawnY = breadCrumbs.get(0).y;
+
+    addEnemy(enemyHealth);
   }
 
   /**
@@ -47,10 +57,7 @@ public class Wave {
 
     // Spawns enemies onto the map
     if (randomFloat < spawnProbability) {
-      addBigEnemy();
-    }
-    else{
-      addNormalEnemy();
+      addEnemy(enemyHealth);
     }
 
   }
@@ -59,32 +66,18 @@ public class Wave {
    * Checks that the max wave size will not be exceeded by the addition of a new enemy. Creates a
    * new enemy and adds it to the wave.
    */
-  private void addNormalEnemy() {
+  private void addEnemy(int enemyHealth) {
     if (enemies.size() < this.waveSize) {
-//       Ensures enemies don't spawn on top of each other
-      if (enemies.size() > 0 && (enemies.get(enemies.size() - 1).getX() > 64)) {
-//         Pre-defined spawn positions for all enemies on the map
-        int spawnX = -64; // 0 - 64
-        int spawnY = 575; // 540 - 64
-
-        NormalEnemy enemy = new NormalEnemy(spawnX, spawnY);
+      // Ensures enemies don't spawn on top of each other
+      if (spawnCount <= waveSize) {
+        Enemy enemy = new Enemy(spawnX, spawnY, breadCrumbs.get(1), enemyHealth);
         enemies.add(enemy);
-        waveSize--;
-      }
-    }
-  }
-
-  private void addBigEnemy() {
-    if (enemies.size() < this.waveSize) {
-//       Ensures enemies don't spawn on top of each other
-      if (enemies.size() > 0 && (enemies.get(enemies.size() - 1).getX() > 64)) {
-//         Pre-defined spawn positions for all enemies on the map
-        int spawnX = -64; // 0 - 64
-        int spawnY = 575; // 540 - 64
-
-        BigEnemy enemy = new BigEnemy(spawnX, spawnY);
+        spawnCount ++;
+      } else if (enemies.get(enemies.size() - 1).getX() > 64) {
+        // Pre-defined spawn positions for all enemies on the map
+        Enemy enemy = new Enemy(spawnX, spawnY, breadCrumbs.get(1), enemyHealth);
         enemies.add(enemy);
-        waveSize--;
+        spawnCount ++;
       }
     }
   }
@@ -94,12 +87,16 @@ public class Wave {
    */
   void cleanUp() {
     // Filters out enemies that have left the screen
-    List<Enemy> cleanedEnemies = this.enemies.stream()
+
+    enemies.forEach(e -> {
+      if (e.isDead()) {
+        killCounter++;
+      }
+    });
+
+    enemies = enemies.stream()
         .filter(enemy -> !enemy.isDead() && !enemy.isLost())
         .collect(Collectors.toList());
-
-    this.enemies = cleanedEnemies;
-
   }
 
   /**
@@ -110,24 +107,32 @@ public class Wave {
   public void updatePositions(float delta) {
     enemies.forEach(e -> {
       if (!e.isAttackingBase()) {
-        e.updateX(delta);
-        e.getHealthBar().updateX(delta);
-      }
-    });
-    enemies.forEach(e -> {
-      if(e.isDead()){
-        killCounter++;
+
+        // Set new breadcrumb if current breadcrumb has been reached
+        if (e.hasReachedDestination()) {
+          int currentIndex = breadCrumbs.indexOf(e.getDestination());
+          int nextIndex = currentIndex + 1;
+
+          if (nextIndex < breadCrumbs.size()) {
+            e.setDestination(breadCrumbs.get(nextIndex));
+          }
+        }
+
+        e.updatePosition(delta);
       }
     });
   }
 
-  public int getKillCounter(){
+  public boolean waveKilled() {
+    return killCounter >= waveSize;
+  }
+
+  int getKillCounter() {
     return killCounter;
   }
 
-  public void updateHealthBars() {
+  void updateHealthBars() {
     this.getEnemies().forEach(Enemy::updateHealthBar);
-
   }
 
   /**

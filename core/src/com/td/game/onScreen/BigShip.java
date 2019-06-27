@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class BigShip extends Ship {
 
-    private static final Texture TEXTURE = new Texture(Gdx.files.internal("playerShip1.png"));
+    private static final Texture TEXTURE = new Texture(Gdx.files.internal("game/playerShip1.png"));
     private static final float RADIUS = 500;
 
     /**

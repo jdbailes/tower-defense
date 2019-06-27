@@ -1,9 +1,17 @@
 package com.td.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.td.game.screens.MenuScreen;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.td.game.offScreen.LevelConfig;
+import com.td.game.screens.MainMenuScreen;
+import com.td.game.screens.UserConfig;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Game abstract class provides an implementation of ApplicationListener for you to use, along with
@@ -11,17 +19,27 @@ import com.td.game.screens.MenuScreen;
  */
 public class TowerDefenseGame extends Game {
 
-  // SpriteBatch used to render objects on the screen
+  private static final String USER_CONFIG = "configuration/user_configuration.json";
+  private final AssetManager assetManager = new AssetManager();
+
   public SpriteBatch batch;
-  // Bitmap font used alongside SpriteBatch to render text on the screen
-  public BitmapFont font;
 
   @Override
   public void create() {
-    batch = new SpriteBatch();
-    font = new BitmapFont();
 
-    this.setScreen(new MenuScreen(this));
+    ObjectMapper mapper = new ObjectMapper();
+    //JSON file to Java object
+    UserConfig userConfig = new UserConfig();
+    try {
+      userConfig = mapper.readValue(new File(USER_CONFIG), UserConfig.class);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+
+    this.batch = new SpriteBatch();
+    this.assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+    this.setScreen(new MainMenuScreen(this, userConfig));
   }
 
   @Override
@@ -32,7 +50,10 @@ public class TowerDefenseGame extends Game {
   @Override
   public void dispose() {
     // Kills batch and font
-    batch.dispose();
-    font.dispose();
+    this.batch.dispose();
+  }
+
+  public AssetManager getAssetManager() {
+    return assetManager;
   }
 }

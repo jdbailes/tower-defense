@@ -8,30 +8,30 @@ import com.td.game.TowerDefenseGame;
 /**
  * Serves the Main Menu screen in the game.
  */
-public class GameOverScreen extends AbstractScreen {
+public class LevelCompleteScreen extends AbstractScreen {
 
-  private final static Logger logger = new Logger("GameOverScreen", Logger.INFO);
+  private final static Logger logger = new Logger("LevelCompleteScreen", Logger.INFO);
 
-  private static final int GAME_OVER_Y = 620;
+  private static final int LEVEL_COMPLETE_Y = 620;
   private static final int MENU_BUTTON_Y = 100;
 
-  private final int gameOverX;
+  private final int levelCompleteX;
   private final int menuButtonX;
 
-  private Texture gameOver;
+  private Texture levelComplete;
   private Texture menuButtonActive;
   private Texture menuButtonInactive;
 
-  public GameOverScreen(final TowerDefenseGame game, UserConfig userConfig) {
+  public LevelCompleteScreen(final TowerDefenseGame game, UserConfig userConfig) {
     super(game, userConfig);
 
     // Load images to texture
-    this.gameOver = new Texture("ui/game_over_title.png");
+    this.levelComplete = new Texture("ui/level_complete_title.png");
     this.menuButtonActive = new Texture("ui/menu_button_active.png");
     this.menuButtonInactive = new Texture("ui/menu_button_inactive.png");
 
     // Calculate x-coordinates for screen items
-    this.gameOverX = getCentrePointX(gameOver.getWidth());
+    this.levelCompleteX = getCentrePointX(levelComplete.getWidth());
     this.menuButtonX = getCentrePointX(menuButtonInactive.getWidth());
   }
 
@@ -47,12 +47,12 @@ public class GameOverScreen extends AbstractScreen {
     this.camera.update();
     this.game.batch.begin();
 
-    drawGameOverTitle();
+    drawLevelCompleteTitle();
 
     // Render exit button
     if (isTouchingMenuButton(menuButtonX) && Gdx.input.justTouched()) {
       logger.info("Switching to main menu screen");
-      switchScreen(new LevelMenuScreen(game, userConfig));
+      switchScreen(new LevelMenuScreen(game,userConfig));
     } else if (isTouchingMenuButton(menuButtonX)) {
       drawMenuButton(menuButtonX, MENU_BUTTON_Y, true);
     } else {
@@ -74,8 +74,8 @@ public class GameOverScreen extends AbstractScreen {
         && getInputY() > MENU_BUTTON_Y;
   }
 
-  private void drawGameOverTitle() {
-    game.batch.draw(gameOver, gameOverX, GAME_OVER_Y);
+  private void drawLevelCompleteTitle() {
+    game.batch.draw(levelComplete, levelCompleteX, LEVEL_COMPLETE_Y);
   }
 
   @Override

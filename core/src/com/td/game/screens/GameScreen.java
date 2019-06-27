@@ -2,26 +2,31 @@ package com.td.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.td.game.Config;
 import com.td.game.TowerDefenseGame;
 import com.td.game.offScreen.Level;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Serves the screen the game is played within.
  */
-public class GameScreen implements Screen {
+public class GameScreen extends AbstractScreen {
 
-  private final TowerDefenseGame game;
+  private static final String NAVIGATION_KEY = "NAVIGATION_LAYER";
 
   private OrthographicCamera camera;
   private TiledMap tiledMap;
@@ -29,25 +34,23 @@ public class GameScreen implements Screen {
   private ShapeRenderer shapeRenderer;
   private SpriteBatch batch;
   private Level level;
+  private int levelNumber;
 
-  private boolean isDebug = false;
+  GameScreen(final TowerDefenseGame game, int level, UserConfig userConfig) {
+    super(game, userConfig);
+    setupCamera();
 
-  GameScreen(final TowerDefenseGame game) {
-    this.game = game;
+    this.levelNumber = level;
+    this.tiledMap = this.game.getAssetManager().get(Config.getLevelFilepath(level));
 
-    // Setup the camera
-    this.camera = new OrthographicCamera();
-    this.camera.setToOrtho(false, Config.getScreenWidth(), Config.getScreenHeight());
-    this.camera.update();
+    MapObjects mapObjects = this.tiledMap.getLayers().get(NAVIGATION_KEY).getObjects();
+    List<Vector2> breadCrumbs = getBreadCrumbs(mapObjects);
 
-    this.tiledMap = new TmxMapLoader().load("Level_1.tmx");
+    this.level = new Level(breadCrumbs, level);
+
     this.tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-
-    // Initialise a new SpriteBatch for this game
-    this.batch = new SpriteBatch();
-    this.level = new Level();
-
     this.shapeRenderer = new ShapeRenderer();
+    this.batch = new SpriteBatch();
   }
 
   @Override
@@ -57,23 +60,13 @@ public class GameScreen implements Screen {
 
   @Override
   public void render(float delta) {
-    // Clear the screen
-    Gdx.gl.glClearColor(1, 0, 0, 1);
-    Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    super.render(delta);
 
     // Render the tilemap
     this.camera.update();
     this.tiledMapRenderer.setView(camera);
     this.tiledMapRenderer.render();
 
-    // TODO Move to private method
-    // Will switch to/from debug mode if tab is pressed
-    if (Gdx.input.isKeyJustPressed(Keys.TAB)) {
-      this.isDebug = !this.isDebug;
-    }
-
-    // TODO Move to private method
     if (Gdx.input.isKeyJustPressed(Keys.NUM_1)) {
       // Get the coordinates of the current mouse position
       int x = Gdx.input.getX();
@@ -102,49 +95,63 @@ public class GameScreen implements Screen {
     this.batch.setProjectionMatrix(camera.combined);
     this.batch.begin();
 
-    boolean gameOver =this.level.update();
+    boolean gameOver = this.level.update();
 
-    if(gameOver) {
-      game.setScreen(new GameOverScreen(game));
+    if (gameOver) {
+      switchScreen(new GameOverScreen(game, userConfig));
       dispose();
     }
 
-    if (this.isDebug) {
-      // Configure the shape renderer for debug mode
-      this.shapeRenderer.setProjectionMatrix(camera.projection);
-      this.shapeRenderer.setTransformMatrix(camera.view);
-      this.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-      this.level.draw(batch, shapeRenderer);
-    } else {
-      this.level.draw(batch);
+    if (level.levelComplete()) {
+
+      switch(levelNumber) {
+        case 1:
+          userConfig.setLevelTwoUnlocked(true);
+          break;
+        case 2:
+          userConfig.setLevelThreeUnlocked(true);
+          break;
+
+      }
+
+      ObjectMapper mapper = new ObjectMapper();
+      try {
+        mapper.writeValue(new File("configuration/user_configuration.json"), userConfig);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+
+      switchScreen(new LevelCompleteScreen(game, userConfig));
+      dispose();
     }
+
+    this.level.draw(batch);
 
     this.shapeRenderer.end();
     this.batch.end();
   }
 
-  @Override
-  public void resize(int width, int height) {
-
+  private void setupCamera() {
+    this.camera = new OrthographicCamera();
+    this.camera.setToOrtho(false, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
+    this.camera.update();
   }
 
-  @Override
-  public void pause() {
+  private List<Vector2> getBreadCrumbs(MapObjects mapObjects) {
 
-  }
+    List<Vector2> breadCrumbs = new ArrayList<>();
 
-  @Override
-  public void resume() {
+    for (int i = 0; i < mapObjects.getCount(); i++) {
+      MapObject mapObject = mapObjects.get(i);
 
-  }
+      Vector2 vector2 = new Vector2(
+          (float) mapObject.getProperties().get("x"),
+          (float) mapObject.getProperties().get("y")
+      );
 
-  @Override
-  public void hide() {
+      breadCrumbs.add(Integer.valueOf(mapObject.getName()), vector2);
+    }
 
-  }
-
-  @Override
-  public void dispose() {
-
+    return breadCrumbs;
   }
 }

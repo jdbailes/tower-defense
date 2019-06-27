@@ -11,7 +11,7 @@ import com.td.game.Config;
  */
 public class Missile extends Component {
 
-  private static final Texture TEXTURE = new Texture(Gdx.files.internal("spaceMissiles_006.png"));
+  private static final Texture TEXTURE = new Texture(Gdx.files.internal("game/space-missile.png"));
   private static final float RADIUS = 10;
   private static final float SPEED = 8.0f;
 
@@ -72,7 +72,7 @@ public class Missile extends Component {
   }
 
   private boolean isLost() {
-    return getX() > Config.getScreenWidth() + 100 || getX() < -100
-        || getY() > Config.getScreenHeight() + 100 || getY() < -100;
+    return getX() > Config.SCREEN_WIDTH + 100 || getX() < -100
+        || getY() > Config.SCREEN_HEIGHT + 100 || getY() < -100;
   }
 }
