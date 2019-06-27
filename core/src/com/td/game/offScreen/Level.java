@@ -79,6 +79,8 @@ public class Level {
 
     this.stats.setCurrentCurrency();
     this.stats.setCurrentFleet();
+    this.stats.setCurrentFleet();
+    this.stats.setCurrentFleetBig();
     this.stats.setCurrentXP();
 
     float delta = 100 * Gdx.graphics.getDeltaTime();

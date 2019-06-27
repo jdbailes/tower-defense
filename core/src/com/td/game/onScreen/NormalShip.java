@@ -17,9 +17,4 @@ public class NormalShip extends Ship {
     public NormalShip(int x, int y) {
         super(x, y, TEXTURE, RADIUS);
     }
-
-
-
-
-
 }
