@@ -32,6 +32,11 @@ public class Enemy extends Component {
     this.healthbar = new HealthBar(x, y + 30);
   }
 
+  public Enemy(float x, float y, Texture texture, float radius) {
+    super(x, y, 32, 32, TEXTURE, RADIUS);
+    this.healthbar = new HealthBar(x, y + 30);
+  }
+
   public HealthBar getHealthBar() {
     return this.healthbar;
   }

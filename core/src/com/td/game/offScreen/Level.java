@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class Level {
 
-  private static final float SPAWN_PROBABILITY = 0.02f;  // The the chance of an enemy spawning in a frame
+  private static final float SPAWN_PROBABILITY = 0.01f;  // The the chance of an enemy spawning in a frame
   private static final float BASE_X_POSITION = 1750;    // The default x-position of the base
   private static final float BASE_Y_POSITION = 525;     // The default y-position of the base
 
@@ -65,6 +65,7 @@ public class Level {
     this.wave.getKillCounter();
     this.stats.setCurrentCurrency();
     this.stats.setCurrentFleet();
+    this.stats.setCurrentFleetBig();
     this.stats.setCurrentXP();
     this.wave.cleanUp();
     this.wave.spawnEnemy(SPAWN_PROBABILITY);
@@ -91,9 +92,13 @@ public class Level {
    * @param x x-position of the ship to be added
    * @param y y-position of the ship to be added
    */
-  public void addShip(int x, int y) {
-    this.fleet.addShip(x, y);
+  public void addNormalShip(int x, int y) {
+    this.fleet.addNormalShip(x, y);
   }
+
+  public void addBigShip(int x, int y) {
+        this.fleet.addBigShip(x, y);
+    }
 
   /**
    * Method invoked by GameManager and calls rendering methods on wave and ship.

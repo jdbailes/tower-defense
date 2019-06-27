@@ -10,7 +10,9 @@ public class Statistics {
     private int currentXP;
     private int killCounter;
     private int currentFleet;
+    private int currentFleetBig;
     private int shipCost = 50;
+    private int shipCostBig = 100;
 
 
     private Wave wave;
@@ -33,7 +35,7 @@ public class Statistics {
 
     public int setCurrentCurrency() {
         killCounter = this.wave.getKillCounter();
-        currentCurrency = (startingCurrency + (currencyPerKill * killCounter) - (currentFleet * shipCost));
+        currentCurrency = (startingCurrency + (currencyPerKill * killCounter) - ((currentFleet * shipCost) + (currentFleetBig * shipCostBig)));
 
         return currentCurrency;
     }
@@ -46,7 +48,9 @@ public class Statistics {
 
     public void setCurrentFleet(){
         currentFleet = this.fleet.getCurrentFleet();
+    }
 
-
+    public void setCurrentFleetBig(){
+        currentFleetBig = this.fleet.getCurrentFleetBig();
     }
 }

@@ -81,7 +81,21 @@ public class GameScreen implements Screen {
       Vector3 worldCoords = camera.unproject(new Vector3(x, y, 0));
 
       // Create a new tower in the fleet with these towers
-      level.addShip((int) worldCoords.x, (int) worldCoords.y);
+      level.addNormalShip((int) worldCoords.x, (int) worldCoords.y);
+
+
+    }
+
+    if (Gdx.input.isKeyJustPressed(Keys.NUM_2)) {
+      // Get the coordinates of the current mouse position
+      int x = Gdx.input.getX();
+      int y = Gdx.input.getY();
+      Vector3 worldCoords = camera.unproject(new Vector3(x, y, 0));
+
+      // Create a new tower in the fleet with these towers
+      level.addBigShip((int) worldCoords.x, (int) worldCoords.y);
+
+
     }
 
     // Render the game

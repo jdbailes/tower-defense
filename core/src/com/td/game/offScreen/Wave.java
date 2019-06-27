@@ -2,7 +2,10 @@ package com.td.game.offScreen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.td.game.onScreen.BigEnemy;
 import com.td.game.onScreen.Enemy;
+import com.td.game.onScreen.NormalEnemy;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -26,9 +29,8 @@ public class Wave {
    * Creates a new wave containing a single enemy.
    */
   public Wave() {
-    this.enemies.add(new Enemy(SPAWN_X, SPAWN_Y));
-
-
+    this.enemies.add(new NormalEnemy(SPAWN_X, SPAWN_Y));
+    this.enemies.add(new BigEnemy(SPAWN_X, SPAWN_Y));
   }
 
   /**
@@ -45,7 +47,10 @@ public class Wave {
 
     // Spawns enemies onto the map
     if (randomFloat < spawnProbability) {
-      addEnemy();
+      addBigEnemy();
+    }
+    else{
+      addNormalEnemy();
     }
 
   }
@@ -54,7 +59,7 @@ public class Wave {
    * Checks that the max wave size will not be exceeded by the addition of a new enemy. Creates a
    * new enemy and adds it to the wave.
    */
-  private void addEnemy() {
+  private void addNormalEnemy() {
     if (enemies.size() < this.waveSize) {
 //       Ensures enemies don't spawn on top of each other
       if (enemies.size() > 0 && (enemies.get(enemies.size() - 1).getX() > 64)) {
@@ -62,7 +67,22 @@ public class Wave {
         int spawnX = -64; // 0 - 64
         int spawnY = 575; // 540 - 64
 
-        Enemy enemy = new Enemy(spawnX, spawnY);
+        NormalEnemy enemy = new NormalEnemy(spawnX, spawnY);
+        enemies.add(enemy);
+        waveSize--;
+      }
+    }
+  }
+
+  private void addBigEnemy() {
+    if (enemies.size() < this.waveSize) {
+//       Ensures enemies don't spawn on top of each other
+      if (enemies.size() > 0 && (enemies.get(enemies.size() - 1).getX() > 64)) {
+//         Pre-defined spawn positions for all enemies on the map
+        int spawnX = -64; // 0 - 64
+        int spawnY = 575; // 540 - 64
+
+        BigEnemy enemy = new BigEnemy(spawnX, spawnY);
         enemies.add(enemy);
         waveSize--;
       }

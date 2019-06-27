@@ -4,9 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
-import com.td.game.onScreen.Enemy;
-import com.td.game.onScreen.Missile;
-import com.td.game.onScreen.Ship;
+import com.td.game.onScreen.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +22,7 @@ public class Fleet {
   private int currentStatistics;
 
   private int currentFleet;
+  private int currentFleetBig;
 
   public Fleet() {
     this.ships = new ArrayList<>();
@@ -80,11 +80,11 @@ public class Fleet {
     return missiles.stream().anyMatch(missile -> missile.hasShip(ship));
   }
 
-  public void addShip(int x, int y) {
+  public void addNormalShip(int x, int y) {
     //if the player has enough currency, they will be able to spawn a turret
     if(this.stats.setCurrentCurrency() > 49 && currentFleet <= 10) {
       currentFleet++;
-      Ship newShip = new Ship(x, y);
+      Ship newShip = new NormalShip(x, y);
       Circle circle1 = new Circle(newShip.getCollisionCircle().x, newShip.getCollisionCircle().y,
           64);
 
@@ -100,8 +100,32 @@ public class Fleet {
     }
   }
 
+  public void addBigShip(int x, int y) {
+    //if the player has enough currency, they will be able to spawn a turret
+    if(this.stats.setCurrentCurrency() > 99 && currentFleetBig <= 10) {
+      currentFleetBig++;
+      Ship newShip = new BigShip(x, y);
+      Circle circle1 = new Circle(newShip.getCollisionCircle().x, newShip.getCollisionCircle().y,
+              64);
+
+      boolean overlaps = this.ships.stream().anyMatch(ship -> {
+        Circle circle2 = new Circle(ship.getCollisionCircle().x, ship.getCollisionCircle().y, 64);
+        return Intersector.overlaps(circle1, circle2);
+      });
+
+      if (!overlaps) {
+        this.ships.add(newShip);
+        shipCount++;
+      }
+    }
+  }
+
   public int getCurrentFleet(){
     return currentFleet;
+  }
+
+  public int getCurrentFleetBig(){
+    return currentFleetBig;
   }
 
   public void draw(SpriteBatch batch) {
