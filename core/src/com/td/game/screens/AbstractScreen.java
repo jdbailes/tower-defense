@@ -13,11 +13,8 @@ public abstract class AbstractScreen implements Screen {
   TowerDefenseGame game;
   OrthographicCamera camera;
 
-  UserConfig userConfig;
-
-  AbstractScreen(final TowerDefenseGame game, UserConfig userConfig) {
+  AbstractScreen(final TowerDefenseGame game) {
     this.game = game;
-    this.userConfig = userConfig;
 
     // Setup the camera
     this.camera = new OrthographicCamera();

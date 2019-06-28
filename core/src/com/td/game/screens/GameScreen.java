@@ -2,6 +2,7 @@ package com.td.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -36,8 +37,8 @@ public class GameScreen extends AbstractScreen {
   private Level level;
   private int levelNumber;
 
-  GameScreen(final TowerDefenseGame game, int level, UserConfig userConfig) {
-    super(game, userConfig);
+  GameScreen(final TowerDefenseGame game, int level) {
+    super(game);
     setupCamera();
 
     this.levelNumber = level;
@@ -84,30 +85,26 @@ public class GameScreen extends AbstractScreen {
     boolean gameOver = this.level.update();
 
     if (gameOver) {
-      switchScreen(new GameOverScreen(game, userConfig));
+      switchScreen(new GameOverScreen(game));
       dispose();
     }
 
     if (level.levelComplete()) {
 
+      Preferences preferences = Gdx.app.getPreferences("profile");
       switch(levelNumber) {
         case 1:
-          userConfig.setLevelTwoUnlocked(true);
+          preferences.putBoolean("levelTwoUnlocked", true);
+          preferences.flush();
           break;
         case 2:
-          userConfig.setLevelThreeUnlocked(true);
+          preferences.putBoolean("levelThreeUnlocked", true);
+          preferences.flush();
           break;
 
       }
 
-      ObjectMapper mapper = new ObjectMapper();
-      try {
-        mapper.writeValue(new File("core/assets/configuration/user_configuration.json"), userConfig);
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-
-      switchScreen(new LevelCompleteScreen(game, userConfig));
+      switchScreen(new LevelCompleteScreen(game));
       dispose();
     }
 

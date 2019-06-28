@@ -1,17 +1,14 @@
 package com.td.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.td.game.offScreen.LevelConfig;
 import com.td.game.screens.MainMenuScreen;
-import com.td.game.screens.UserConfig;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * Game abstract class provides an implementation of ApplicationListener for you to use, along with
@@ -19,7 +16,6 @@ import java.io.IOException;
  */
 public class TowerDefenseGame extends Game {
 
-  private static final String USER_CONFIG = "core/assets/configuration/user_configuration.json";
   private final AssetManager assetManager = new AssetManager();
 
   public SpriteBatch batch;
@@ -27,19 +23,25 @@ public class TowerDefenseGame extends Game {
   @Override
   public void create() {
 
-    ObjectMapper mapper = new ObjectMapper();
-    //JSON file to Java object
-    UserConfig userConfig = new UserConfig();
-    try {
-      userConfig = mapper.readValue(new File(USER_CONFIG), UserConfig.class);
-    } catch (IOException e) {
-      e.printStackTrace();
+    Preferences preferences = Gdx.app.getPreferences("profile");
+    if (!preferences.contains("newGame")) {
+      preferences.putBoolean("newGame", true);
+    }
+    if (!preferences.contains("levelOneUnlocked")) {
+      preferences.putBoolean("levelOneUnlocked", true);
+    }
+    if (!preferences.contains("levelTwoUnlocked")) {
+      preferences.putBoolean("levelTwoUnlocked", false);
+    }
+    if (!preferences.contains("levelThreeUnlocked")) {
+      preferences.putBoolean("levelThreeUnlocked", false);
     }
 
+    preferences.flush();
 
     this.batch = new SpriteBatch();
     this.assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-    this.setScreen(new MainMenuScreen(this, userConfig));
+    this.setScreen(new MainMenuScreen(this));
   }
 
   @Override

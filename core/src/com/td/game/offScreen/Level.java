@@ -46,7 +46,7 @@ public class Level {
     //JSON file to Java object
     LevelConfig levelConfig = new LevelConfig();
     try {
-      levelConfig = mapper.readValue(new File(Config.getConfigFilepath(level)), LevelConfig.class);
+      levelConfig = mapper.readValue(Gdx.files.internal(Config.getConfigFilepath(level)).readString(), LevelConfig.class);
     } catch (IOException e) {
       e.printStackTrace();
     }

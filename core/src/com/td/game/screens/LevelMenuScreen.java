@@ -1,6 +1,7 @@
 package com.td.game.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Logger;
 import com.td.game.Config;
@@ -38,8 +39,8 @@ public class LevelMenuScreen extends AbstractScreen {
   /**
    * Default constructor for MainMenuScreen.
    */
-  LevelMenuScreen(TowerDefenseGame game, UserConfig userConfig) {
-    super(game, userConfig);
+  LevelMenuScreen(TowerDefenseGame game) {
+    super(game);
 
     // Load images to texture
     this.title = new Texture("ui/level_select_title.png");
@@ -74,10 +75,14 @@ public class LevelMenuScreen extends AbstractScreen {
 
     drawLevelSelectTitle();
 
-    if(userConfig.isLevelOneUnlocked()) {
+    Preferences preferences = Gdx.app.getPreferences("profile");
+    preferences.putBoolean("newGame", false);
+    preferences.flush();
+
+    if(preferences.getBoolean("levelOneUnlocked")) {
       if (isTouchingLevelOne(levelOneSelectionX) && Gdx.input.justTouched()) {
         logger.info("Switching to game screen [level 1]");
-        switchScreen(new LoadingScreen(game, 1, userConfig));
+        switchScreen(new LoadingScreen(game, 1));
       } else if (isTouchingLevelOne(levelOneSelectionX)) {
         drawLevelOne(levelOneSelectionX, levelOneSelectionActive);
       } else {
@@ -87,10 +92,10 @@ public class LevelMenuScreen extends AbstractScreen {
       drawLevelOne(levelOneSelectionX, levelOneSelectionLocked);
     }
 
-    if(userConfig.isLevelTwoUnlocked()) {
+    if(preferences.getBoolean("levelTwoUnlocked")) {
       if (isTouchingLevelTwo(levelTwoSelectionX) && Gdx.input.justTouched()) {
         logger.info("Switching to game screen [level 2]");
-        switchScreen(new LoadingScreen(game, 2, userConfig));
+        switchScreen(new LoadingScreen(game, 2));
       } else if (isTouchingLevelTwo(levelTwoSelectionX)) {
         drawLevelTwo(levelTwoSelectionX, levelTwoSelectionActive);
       } else {
@@ -100,10 +105,10 @@ public class LevelMenuScreen extends AbstractScreen {
       drawLevelTwo(levelTwoSelectionX, levelTwoSelectionLocked);
     }
 
-    if(userConfig.isLevelThreeUnlocked()) {
+    if(preferences.getBoolean("levelThreeUnlocked")) {
       if (isTouchingLevelThree(levelThreeSelectionX) && Gdx.input.justTouched()) {
         logger.info("Switching to game screen [level 3]");
-        switchScreen(new LoadingScreen(game, 3, userConfig));
+        switchScreen(new LoadingScreen(game, 3));
       } else if (isTouchingLevelThree(levelThreeSelectionX)) {
         drawLevelThree(levelThreeSelectionX, levelThreeSelectionActive);
       } else {

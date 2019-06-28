@@ -1,6 +1,7 @@
 package com.td.game.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Logger;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,8 +52,8 @@ public class MainMenuScreen extends AbstractScreen {
   /**
    * Default constructor for MainMenuScreen.
    */
-  public MainMenuScreen(TowerDefenseGame game, UserConfig userConfig) {
-    super(game, userConfig);
+  public MainMenuScreen(TowerDefenseGame game) {
+    super(game);
 
     logger.debug("Creating menu screen");
 
@@ -83,7 +84,8 @@ public class MainMenuScreen extends AbstractScreen {
 
     renderExitButton();
 
-    if (userConfig.isNewGame()) {
+    Preferences preferences = Gdx.app.getPreferences("profile");
+    if (preferences.getBoolean("newGame")) {
       renderNewGameButton();
     } else {
       renderNewGameButton();
@@ -109,8 +111,7 @@ public class MainMenuScreen extends AbstractScreen {
     // Render new game button
     if ((isTouchingNewGameButton(newGameXPos)) && Gdx.input.justTouched()) {
       logger.debug("Switching to level menu screen");
-      resetUserConfig();
-      switchScreen(new LevelMenuScreen(game, userConfig));
+      switchScreen(new LevelMenuScreen(game));
     } else if (isTouchingNewGameButton(newGameXPos)) {
       drawNewGameButton(newGameXPos, newGameButtonActive);
     } else {
@@ -121,7 +122,7 @@ public class MainMenuScreen extends AbstractScreen {
   private void renderResumeButton() {
     if (isTouchingResumeButton(resumeXPos) && Gdx.input.justTouched()) {
       logger.debug("Switching to level menu screen");
-      switchScreen(new LevelMenuScreen(game, userConfig));
+      switchScreen(new LevelMenuScreen(game));
     } else if (isTouchingResumeButton(resumeXPos)) {
       drawResumeButton(resumeXPos, resumeButtonActive);
     } else {
@@ -164,22 +165,6 @@ public class MainMenuScreen extends AbstractScreen {
         && getInputX() > x
         && getInputY() < EXIT_Y_POS + exitButtonInactive.getHeight()
         && getInputY() > EXIT_Y_POS;
-  }
-
-  private void resetUserConfig() {
-
-    ObjectMapper mapper = new ObjectMapper();
-
-    userConfig.setNewGame(false);
-    userConfig.setLevelOneUnlocked(true);
-    userConfig.setLevelTwoUnlocked(false);
-    userConfig.setLevelThreeUnlocked(false);
-
-    try {
-      mapper.writeValue(new File("core/assets/configuration/user_configuration.json"), userConfig);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
   }
 
   @Override
