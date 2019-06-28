@@ -129,7 +129,7 @@ public class Fleet {
 
   public void addNormalShip(int x, int y) {
     //if the player has enough currency, they will be able to spawn a turret
-    if (this.stats.setCurrentCurrency() > 49 && currentFleet <= 10) {
+    if (this.stats.setCurrentCurrency() > 49 && currentFleet <= 8) {
       currentFleet++;
       Ship newShip = new NormalShip(x, y);
       Circle circle1 = new Circle(newShip.getCollisionCircle().x, newShip.getCollisionCircle().y,
@@ -149,7 +149,7 @@ public class Fleet {
 
   public void addBigShip(int x, int y) {
     //if the player has enough currency, they will be able to spawn a turret
-    if (this.stats.setCurrentCurrency() > 99 && currentFleetBig <= 10) {
+    if (this.stats.setCurrentCurrency() > 99 && currentFleetBig <= 5) {
       currentFleetBig++;
       BigShip newShipBig = new BigShip(x, y);
       Circle circle1 = new Circle(newShipBig.getCollisionCircle().x, newShipBig.getCollisionCircle().y,

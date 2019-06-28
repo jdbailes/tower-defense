@@ -9,8 +9,8 @@ import com.td.game.Config;
 public class BigMissile extends Component {
 
     private static final Texture TEXTURE = new Texture(Gdx.files.internal("game/laserRed09.png"));
-    private static final float RADIUS = 10;
-    private static final float SPEED = 2.5f;
+    private static final float RADIUS = 12;
+    private static final float SPEED = 3.0f;
 
     private final BigShip bigShip;
     private final Enemy enemy;
