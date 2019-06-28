@@ -102,7 +102,7 @@ public class GameScreen extends AbstractScreen {
 
       ObjectMapper mapper = new ObjectMapper();
       try {
-        mapper.writeValue(new File("configuration/user_configuration.json"), userConfig);
+        mapper.writeValue(new File("core/assets/configuration/user_configuration.json"), userConfig);
       } catch (IOException e) {
         e.printStackTrace();
       }

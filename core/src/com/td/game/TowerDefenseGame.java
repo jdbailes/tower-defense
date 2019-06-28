@@ -19,7 +19,7 @@ import java.io.IOException;
  */
 public class TowerDefenseGame extends Game {
 
-  private static final String USER_CONFIG = "configuration/user_configuration.json";
+  private static final String USER_CONFIG = "core/assets/configuration/user_configuration.json";
   private final AssetManager assetManager = new AssetManager();
 
   public SpriteBatch batch;
