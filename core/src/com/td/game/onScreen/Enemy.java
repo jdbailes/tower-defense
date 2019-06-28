@@ -37,6 +37,7 @@ public class Enemy extends Component {
     this.healthbar = new HealthBar(x, y + 30);
   }
 
+
   public HealthBar getHealthBar() {
     return this.healthbar;
   }
@@ -60,6 +61,13 @@ public class Enemy extends Component {
     }
   }
 
+  public void decrementHealthBig() {
+    if (this.health - 1 >= 0) {
+      health = health - 25;
+    }
+  }
+
+
   public void setAttackingBase(boolean attackingBase) {
     this.attackingBase = attackingBase;
   }
@@ -69,6 +77,11 @@ public class Enemy extends Component {
   }
 
   public boolean isMissileColliding(Missile missile) {
+    Circle missileCollisionCircle = missile.getCollisionCircle();
+    return Intersector.overlaps(missileCollisionCircle, super.getCollisionCircle());
+  }
+
+  public boolean isMissileColliding(BigMissile missile) {
     Circle missileCollisionCircle = missile.getCollisionCircle();
     return Intersector.overlaps(missileCollisionCircle, super.getCollisionCircle());
   }

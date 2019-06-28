@@ -79,6 +79,8 @@ public class Level {
 
     this.stats.setCurrentCurrency();
     this.stats.setCurrentFleet();
+    this.stats.setCurrentFleet();
+    this.stats.setCurrentFleetBig();
     this.stats.setCurrentXP();
 
     float delta = 100 * Gdx.graphics.getDeltaTime();
@@ -113,8 +115,12 @@ public class Level {
    * @param x x-position of the ship to be added
    * @param y y-position of the ship to be added
    */
-  public void addShip(int x, int y) {
-    this.fleet.addShip(x, y);
+  public void addNormalShip(int x, int y) {
+    this.fleet.addNormalShip(x, y);
+  }
+
+  public void addBigShip(int x, int y) {
+    this.fleet.addBigShip(x, y);
   }
 
   /**

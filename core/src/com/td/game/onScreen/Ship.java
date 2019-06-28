@@ -25,6 +25,10 @@ public class Ship extends Component {
     super(x, y, 64, 64, TEXTURE, RADIUS);
   }
 
+  public Ship(int x, int y, Texture texture, float radius){
+    super(x,y,64,64,texture,radius);
+  }
+
   public void checkForTarget(Wave wave) {
     this.currentTarget = wave.getEnemies().stream()
         .filter(enemy -> enemy.getCollisionCircle().overlaps(this.getCollisionCircle()))

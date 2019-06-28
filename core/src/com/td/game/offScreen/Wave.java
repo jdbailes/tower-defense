@@ -20,6 +20,7 @@ public class Wave {
 
   private List<Vector2> breadCrumbs;
   private List<Enemy> enemies;
+
   private final int waveSize;
   private int spawnCount;
   private int enemyHealth;
@@ -37,10 +38,12 @@ public class Wave {
 
     this.enemies = new ArrayList<>();
 
+
     this.spawnX = breadCrumbs.get(0).x;
     this.spawnY = breadCrumbs.get(0).y;
 
     addEnemy(enemyHealth);
+
   }
 
   /**
@@ -81,6 +84,8 @@ public class Wave {
       }
     }
   }
+
+
 
   /**
    * Checks for enemies that have reached the end of the map and removes them from the wave.
