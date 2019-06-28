@@ -13,7 +13,7 @@ public class Missile extends Component {
 
   private static final Texture TEXTURE = new Texture(Gdx.files.internal("game/space-missile.png"));
   private static final float RADIUS = 10;
-  private static final float SPEED = 8.0f;
+  private static final float SPEED = 9.0f;
 
   private final Ship ship;
   private final Enemy enemy;
