@@ -4,10 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Logger;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.td.game.TowerDefenseGame;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * The first screen that's displayed upon starting the game application. Gives the user options of
@@ -18,6 +15,7 @@ import java.io.IOException;
 public class MainMenuScreen extends AbstractScreen {
 
   private static final Logger logger = new Logger("MainMenuScreen", Logger.DEBUG);
+  private static final String PREF = "profile";
 
   // All file paths for the textures of all screen components
   private static final String RESUME_ACTIVE_FILEPATH = "ui/resume_button_active.png";
@@ -41,21 +39,19 @@ public class MainMenuScreen extends AbstractScreen {
   private final int exitXPos;
 
   // All textures for screen components
-  private Texture title;
-  private Texture resumeButtonActive;
-  private Texture resumeButtonInactive;
-  private Texture newGameButtonActive;
-  private Texture newGameButtonInactive;
-  private Texture exitButtonActive;
-  private Texture exitButtonInactive;
+  private final Texture title;
+  private final Texture resumeButtonActive;
+  private final Texture resumeButtonInactive;
+  private final Texture newGameButtonActive;
+  private final Texture newGameButtonInactive;
+  private final Texture exitButtonActive;
+  private final Texture exitButtonInactive;
 
   /**
    * Default constructor for MainMenuScreen.
    */
   public MainMenuScreen(TowerDefenseGame game) {
     super(game);
-
-    logger.debug("Creating menu screen");
 
     // Load images to texture
     title = new Texture(TITLE_PATH);
@@ -81,52 +77,60 @@ public class MainMenuScreen extends AbstractScreen {
     game.batch.begin();
 
     drawTitle();
-
     renderExitButton();
 
-    Preferences preferences = Gdx.app.getPreferences("profile");
+    Preferences preferences = Gdx.app.getPreferences(PREF);
     if (preferences.getBoolean("newGame")) {
       renderNewGameButton();
+
     } else {
       renderNewGameButton();
       renderResumeButton();
+
     }
 
     this.game.batch.end();
   }
 
   private void renderExitButton() {
-    if (isTouchingExitButton(exitXPos) && Gdx.input.justTouched()) {
+    if (isTouchingExitButton(exitXPos) && inputIsTouched()) {
       logger.debug("Exiting main menu screen");
       safeExit();
+
     } else if (isTouchingExitButton(exitXPos)) {
       drawExitButton(exitXPos, exitButtonActive);
+
     } else {
       drawExitButton(exitXPos, exitButtonInactive);
-    }
 
+    }
   }
 
   private void renderNewGameButton() {
-    // Render new game button
-    if ((isTouchingNewGameButton(newGameXPos)) && Gdx.input.justTouched()) {
+    if ((isTouchingNewGameButton(newGameXPos)) && inputIsTouched()) {
       logger.debug("Switching to level menu screen");
       switchScreen(new LevelMenuScreen(game));
+
     } else if (isTouchingNewGameButton(newGameXPos)) {
       drawNewGameButton(newGameXPos, newGameButtonActive);
+
     } else {
       drawNewGameButton(newGameXPos, newGameButtonInactive);
+
     }
   }
 
   private void renderResumeButton() {
-    if (isTouchingResumeButton(resumeXPos) && Gdx.input.justTouched()) {
+    if (isTouchingResumeButton(resumeXPos) && inputIsTouched()) {
       logger.debug("Switching to level menu screen");
       switchScreen(new LevelMenuScreen(game));
+
     } else if (isTouchingResumeButton(resumeXPos)) {
       drawResumeButton(resumeXPos, resumeButtonActive);
+
     } else {
       drawResumeButton(resumeXPos, resumeButtonInactive);
+
     }
   }
 

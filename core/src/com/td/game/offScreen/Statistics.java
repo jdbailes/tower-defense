@@ -1,9 +1,11 @@
 package com.td.game.offScreen;
 
 /**
+ * Stores the state of in-game statistics.
+ *
  * @author tautvydasponelis
  */
-public class Statistics {
+class Statistics {
 
   private int killCounter;
   private int currentFleet;

@@ -1,5 +1,10 @@
 package com.td.game;
 
+/**
+ * A static config class used to serve config across the application.
+ *
+ * @author josephbailey
+ */
 public class Config {
 
   public static final int SCREEN_HEIGHT = 960;
@@ -13,7 +18,10 @@ public class Config {
   private static final String LEVEL_2_CONFIG_FILEPATH = "configuration/level2_config.json";
   private static final String LEVEL_3_CONFIG_FILEPATH = "configuration/level3_config.json";
 
-  public static String getLevelFilepath(int levelNumber) {
+  /**
+   * Retries the file path for the tile map of a given level.
+   */
+  public static String getTiledMapFilepath(int levelNumber) {
     switch (levelNumber) {
       case 1:
         return LEVEL_1_FILEPATH;
@@ -29,6 +37,9 @@ public class Config {
     }
   }
 
+  /**
+   * Retrieves the file path for the config of a given level.
+   */
   public static String getConfigFilepath(int levelNumber) {
     switch (levelNumber) {
       case 1:

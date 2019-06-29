@@ -13,6 +13,8 @@ import com.td.game.screens.MainMenuScreen;
 /**
  * Game abstract class provides an implementation of ApplicationListener for you to use, along with
  * some helper methods to set and handle Screen rendering.
+ *
+ * @author josephbailey
  */
 public class TowerDefenseGame extends Game {
 

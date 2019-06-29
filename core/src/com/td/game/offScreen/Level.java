@@ -9,13 +9,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.td.game.Config;
 import com.td.game.onScreen.Base;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 /**
  * Level class stores the state of a level. By having this in a Level class rather than the
  * GameManager, it means that different levels could be configured in the future.
+ *
+ * @author josephbailey
+ * @author tautvydasponelis
  */
 public class Level {
 
@@ -46,7 +48,9 @@ public class Level {
     //JSON file to Java object
     LevelConfig levelConfig = new LevelConfig();
     try {
-      levelConfig = mapper.readValue(Gdx.files.internal(Config.getConfigFilepath(level)).readString(), LevelConfig.class);
+      levelConfig = mapper
+          .readValue(Gdx.files.internal(Config.getConfigFilepath(level)).readString(),
+              LevelConfig.class);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -125,9 +129,6 @@ public class Level {
 
   /**
    * Method invoked by GameManager and calls rendering methods on wave and ship.
-   *
-   * @param batch SpriteBatch passed from GameManager ensures all components are drawn on the same
-   * batch
    */
   public void draw(SpriteBatch batch) {
     this.wave.draw(batch);
@@ -142,8 +143,8 @@ public class Level {
 
   private void displayStats(SpriteBatch batch) {
     font.draw(batch, "Currency:", CURRENCY_X_POS, STATS_Y_POS);
-    font.draw(batch, String.valueOf(this.stats.setCurrentCurrency()), CURRENCY_VALUE_X_POS, STATS_Y_POS);
-
+    font.draw(batch, String.valueOf(this.stats.setCurrentCurrency()), CURRENCY_VALUE_X_POS,
+        STATS_Y_POS);
 
     font.draw(batch, "XP:", XP_X_POS, STATS_Y_POS);
     font.draw(batch, String.valueOf(this.stats.setCurrentXP()), XP_VALUE_X_POS, STATS_Y_POS);
@@ -151,11 +152,7 @@ public class Level {
 
   /**
    * Debug method invoked by GameManager and calls rendering methods on wave and ship as well as the
-   * collision zones which will also be displayed on the screen
-   *
-   * @param batch SpriteBatch passed from GameManager ensures all components are drawn on the same
-   * batch
-   * @param renderer ShapeRenderer renders the collision zones on the screen for debugging
+   * collision zones which will also be displayed on the screen.
    */
   public void draw(SpriteBatch batch, ShapeRenderer renderer) {
     this.wave.draw(batch, renderer);

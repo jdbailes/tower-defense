@@ -8,6 +8,8 @@ import com.td.game.Config;
 
 /**
  * Stores the state of a Missile for easy tracking of Missile projections & stats.
+ *
+ * @author josephbailey
  */
 public class Missile extends Component {
 
@@ -29,10 +31,6 @@ public class Missile extends Component {
 
   public boolean hasShip(Ship ship) {
     return this.ship.equals(ship);
-  }
-
-  public boolean hasTarget(Enemy enemy) {
-    return this.enemy.equals(enemy);
   }
 
   /**
@@ -73,6 +71,6 @@ public class Missile extends Component {
 
   private boolean isLost() {
     return getX() > Config.SCREEN_WIDTH + 100 || getX() < -100
-            || getY() > Config.SCREEN_HEIGHT + 100 || getY() < -100;
+        || getY() > Config.SCREEN_HEIGHT + 100 || getY() < -100;
   }
 }

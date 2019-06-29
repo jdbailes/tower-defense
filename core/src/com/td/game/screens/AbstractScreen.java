@@ -8,18 +8,24 @@ import com.badlogic.gdx.math.Vector3;
 import com.td.game.Config;
 import com.td.game.TowerDefenseGame;
 
+/**
+ * An abstraction of Screen implementations to allow for shared functionality across all game
+ * screens.
+ *
+ * @author josephbailey
+ */
 public abstract class AbstractScreen implements Screen {
 
-  TowerDefenseGame game;
-  OrthographicCamera camera;
+  final TowerDefenseGame game;
+  final OrthographicCamera camera;
 
   AbstractScreen(final TowerDefenseGame game) {
     this.game = game;
 
     // Setup the camera
-    this.camera = new OrthographicCamera();
-    this.camera.setToOrtho(false, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
-    this.camera.update();
+    camera = new OrthographicCamera();
+    camera.setToOrtho(false, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
+    camera.update();
   }
 
   @Override
@@ -37,55 +43,80 @@ public abstract class AbstractScreen implements Screen {
 
   @Override
   public void resize(int width, int height) {
-
+    // Do nothing...
   }
 
   @Override
   public void pause() {
-
+    // Do nothing...
   }
 
   @Override
   public void resume() {
-
+    // Do nothing...
   }
 
   @Override
   public void hide() {
-
+    // Do nothing...
   }
 
   @Override
   public void dispose() {
-
+    // Do nothing...
   }
 
+  /**
+   * Safely switches screen.
+   */
   void switchScreen(Screen screen) {
     game.setScreen(screen);
     dispose();
   }
 
+  /**
+   * Gets the centre point of the screen relative to the width of an object.
+   */
   int getCentrePointX(int width) {
     return (Config.SCREEN_WIDTH / 2) - (width / 2);
   }
 
+  /**
+   * Gets the centre points of the screen relative to the height of an object.
+   */
   int getCentrePointY(int height) {
     return (Config.SCREEN_HEIGHT / 2) - (height / 2);
   }
 
+  /**
+   * Gets the on-screen x-coordinate of the current mouse input.
+   */
   float getInputX() {
     // Get the coordinates of the current mouse position
     Vector3 screenCoords = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
     return screenCoords.x;
   }
 
+  /**
+   * Gets the on-screen y-coordinate of the current mouse input.
+   */
   float getInputY() {
     // Get the coordinates of the current mouse position
     Vector3 screenCoords = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
     return screenCoords.y;
   }
 
+  /**
+   * Safely exits the application.
+   */
   void safeExit() {
     Gdx.app.exit();
+  }
+
+  /**
+   * Returns true when input is just touched.
+   */
+  boolean inputIsTouched() {
+    return Gdx.input.justTouched();
   }
 }

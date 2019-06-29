@@ -7,12 +7,17 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * An abstraction of on-screen components for shared functionality across components.
+ *
+ * @author josephbailey
+ */
 public abstract class Component {
 
   private final Sprite sprite;
   private final Circle collisionCircle;
 
-  public Component(float x, float y, float height, float width, Texture texture,
+  Component(float x, float y, float height, float width, Texture texture,
       float collisionCircleRadius) {
     this.sprite = new Sprite(texture);
     this.sprite.setX(x);
@@ -24,7 +29,7 @@ public abstract class Component {
     this.collisionCircle.setRadius(collisionCircleRadius);
   }
 
-  public Sprite getSprite() {
+  Sprite getSprite() {
     return sprite;
   }
 
@@ -42,32 +47,27 @@ public abstract class Component {
     this.collisionCircle.setY(y);
   }
 
-  public void updateX(float delta) {
-    this.sprite.setX(this.sprite.getX() + delta);
-    this.collisionCircle.setX(this.collisionCircle.x + delta);
-  }
-
-  public void increaseX(float delta) {
+  void increaseX(float delta) {
     this.sprite.setX(this.sprite.getX() - delta);
     this.collisionCircle.setX(this.collisionCircle.x - delta);
   }
 
-  public void decreaseX(float delta) {
+  void decreaseX(float delta) {
     this.sprite.setX(this.sprite.getX() + delta);
     this.collisionCircle.setX(this.collisionCircle.x + delta);
   }
 
-  public void increaseY(float delta) {
+  void increaseY(float delta) {
     this.sprite.setY(this.sprite.getY() + delta);
     this.collisionCircle.setY(this.collisionCircle.y + delta);
   }
 
-  public void decreaseY(float delta) {
+  void decreaseY(float delta) {
     this.sprite.setY(this.sprite.getY() - delta);
     this.collisionCircle.setY(this.collisionCircle.y - delta);
   }
 
-  public void setRotation(float rotation) {
+  void setRotation(float rotation) {
     this.sprite.setRotation(rotation);
   }
 
@@ -84,7 +84,7 @@ public abstract class Component {
    *
    * @return the vector for this enemy
    */
-  public Vector2 getVector() {
+  Vector2 getVector() {
     return new Vector2(collisionCircle.x, collisionCircle.y);
   }
 

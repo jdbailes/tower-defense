@@ -9,6 +9,12 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.td.game.offScreen.Wave;
 
+/**
+ * Stores the state of a base component.
+ *
+ * @author josephbailey
+ * @author tautvydasponelis
+ */
 public class Base {
 
   private static final Texture TEXTURE = new Texture(Gdx.files.internal("game/space-base.png"));
@@ -18,7 +24,7 @@ public class Base {
 
   private float health = 1900;
 
-  private HealthBar healthbar;
+  private final HealthBar healthbar;
 
   /**
    * Default constructor.
@@ -28,23 +34,25 @@ public class Base {
    */
   public Base(float xPosition, float yPosition) {
     // Create and configure a new sprite
-    this.sprite = new Sprite(TEXTURE);
-    this.sprite.setX(xPosition);
-    this.sprite.setY(yPosition);
-    this.sprite.setSize(128, 128);
+    sprite = new Sprite(TEXTURE);
+    sprite.setX(xPosition);
+    sprite.setY(yPosition);
+    sprite.setSize(128, 128);
 
     // Create and configure a new collision rectangle
-    this.collisionRectangle = new Rectangle();
-    this.collisionRectangle.setX(xPosition);
-    this.collisionRectangle.setY(yPosition);
-    this.collisionRectangle.setHeight(128);
-    this.collisionRectangle.setWidth(128);
+    collisionRectangle = new Rectangle();
+    collisionRectangle.setX(xPosition);
+    collisionRectangle.setY(yPosition);
+    collisionRectangle.setHeight(128);
+    collisionRectangle.setWidth(128);
 
-    this.healthbar = new HealthBar(1875, 0);
-    this.healthbar.getSprite().setSize(25, 1900);
+    healthbar = new HealthBar(1875, 0);
+    healthbar.getSprite().setSize(25, 1900);
   }
 
-
+  /**
+   * Runs the base for a single frame.
+   */
   public void run(Wave wave) {
     wave.getEnemies().forEach(enemy -> {
       boolean collision = Intersector.overlaps(enemy.getCollisionCircle(), this.collisionRectangle);
@@ -59,12 +67,15 @@ public class Base {
     });
   }
 
+  /**
+   * Simple getter on base health.
+   */
   public double getHealth() {
     return this.health;
   }
 
 
-  public void updateHealthBar() {
+  private void updateHealthBar() {
     this.healthbar.getSprite().setSize(25, this.health);
 
   }
@@ -79,6 +90,9 @@ public class Base {
     this.healthbar.draw(batch);
   }
 
+  /**
+   * Draws the base for a single frame.
+   */
   public void draw(SpriteBatch batch, ShapeRenderer renderer) {
     renderer
         .rect(this.collisionRectangle.x, this.collisionRectangle.y, this.collisionRectangle.width,

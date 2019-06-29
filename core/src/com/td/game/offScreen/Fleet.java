@@ -4,12 +4,20 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
-import com.td.game.onScreen.*;
-
+import com.td.game.onScreen.BigMissile;
+import com.td.game.onScreen.BigShip;
+import com.td.game.onScreen.Missile;
+import com.td.game.onScreen.NormalShip;
+import com.td.game.onScreen.Ship;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Stores the state of the fleet.
+ *
+ * @author josephbailey
+ */
 public class Fleet {
 
   private List<Ship> ships;
@@ -17,33 +25,24 @@ public class Fleet {
   private List<BigShip> bigShips;
   private List<BigMissile> bigMissiles;
 
-  private int shipCount;
-
   private Statistics stats;
-
-  private int currentStatistics;
 
   private int currentFleet;
   private int currentFleetBig;
 
-  public Fleet() {
+  Fleet() {
     this.ships = new ArrayList<>();
     this.missiles = new ArrayList<>();
 
     this.bigShips = new ArrayList<>();
     this.bigMissiles = new ArrayList<>();
-
-    this.shipCount = 0;
-
-
   }
 
-  public void registerStats(Statistics stats) {
+  void registerStats(Statistics stats) {
     this.stats = stats;
   }
 
-
-  public void run(Wave wave) {
+  void run(Wave wave) {
     this.ships.forEach(ship -> {
       // Set the rotation of the ship based on its target if it has one
       ship.setRotation();
@@ -65,7 +64,7 @@ public class Fleet {
       }
 
       if (ship.getCurrentTarget() != null && !ship.getCurrentTarget().getCollisionCircle()
-              .overlaps(ship.getCollisionCircle())) {
+          .overlaps(ship.getCollisionCircle())) {
         ship.setCurrentTarget(null);
       }
     });
@@ -73,8 +72,8 @@ public class Fleet {
     if (!this.missiles.isEmpty()) {
       // Remove missile that have hit an enemy of left the screen
       this.missiles = this.missiles.stream()
-              .filter(missile -> !missile.isTerminated())
-              .collect(Collectors.toList());
+          .filter(missile -> !missile.isTerminated())
+          .collect(Collectors.toList());
 
       // Update the position of each enemy
       this.missiles.forEach(Missile::updatePosition);
@@ -101,7 +100,7 @@ public class Fleet {
       }
 
       if (shipBig.getCurrentTarget() != null && !shipBig.getCurrentTarget().getCollisionCircle()
-              .overlaps(shipBig.getCollisionCircle())) {
+          .overlaps(shipBig.getCollisionCircle())) {
         shipBig.setCurrentTarget(null);
       }
     });
@@ -109,8 +108,8 @@ public class Fleet {
     if (!this.bigMissiles.isEmpty()) {
       // Remove missile that have hit an enemy of left the screen
       this.bigMissiles = this.bigMissiles.stream()
-              .filter(missile -> !missile.isTerminated())
-              .collect(Collectors.toList());
+          .filter(missile -> !missile.isTerminated())
+          .collect(Collectors.toList());
 
       // Update the position of each enemy
       this.bigMissiles.forEach(BigMissile::updatePosition);
@@ -126,14 +125,13 @@ public class Fleet {
 
   }
 
-
-  public void addNormalShip(int x, int y) {
+  void addNormalShip(int x, int y) {
     //if the player has enough currency, they will be able to spawn a turret
     if (this.stats.setCurrentCurrency() > 49 && currentFleet <= 8) {
       currentFleet++;
       Ship newShip = new NormalShip(x, y);
       Circle circle1 = new Circle(newShip.getCollisionCircle().x, newShip.getCollisionCircle().y,
-              64);
+          64);
 
       boolean overlaps = this.ships.stream().anyMatch(ship -> {
         Circle circle2 = new Circle(ship.getCollisionCircle().x, ship.getCollisionCircle().y, 64);
@@ -142,18 +140,18 @@ public class Fleet {
 
       if (!overlaps) {
         this.ships.add(newShip);
-        shipCount++;
       }
     }
   }
 
-  public void addBigShip(int x, int y) {
+  void addBigShip(int x, int y) {
     //if the player has enough currency, they will be able to spawn a turret
     if (this.stats.setCurrentCurrency() > 99 && currentFleetBig <= 5) {
       currentFleetBig++;
       BigShip newShipBig = new BigShip(x, y);
-      Circle circle1 = new Circle(newShipBig.getCollisionCircle().x, newShipBig.getCollisionCircle().y,
-              64);
+      Circle circle1 = new Circle(newShipBig.getCollisionCircle().x,
+          newShipBig.getCollisionCircle().y,
+          64);
 
       boolean overlaps = this.ships.stream().anyMatch(ship -> {
         Circle circle2 = new Circle(ship.getCollisionCircle().x, ship.getCollisionCircle().y, 64);
@@ -162,19 +160,21 @@ public class Fleet {
 
       if (!overlaps) {
         this.bigShips.add(newShipBig);
-        shipCount++;
       }
     }
   }
 
-  public int getCurrentFleet() {
+  int getCurrentFleet() {
     return currentFleet;
   }
 
-  public int getCurrentFleetBig() {
+  int getCurrentFleetBig() {
     return currentFleetBig;
   }
 
+  /**
+   * Draws the fleet.
+   */
   public void draw(SpriteBatch batch) {
     this.ships.forEach(ship -> ship.draw(batch));
     this.bigShips.forEach(ship -> ship.draw(batch));
@@ -182,6 +182,9 @@ public class Fleet {
     this.bigMissiles.forEach(missile -> missile.draw(batch));
   }
 
+  /**
+   * Draws the fleet.
+   */
   public void draw(SpriteBatch batch, ShapeRenderer renderer) {
     this.ships.forEach(ship -> ship.draw(batch, renderer));
     this.bigShips.forEach(ship -> ship.draw(batch, renderer));

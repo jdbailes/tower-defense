@@ -1,5 +1,10 @@
 package com.td.game.offScreen;
 
+/**
+ * Simple POJO to store level config.
+ *
+ * @author josephbailey
+ */
 public class LevelConfig {
 
   private int startingCredit;

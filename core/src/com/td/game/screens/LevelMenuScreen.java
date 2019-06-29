@@ -6,35 +6,52 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Logger;
 import com.td.game.Config;
 import com.td.game.TowerDefenseGame;
-import javax.xml.soap.Text;
 
+/**
+ * Serves the Level Menu screen in the game.
+ *
+ * @author josephbailey
+ */
 public class LevelMenuScreen extends AbstractScreen {
 
-  private final static Logger logger = new Logger("LevelMenuScreen", Logger.INFO);
+  private static final Logger logger = new Logger("LevelMenuScreen", Logger.INFO);
+  private static final String PREF = "profile";
 
+  // All file paths for the textures of all screen components
+  private static final String TITLE_FILEPATH = "ui/level_select_title.png";
+  private static final String LEVEL_ONE_INACTIVE_FILEPATH = "ui/level1_selection_inactive.png";
+  private static final String LEVEL_ONE_ACTIVE_FILEPATH = "ui/level1_selection_active.png";
+  private static final String LEVEL_ONE_LOCKED_FILEPATH = "ui/level1_selection_locked.png";
+  private static final String LEVEL_TWO_INACTIVE_FILEPATH = "ui/level2_selection_inactive.png";
+  private static final String LEVEL_TWO_ACTIVE_FILEPATH = "ui/level2_selection_active.png";
+  private static final String LEVEL_TWO_LOCKED_FILEPATH = "ui/level2_selection_locked.png";
+  private static final String LEVEL_THREE_INACTIVE_FILEPATH = "ui/level3_selection_inactive.png";
+  private static final String LEVEL_THREE_ACTIVE_FILEPATH = "ui/level3_selection_active.png";
+  private static final String LEVEL_THREE_LOCKED_FILEPATH = "ui/level3_selection_locked.png";
+
+  // y-positions of all screen components
   private static final int TITLE_Y = 600;
   private static final int LEVEL_ONE_SELECTION_Y = 250;
   private static final int LEVEL_TWO_SELECTION_Y = 250;
   private static final int LEVEL_THREE_SELECTION_Y = 250;
 
+  // x-positions of all screen components
   private final int titleX;
   private final int levelOneSelectionX;
   private final int levelTwoSelectionX;
   private final int levelThreeSelectionX;
 
-  private Texture title;
-
-  private Texture levelOneSelectionInactive;
-  private Texture levelOneSelectionActive;
-  private Texture levelOneSelectionLocked;
-
-  private Texture levelTwoSelectionInactive;
-  private Texture levelTwoSelectionActive;
-  private Texture levelTwoSelectionLocked;
-
-  private Texture levelThreeSelectionInactive;
-  private Texture levelThreeSelectionActive;
-  private Texture levelThreeSelectionLocked;
+  // All textures for screen components
+  private final Texture title;
+  private final Texture levelOneSelectionInactive;
+  private final Texture levelOneSelectionActive;
+  private final Texture levelOneSelectionLocked;
+  private final Texture levelTwoSelectionInactive;
+  private final Texture levelTwoSelectionActive;
+  private final Texture levelTwoSelectionLocked;
+  private final Texture levelThreeSelectionInactive;
+  private final Texture levelThreeSelectionActive;
+  private final Texture levelThreeSelectionLocked;
 
   /**
    * Default constructor for MainMenuScreen.
@@ -43,26 +60,25 @@ public class LevelMenuScreen extends AbstractScreen {
     super(game);
 
     // Load images to texture
-    this.title = new Texture("ui/level_select_title.png");
+    title = new Texture(TITLE_FILEPATH);
 
-    this.levelOneSelectionInactive = new Texture("ui/level1_selection_inactive.png");
-    this.levelOneSelectionActive = new Texture("ui/level1_selection_active.png");
-    this.levelOneSelectionLocked = new Texture("ui/level1_selection_locked.png");
+    levelOneSelectionInactive = new Texture(LEVEL_ONE_INACTIVE_FILEPATH);
+    levelOneSelectionActive = new Texture(LEVEL_ONE_ACTIVE_FILEPATH);
+    levelOneSelectionLocked = new Texture(LEVEL_ONE_LOCKED_FILEPATH);
 
-    this.levelTwoSelectionInactive = new Texture("ui/level2_selection_inactive.png");
-    this.levelTwoSelectionActive = new Texture("ui/level2_selection_active.png");
-    this.levelTwoSelectionLocked = new Texture("ui/level2_selection_locked.png");
+    levelTwoSelectionInactive = new Texture(LEVEL_TWO_INACTIVE_FILEPATH);
+    levelTwoSelectionActive = new Texture(LEVEL_TWO_ACTIVE_FILEPATH);
+    levelTwoSelectionLocked = new Texture(LEVEL_TWO_LOCKED_FILEPATH);
 
-    this.levelThreeSelectionInactive = new Texture("ui/level3_selection_inactive.png");
-    this.levelThreeSelectionActive = new Texture("ui/level3_selection_active.png");
-    this.levelThreeSelectionLocked = new Texture("ui/level3_selection_locked.png");
-
+    levelThreeSelectionInactive = new Texture(LEVEL_THREE_INACTIVE_FILEPATH);
+    levelThreeSelectionActive = new Texture(LEVEL_THREE_ACTIVE_FILEPATH);
+    levelThreeSelectionLocked = new Texture(LEVEL_THREE_LOCKED_FILEPATH);
 
     // Calculate x-coordinates for screen items
-    this.titleX = getCentrePointX(this.title.getWidth());
-    this.levelOneSelectionX = getLevelOneCentrePoint(this.levelOneSelectionInactive.getWidth());
-    this.levelTwoSelectionX = getLevelTwoCentrePoint(this.levelTwoSelectionInactive.getWidth());
-    this.levelThreeSelectionX = getLevelThreeCentrePoint(
+    titleX = getCentrePointX(this.title.getWidth());
+    levelOneSelectionX = getLevelOneCentrePoint(this.levelOneSelectionInactive.getWidth());
+    levelTwoSelectionX = getLevelTwoCentrePoint(this.levelTwoSelectionInactive.getWidth());
+    levelThreeSelectionX = getLevelThreeCentrePoint(
         this.levelThreeSelectionInactive.getWidth());
   }
 
@@ -70,55 +86,67 @@ public class LevelMenuScreen extends AbstractScreen {
   public void render(float delta) {
     super.render(delta);
 
-    this.camera.update();
-    this.game.batch.begin();
+    camera.update();
+    game.batch.begin();
 
     drawLevelSelectTitle();
 
-    Preferences preferences = Gdx.app.getPreferences("profile");
+    Preferences preferences = Gdx.app.getPreferences(PREF);
     preferences.putBoolean("newGame", false);
     preferences.flush();
 
-    if(preferences.getBoolean("levelOneUnlocked")) {
+    if (preferences.getBoolean("levelOneUnlocked")) {
       if (isTouchingLevelOne(levelOneSelectionX) && Gdx.input.justTouched()) {
         logger.info("Switching to game screen [level 1]");
         switchScreen(new LoadingScreen(game, 1));
+
       } else if (isTouchingLevelOne(levelOneSelectionX)) {
         drawLevelOne(levelOneSelectionX, levelOneSelectionActive);
+
       } else {
         drawLevelOne(levelOneSelectionX, levelOneSelectionInactive);
+
       }
     } else {
       drawLevelOne(levelOneSelectionX, levelOneSelectionLocked);
+
     }
 
-    if(preferences.getBoolean("levelTwoUnlocked")) {
+    if (preferences.getBoolean("levelTwoUnlocked")) {
       if (isTouchingLevelTwo(levelTwoSelectionX) && Gdx.input.justTouched()) {
         logger.info("Switching to game screen [level 2]");
         switchScreen(new LoadingScreen(game, 2));
+
       } else if (isTouchingLevelTwo(levelTwoSelectionX)) {
         drawLevelTwo(levelTwoSelectionX, levelTwoSelectionActive);
+
       } else {
         drawLevelTwo(levelTwoSelectionX, levelTwoSelectionInactive);
+
       }
     } else {
       drawLevelTwo(levelTwoSelectionX, levelTwoSelectionLocked);
+
     }
 
-    if(preferences.getBoolean("levelThreeUnlocked")) {
+    if (preferences.getBoolean("levelThreeUnlocked")) {
       if (isTouchingLevelThree(levelThreeSelectionX) && Gdx.input.justTouched()) {
         logger.info("Switching to game screen [level 3]");
         switchScreen(new LoadingScreen(game, 3));
+
       } else if (isTouchingLevelThree(levelThreeSelectionX)) {
         drawLevelThree(levelThreeSelectionX, levelThreeSelectionActive);
+
       } else {
         drawLevelThree(levelThreeSelectionX, levelThreeSelectionInactive);
+
       }
     } else {
       drawLevelThree(levelThreeSelectionX, levelThreeSelectionLocked);
+
     }
 
-    this.game.batch.end();
+    game.batch.end();
   }
 
   private boolean isTouchingLevelOne(int x) {

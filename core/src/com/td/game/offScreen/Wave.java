@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 /**
  * Manages the wave of enemies in the game.
+ *
+ * @author josephbailey
  */
 public class Wave {
 
@@ -30,14 +32,13 @@ public class Wave {
   /**
    * Creates a new wave containing a single enemy.
    */
-  public Wave(List<Vector2> breadCrumbs, int waveSize, int enemyHealth) {
+  Wave(List<Vector2> breadCrumbs, int waveSize, int enemyHealth) {
     this.waveSize = waveSize;
     this.enemyHealth = enemyHealth;
 
     this.breadCrumbs = breadCrumbs;
 
     this.enemies = new ArrayList<>();
-
 
     this.spawnX = breadCrumbs.get(0).x;
     this.spawnY = breadCrumbs.get(0).y;
@@ -55,7 +56,7 @@ public class Wave {
     return enemies;
   }
 
-  public void spawnEnemy(float spawnProbability) {
+  void spawnEnemy(float spawnProbability) {
     float randomFloat = RANDOM.nextFloat();    // Determine a spawn probability
 
     // Spawns enemies onto the map
@@ -75,16 +76,15 @@ public class Wave {
       if (spawnCount <= waveSize) {
         Enemy enemy = new Enemy(spawnX, spawnY, breadCrumbs.get(1), enemyHealth);
         enemies.add(enemy);
-        spawnCount ++;
+        spawnCount++;
       } else if (enemies.get(enemies.size() - 1).getX() > 64) {
         // Pre-defined spawn positions for all enemies on the map
         Enemy enemy = new Enemy(spawnX, spawnY, breadCrumbs.get(1), enemyHealth);
         enemies.add(enemy);
-        spawnCount ++;
+        spawnCount++;
       }
     }
   }
-
 
 
   /**
@@ -109,7 +109,7 @@ public class Wave {
    *
    * @param delta a given delta to be added to the x-positions.
    */
-  public void updatePositions(float delta) {
+  void updatePositions(float delta) {
     enemies.forEach(e -> {
       if (!e.isAttackingBase()) {
 
@@ -128,7 +128,7 @@ public class Wave {
     });
   }
 
-  public boolean waveKilled() {
+  boolean waveKilled() {
     return killCounter >= waveSize;
   }
 

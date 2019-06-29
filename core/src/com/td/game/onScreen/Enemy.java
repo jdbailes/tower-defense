@@ -10,6 +10,9 @@ import com.td.game.Config;
 
 /**
  * Enemy class stores the state of an enemy character.
+ *
+ * @author josephbailey
+ * @author tautvydasponelis
  */
 public class Enemy extends Component {
 
@@ -38,10 +41,6 @@ public class Enemy extends Component {
   }
 
 
-  public HealthBar getHealthBar() {
-    return this.healthbar;
-  }
-
   public void updateHealthBar() {
     this.healthbar.getSprite().setSize(5, this.health);
 
@@ -55,15 +54,17 @@ public class Enemy extends Component {
     return this.getX() > Config.SCREEN_WIDTH - 64;
   }
 
-  public void decrementHealth() {
+  void decrementHealth() {
     if (this.health - 1 >= 0) {
       health--;
+
     }
   }
 
-  public void decrementHealthBig() {
+  void decrementHealthBig() {
     if (this.health - 1 >= 0) {
       health = health - 25;
+
     }
   }
 
@@ -76,34 +77,40 @@ public class Enemy extends Component {
     return attackingBase;
   }
 
-  public boolean isMissileColliding(Missile missile) {
+  boolean isMissileColliding(Missile missile) {
     Circle missileCollisionCircle = missile.getCollisionCircle();
     return Intersector.overlaps(missileCollisionCircle, super.getCollisionCircle());
   }
 
-  public boolean isMissileColliding(BigMissile missile) {
+  boolean isMissileColliding(BigMissile missile) {
     Circle missileCollisionCircle = missile.getCollisionCircle();
     return Intersector.overlaps(missileCollisionCircle, super.getCollisionCircle());
   }
 
+  /**
+   * Updates the position of an enemy.
+   */
   public void updatePosition(float delta) {
-
     int xCompare = Float.compare(getX(), destination.x);
     if (xCompare > 0) {
       increaseX(delta);
       healthbar.increaseX(delta);
+
     } else if (xCompare < 0) {
       decreaseX(delta);
       healthbar.decreaseX(delta);
+
     }
 
     int yCompare = Float.compare(getY(), destination.y);
     if (yCompare < 0) {
       increaseY(delta);
       healthbar.increaseY(delta);
+
     } else if (yCompare > 0) {
       decreaseY(delta);
       healthbar.decreaseY(delta);
+
     }
 
   }

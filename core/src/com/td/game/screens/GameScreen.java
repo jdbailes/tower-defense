@@ -13,45 +13,45 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.td.game.Config;
 import com.td.game.TowerDefenseGame;
 import com.td.game.offScreen.Level;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Serves the screen the game is played within.
+ *
+ * @author josephbailey
+ * @author tautvydasponelis
  */
 public class GameScreen extends AbstractScreen {
 
   private static final String NAVIGATION_KEY = "NAVIGATION_LAYER";
 
+  private final TiledMapRenderer tiledMapRenderer;
+  private final ShapeRenderer shapeRenderer;
+  private final SpriteBatch batch;
+  private final Level level;
+  private final int levelNumber;
+
   private OrthographicCamera camera;
-  private TiledMap tiledMap;
-  private TiledMapRenderer tiledMapRenderer;
-  private ShapeRenderer shapeRenderer;
-  private SpriteBatch batch;
-  private Level level;
-  private int levelNumber;
 
   GameScreen(final TowerDefenseGame game, int level) {
     super(game);
     setupCamera();
 
-    this.levelNumber = level;
-    this.tiledMap = this.game.getAssetManager().get(Config.getLevelFilepath(level));
+    levelNumber = level;
+    TiledMap tiledMap = this.game.getAssetManager().get(Config.getTiledMapFilepath(level));
 
-    MapObjects mapObjects = this.tiledMap.getLayers().get(NAVIGATION_KEY).getObjects();
+    MapObjects mapObjects = tiledMap.getLayers().get(NAVIGATION_KEY).getObjects();
     List<Vector2> breadCrumbs = getBreadCrumbs(mapObjects);
 
     this.level = new Level(breadCrumbs, level);
 
-    this.tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-    this.shapeRenderer = new ShapeRenderer();
-    this.batch = new SpriteBatch();
+    tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+    shapeRenderer = new ShapeRenderer();
+    batch = new SpriteBatch();
   }
 
   @Override
@@ -64,9 +64,9 @@ public class GameScreen extends AbstractScreen {
     super.render(delta);
 
     // Render the tilemap
-    this.camera.update();
-    this.tiledMapRenderer.setView(camera);
-    this.tiledMapRenderer.render();
+    camera.update();
+    tiledMapRenderer.setView(camera);
+    tiledMapRenderer.render();
 
     if (Gdx.input.isKeyJustPressed(Keys.NUM_1)) {
       // Get the coordinates of the current mouse position
@@ -76,7 +76,6 @@ public class GameScreen extends AbstractScreen {
 
       // Create a new tower in the fleet with these towers
       level.addNormalShip((int) worldCoords.x, (int) worldCoords.y);
-
 
     }
 
@@ -89,24 +88,22 @@ public class GameScreen extends AbstractScreen {
       // Create a new tower in the fleet with these towers
       level.addBigShip((int) worldCoords.x, (int) worldCoords.y);
 
-
     }
 
     // Render the game
-    this.batch.setProjectionMatrix(camera.combined);
-    this.batch.begin();
+    batch.setProjectionMatrix(camera.combined);
+    batch.begin();
 
     boolean gameOver = this.level.update();
 
     if (gameOver) {
       switchScreen(new GameOverScreen(game));
-      dispose();
+
     }
 
     if (level.levelComplete()) {
-
       Preferences preferences = Gdx.app.getPreferences("profile");
-      switch(levelNumber) {
+      switch (levelNumber) {
         case 1:
           preferences.putBoolean("levelTwoUnlocked", true);
           preferences.flush();
@@ -115,27 +112,26 @@ public class GameScreen extends AbstractScreen {
           preferences.putBoolean("levelThreeUnlocked", true);
           preferences.flush();
           break;
-
+        default:
+          // Do nothing...
       }
-
       switchScreen(new LevelCompleteScreen(game));
-      dispose();
+
     }
 
-    this.level.draw(batch);
+    level.draw(batch);
 
-    this.shapeRenderer.end();
-    this.batch.end();
+    shapeRenderer.end();
+    batch.end();
   }
 
   private void setupCamera() {
-    this.camera = new OrthographicCamera();
-    this.camera.setToOrtho(false, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
-    this.camera.update();
+    camera = new OrthographicCamera();
+    camera.setToOrtho(false, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
+    camera.update();
   }
 
   private List<Vector2> getBreadCrumbs(MapObjects mapObjects) {
-
     List<Vector2> breadCrumbs = new ArrayList<>();
 
     for (int i = 0; i < mapObjects.getCount(); i++) {

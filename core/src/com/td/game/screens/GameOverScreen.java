@@ -7,64 +7,74 @@ import com.td.game.TowerDefenseGame;
 
 /**
  * Serves the Main Menu screen in the game.
+ *
+ * @author josephbailey
  */
 public class GameOverScreen extends AbstractScreen {
 
-  private final static Logger logger = new Logger("GameOverScreen", Logger.INFO);
+  private static final Logger logger = new Logger("GameOverScreen", Logger.INFO);
 
+  // All file paths for the textures of all screen components
+  private static final String GAME_OVER_FILEPATH = "ui/game_over_title.png";
+  private static final String MENU_ACTIVE_FILEPATH = "ui/menu_button_active.png";
+  private static final String MENU_INACTIVE_FILEPATH = "ui/menu_button_inactive.png";
+
+  // y-positions of all screen components
   private static final int GAME_OVER_Y = 620;
   private static final int MENU_BUTTON_Y = 100;
 
+  // x-positions of all screen components
   private final int gameOverX;
   private final int menuButtonX;
 
-  private Texture gameOver;
-  private Texture menuButtonActive;
-  private Texture menuButtonInactive;
+  // All textures for screen components
+  private final Texture gameOver;
+  private final Texture menuButtonActive;
+  private final Texture menuButtonInactive;
 
-  public GameOverScreen(final TowerDefenseGame game) {
+  GameOverScreen(final TowerDefenseGame game) {
     super(game);
 
     // Load images to texture
-    this.gameOver = new Texture("ui/game_over_title.png");
-    this.menuButtonActive = new Texture("ui/menu_button_active.png");
-    this.menuButtonInactive = new Texture("ui/menu_button_inactive.png");
+    gameOver = new Texture(GAME_OVER_FILEPATH);
+    menuButtonActive = new Texture(MENU_ACTIVE_FILEPATH);
+    menuButtonInactive = new Texture(MENU_INACTIVE_FILEPATH);
 
     // Calculate x-coordinates for screen items
-    this.gameOverX = getCentrePointX(gameOver.getWidth());
-    this.menuButtonX = getCentrePointX(menuButtonInactive.getWidth());
-  }
-
-  @Override
-  public void show() {
-
+    gameOverX = getCentrePointX(gameOver.getWidth());
+    menuButtonX = getCentrePointX(menuButtonInactive.getWidth());
   }
 
   @Override
   public void render(float delta) {
     super.render(delta);
 
-    this.camera.update();
-    this.game.batch.begin();
+    camera.update();
+    game.batch.begin();
 
     drawGameOverTitle();
+    renderExitButton();
 
-    // Render exit button
-    if (isTouchingMenuButton(menuButtonX) && Gdx.input.justTouched()) {
-      logger.info("Switching to main menu screen");
-      switchScreen(new LevelMenuScreen(game));
-    } else if (isTouchingMenuButton(menuButtonX)) {
-      drawMenuButton(menuButtonX, MENU_BUTTON_Y, true);
-    } else {
-      drawMenuButton(menuButtonX, MENU_BUTTON_Y, false);
-    }
-
-    this.game.batch.end();
+    game.batch.end();
   }
 
-  private void drawMenuButton(float x, float y, boolean active) {
+  private void renderExitButton() {
+    if (isTouchingMenuButton(menuButtonX) && inputIsTouched()) {
+      logger.info("Switching to main menu screen");
+      switchScreen(new LevelMenuScreen(game));
+
+    } else if (isTouchingMenuButton(menuButtonX)) {
+      drawMenuButton(menuButtonX, true);
+
+    } else {
+      drawMenuButton(menuButtonX, false);
+
+    }
+  }
+
+  private void drawMenuButton(float x, boolean active) {
     Texture texture = active ? this.menuButtonActive : this.menuButtonInactive;
-    game.batch.draw(texture, x, y);
+    game.batch.draw(texture, x, (float) GameOverScreen.MENU_BUTTON_Y);
   }
 
   private boolean isTouchingMenuButton(int x) {
