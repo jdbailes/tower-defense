@@ -2,52 +2,56 @@ package com.td.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.td.game.Config;
 import com.td.game.TowerDefenseGame;
 import com.td.game.offScreen.Level;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Serves the screen the game is played within.
+ *
+ * @author josephbailey
+ * @author tautvydasponelis
  */
-public class GameScreen implements Screen {
+public class GameScreen extends AbstractScreen {
 
-  private final TowerDefenseGame game;
+  private static final String NAVIGATION_KEY = "NAVIGATION_LAYER";
+
+  private final TiledMapRenderer tiledMapRenderer;
+  private final ShapeRenderer shapeRenderer;
+  private final SpriteBatch batch;
+  private final Level level;
+  private final int levelNumber;
 
   private OrthographicCamera camera;
-  private TiledMap tiledMap;
-  private TiledMapRenderer tiledMapRenderer;
-  private ShapeRenderer shapeRenderer;
-  private SpriteBatch batch;
-  private Level level;
 
-  private boolean isDebug = false;
+  GameScreen(final TowerDefenseGame game, int level) {
+    super(game);
+    setupCamera();
 
-  GameScreen(final TowerDefenseGame game) {
-    this.game = game;
+    levelNumber = level;
+    TiledMap tiledMap = this.game.getAssetManager().get(Config.getTiledMapFilepath(level));
 
-    // Setup the camera
-    this.camera = new OrthographicCamera();
-    this.camera.setToOrtho(false, Config.getScreenWidth(), Config.getScreenHeight());
-    this.camera.update();
+    MapObjects mapObjects = tiledMap.getLayers().get(NAVIGATION_KEY).getObjects();
+    List<Vector2> breadCrumbs = getBreadCrumbs(mapObjects);
 
-    this.tiledMap = new TmxMapLoader().load("Level_1.tmx");
-    this.tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+    this.level = new Level(breadCrumbs, level);
 
-    // Initialise a new SpriteBatch for this game
-    this.batch = new SpriteBatch();
-    this.level = new Level();
-
-    this.shapeRenderer = new ShapeRenderer();
+    tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+    shapeRenderer = new ShapeRenderer();
+    batch = new SpriteBatch();
   }
 
   @Override
@@ -57,23 +61,13 @@ public class GameScreen implements Screen {
 
   @Override
   public void render(float delta) {
-    // Clear the screen
-    Gdx.gl.glClearColor(1, 0, 0, 1);
-    Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    super.render(delta);
 
     // Render the tilemap
-    this.camera.update();
-    this.tiledMapRenderer.setView(camera);
-    this.tiledMapRenderer.render();
+    camera.update();
+    tiledMapRenderer.setView(camera);
+    tiledMapRenderer.render();
 
-    // TODO Move to private method
-    // Will switch to/from debug mode if tab is pressed
-    if (Gdx.input.isKeyJustPressed(Keys.TAB)) {
-      this.isDebug = !this.isDebug;
-    }
-
-    // TODO Move to private method
     if (Gdx.input.isKeyJustPressed(Keys.NUM_1)) {
       // Get the coordinates of the current mouse position
       int x = Gdx.input.getX();
@@ -81,56 +75,76 @@ public class GameScreen implements Screen {
       Vector3 worldCoords = camera.unproject(new Vector3(x, y, 0));
 
       // Create a new tower in the fleet with these towers
-      level.addShip((int) worldCoords.x, (int) worldCoords.y);
+      level.addNormalShip((int) worldCoords.x, (int) worldCoords.y);
+
+    }
+
+    if (Gdx.input.isKeyJustPressed(Keys.NUM_2)) {
+      // Get the coordinates of the current mouse position
+      int x = Gdx.input.getX();
+      int y = Gdx.input.getY();
+      Vector3 worldCoords = camera.unproject(new Vector3(x, y, 0));
+
+      // Create a new tower in the fleet with these towers
+      level.addBigShip((int) worldCoords.x, (int) worldCoords.y);
+
     }
 
     // Render the game
-    this.batch.setProjectionMatrix(camera.combined);
-    this.batch.begin();
+    batch.setProjectionMatrix(camera.combined);
+    batch.begin();
 
-    boolean gameOver =this.level.update();
+    boolean gameOver = this.level.update();
 
-    if(gameOver) {
-      game.setScreen(new GameOverScreen(game));
-      dispose();
+    if (gameOver) {
+      switchScreen(new GameOverScreen(game));
+
     }
 
-    if (this.isDebug) {
-      // Configure the shape renderer for debug mode
-      this.shapeRenderer.setProjectionMatrix(camera.projection);
-      this.shapeRenderer.setTransformMatrix(camera.view);
-      this.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-      this.level.draw(batch, shapeRenderer);
-    } else {
-      this.level.draw(batch);
+    if (level.levelComplete()) {
+      Preferences preferences = Gdx.app.getPreferences("profile");
+      switch (levelNumber) {
+        case 1:
+          preferences.putBoolean("levelTwoUnlocked", true);
+          preferences.flush();
+          break;
+        case 2:
+          preferences.putBoolean("levelThreeUnlocked", true);
+          preferences.flush();
+          break;
+        default:
+          // Do nothing...
+      }
+      switchScreen(new LevelCompleteScreen(game));
+
     }
 
-    this.shapeRenderer.end();
-    this.batch.end();
+    level.draw(batch);
+
+    shapeRenderer.end();
+    batch.end();
   }
 
-  @Override
-  public void resize(int width, int height) {
-
+  private void setupCamera() {
+    camera = new OrthographicCamera();
+    camera.setToOrtho(false, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
+    camera.update();
   }
 
-  @Override
-  public void pause() {
+  private List<Vector2> getBreadCrumbs(MapObjects mapObjects) {
+    List<Vector2> breadCrumbs = new ArrayList<>();
 
-  }
+    for (int i = 0; i < mapObjects.getCount(); i++) {
+      MapObject mapObject = mapObjects.get(i);
 
-  @Override
-  public void resume() {
+      Vector2 vector2 = new Vector2(
+          (float) mapObject.getProperties().get("x"),
+          (float) mapObject.getProperties().get("y")
+      );
 
-  }
+      breadCrumbs.add(Integer.valueOf(mapObject.getName()), vector2);
+    }
 
-  @Override
-  public void hide() {
-
-  }
-
-  @Override
-  public void dispose() {
-
+    return breadCrumbs;
   }
 }

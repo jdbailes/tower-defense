@@ -1,6 +1,5 @@
 package com.td.game.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Logger;
 import com.td.game.TowerDefenseGame;
@@ -10,38 +9,38 @@ import com.td.game.TowerDefenseGame;
  *
  * @author josephbailey
  */
-public class GameOverScreen extends AbstractScreen {
+public class LevelCompleteScreen extends AbstractScreen {
 
-  private static final Logger logger = new Logger("GameOverScreen", Logger.INFO);
+  private static final Logger logger = new Logger("LevelCompleteScreen", Logger.INFO);
 
   // All file paths for the textures of all screen components
-  private static final String GAME_OVER_FILEPATH = "ui/game_over_title.png";
+  private static final String LEVEL_COMPLETE_FILEPATH = "ui/level_complete_title.png";
   private static final String MENU_ACTIVE_FILEPATH = "ui/menu_button_active.png";
   private static final String MENU_INACTIVE_FILEPATH = "ui/menu_button_inactive.png";
 
   // y-positions of all screen components
-  private static final int GAME_OVER_Y = 620;
+  private static final int LEVEL_COMPLETE_Y = 620;
   private static final int MENU_BUTTON_Y = 100;
 
   // x-positions of all screen components
-  private final int gameOverX;
+  private final int levelCompleteX;
   private final int menuButtonX;
 
   // All textures for screen components
-  private final Texture gameOver;
+  private final Texture levelComplete;
   private final Texture menuButtonActive;
   private final Texture menuButtonInactive;
 
-  GameOverScreen(final TowerDefenseGame game) {
+  LevelCompleteScreen(final TowerDefenseGame game) {
     super(game);
 
     // Load images to texture
-    gameOver = new Texture(GAME_OVER_FILEPATH);
+    levelComplete = new Texture(LEVEL_COMPLETE_FILEPATH);
     menuButtonActive = new Texture(MENU_ACTIVE_FILEPATH);
     menuButtonInactive = new Texture(MENU_INACTIVE_FILEPATH);
 
     // Calculate x-coordinates for screen items
-    gameOverX = getCentrePointX(gameOver.getWidth());
+    levelCompleteX = getCentrePointX(levelComplete.getWidth());
     menuButtonX = getCentrePointX(menuButtonInactive.getWidth());
   }
 
@@ -52,10 +51,11 @@ public class GameOverScreen extends AbstractScreen {
     camera.update();
     game.batch.begin();
 
-    drawGameOverTitle();
+    drawLevelCompleteTitle();
+
     renderExitButton();
 
-    game.batch.end();
+    this.game.batch.end();
   }
 
   private void renderExitButton() {
@@ -74,7 +74,7 @@ public class GameOverScreen extends AbstractScreen {
 
   private void drawMenuButton(float x, boolean active) {
     Texture texture = active ? this.menuButtonActive : this.menuButtonInactive;
-    game.batch.draw(texture, x, (float) GameOverScreen.MENU_BUTTON_Y);
+    game.batch.draw(texture, x, (float) LevelCompleteScreen.MENU_BUTTON_Y);
   }
 
   private boolean isTouchingMenuButton(int x) {
@@ -84,13 +84,13 @@ public class GameOverScreen extends AbstractScreen {
         && getInputY() > MENU_BUTTON_Y;
   }
 
-  private void drawGameOverTitle() {
-    game.batch.draw(gameOver, gameOverX, GAME_OVER_Y);
+  private void drawLevelCompleteTitle() {
+    game.batch.draw(levelComplete, levelCompleteX, LEVEL_COMPLETE_Y);
   }
 
   @Override
   public String toString() {
-    return "Game over screen";
+    return "Level complete screen";
   }
 
 }

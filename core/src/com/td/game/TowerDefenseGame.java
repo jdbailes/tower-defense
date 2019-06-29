@@ -1,27 +1,49 @@
 package com.td.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.td.game.screens.MenuScreen;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.td.game.screens.MainMenuScreen;
 
 /**
  * Game abstract class provides an implementation of ApplicationListener for you to use, along with
  * some helper methods to set and handle Screen rendering.
+ *
+ * @author josephbailey
  */
 public class TowerDefenseGame extends Game {
 
-  // SpriteBatch used to render objects on the screen
+  private final AssetManager assetManager = new AssetManager();
+
   public SpriteBatch batch;
-  // Bitmap font used alongside SpriteBatch to render text on the screen
-  public BitmapFont font;
 
   @Override
   public void create() {
-    batch = new SpriteBatch();
-    font = new BitmapFont();
 
-    this.setScreen(new MenuScreen(this));
+    Preferences preferences = Gdx.app.getPreferences("profile");
+    if (!preferences.contains("newGame")) {
+      preferences.putBoolean("newGame", true);
+    }
+    if (!preferences.contains("levelOneUnlocked")) {
+      preferences.putBoolean("levelOneUnlocked", true);
+    }
+    if (!preferences.contains("levelTwoUnlocked")) {
+      preferences.putBoolean("levelTwoUnlocked", false);
+    }
+    if (!preferences.contains("levelThreeUnlocked")) {
+      preferences.putBoolean("levelThreeUnlocked", false);
+    }
+
+    preferences.flush();
+
+    this.batch = new SpriteBatch();
+    this.assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+    this.setScreen(new MainMenuScreen(this));
   }
 
   @Override
@@ -32,7 +54,10 @@ public class TowerDefenseGame extends Game {
   @Override
   public void dispose() {
     // Kills batch and font
-    batch.dispose();
-    font.dispose();
+    this.batch.dispose();
+  }
+
+  public AssetManager getAssetManager() {
+    return assetManager;
   }
 }

@@ -1,6 +1,5 @@
 package com.td.game.onScreen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.td.game.offScreen.Wave;
@@ -10,9 +9,6 @@ import com.td.game.offScreen.Wave;
  */
 public class Ship extends Component {
 
-  private static final Texture TEXTURE = new Texture(Gdx.files.internal("spaceShips_002.png"));
-  private static final float RADIUS = 320;
-
   private Enemy currentTarget = null;
 
   /**
@@ -21,18 +17,24 @@ public class Ship extends Component {
    * @param x the x-position of the collision box for this tower.
    * @param y the y-position of the collision box for this tower.
    */
-  public Ship(int x, int y) {
-    super(x, y, 64, 64, TEXTURE, RADIUS);
+  Ship(int x, int y, Texture texture, float radius) {
+    super(x, y, 64, 64, texture, radius);
   }
 
+  /**
+   * Checks the wave for a potential new target.
+   */
   public void checkForTarget(Wave wave) {
     this.currentTarget = wave.getEnemies().stream()
         .filter(enemy -> enemy.getCollisionCircle().overlaps(this.getCollisionCircle()))
         .findFirst().orElse(null);
   }
 
+  /**
+   * Sets the rotation of the ship towards its target.
+   */
   public void setRotation() {
-    if(this.currentTarget != null) {
+    if (this.currentTarget != null) {
       float opp =
           this.currentTarget.getVector().x - this.getVector().x;  // Length of the opposite side
       float adj =

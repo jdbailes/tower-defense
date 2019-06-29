@@ -7,30 +7,33 @@ import com.badlogic.gdx.math.Vector2;
 import com.td.game.Config;
 
 /**
- * Stores the state of a Missile for easy tracking of Missile projections & stats.
+ * Stores the state of a BigMissile component.
  *
- * @author josephbailey
+ * @author tautvydasponelis
  */
-public class Missile extends Component {
+public class BigMissile extends Component {
 
-  private static final Texture TEXTURE = new Texture(Gdx.files.internal("game/space-missile.png"));
-  private static final float RADIUS = 10;
-  private static final float SPEED = 9.0f;
+  private static final Texture TEXTURE = new Texture(Gdx.files.internal("game/laserRed09.png"));
+  private static final float RADIUS = 12;
+  private static final float SPEED = 3.0f;
 
-  private final Ship ship;
+  private final BigShip bigShip;
   private final Enemy enemy;
 
   /**
    * Constructor for a Missile.
    */
-  public Missile(Ship ship, Enemy enemy) {
-    super(ship.getVector().x, ship.getVector().y, 64, 64, TEXTURE, RADIUS);
-    this.ship = ship;
+  public BigMissile(BigShip bigShip, Enemy enemy) {
+    super(bigShip.getVector().x, bigShip.getVector().y, 86, 86, TEXTURE, RADIUS);
+    this.bigShip = bigShip;
     this.enemy = enemy;
   }
 
-  public boolean hasShip(Ship ship) {
-    return this.ship.equals(ship);
+  /**
+   * Determines if BigMissile has BigShip.
+   */
+  public boolean hasShip(BigShip bigShip) {
+    return this.bigShip.equals(bigShip);
   }
 
   /**
@@ -57,13 +60,16 @@ public class Missile extends Component {
     this.setY(newYPos);
   }
 
+  /**
+   * Decides whether enemy has been terminated.
+   */
   public boolean isTerminated() {
     return hasHitEnemy() || isLost();
   }
 
   private boolean hasHitEnemy() {
     if (enemy.isMissileColliding(this)) {
-      this.enemy.decrementHealth();
+      this.enemy.decrementHealthBig();
       return true;
     }
     return false;

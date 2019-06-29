@@ -2,29 +2,21 @@ package com.td.game.onScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class HealthBar {
+/**
+ * Stores the state of a HealthBar component.
+ *
+ * @author tautvydasponelis
+ */
+public class HealthBar extends Component {
 
-  private static final Texture TEXTURE = new Texture(Gdx.files.internal("laserGreen02.png"));
+  private static final Texture TEXTURE = new Texture(Gdx.files.internal("game/green-laser.png"));
 
-  private final Sprite sprite;
+  HealthBar(float xPosition, float yPosition) {
+    super(xPosition, yPosition, 64, 5, TEXTURE, 0);
 
-  public HealthBar(float xPosition, float yPosition) {
-    this.sprite = new Sprite(TEXTURE);
-    this.sprite.setX(xPosition);
-    this.sprite.setY(yPosition);
-    this.sprite.setSize(5, 64);
-    this.sprite.setRotation(90);
-  }
-
-  public Sprite getSprite() {
-    return this.sprite;
-  }
-
-  public void updateX(float delta) {
-    this.sprite.setX(this.sprite.getX() + delta);
+    getSprite().setRotation(90);
   }
 
   /**
@@ -33,7 +25,7 @@ public class HealthBar {
    * @param batch SpriteBatch to be rendered onto
    */
   public void draw(SpriteBatch batch) {
-    this.sprite.draw(batch);
+    getSprite().draw(batch);
   }
 
 }

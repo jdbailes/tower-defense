@@ -1,0 +1,6 @@
+{
+  "startingCredit" : 120,
+  "waveSize" : 50,
+  "spawnProbability" : 0.0125,
+  "enemyHealth" : 30
+}
